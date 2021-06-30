@@ -18,7 +18,7 @@ internal class SumOfMultiplesTest {
         val tool = SumOfMultiples()
         assertEquals(expected, number.sumOfMultiples(factor))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, factor))
-        //assertEquals(expected, tool.sumOfMultiplesVersionC(number, factor))
+        assertEquals(expected, tool.sumOfMultiplesVersionC(number, factor))
     }
 
     @Test
@@ -29,7 +29,7 @@ internal class SumOfMultiplesTest {
         val factors = intArrayOf(3, 5)
         assertEquals(expected, number.sumOfMultiples(*factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
-        //assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
+        assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
     }
 
     @Test
@@ -40,7 +40,7 @@ internal class SumOfMultiplesTest {
         val factors = intArrayOf(3, 3, 3)
         assertEquals(expected, number.sumOfMultiples(*factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
-        //assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
+        assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
     }
 
     @Test
@@ -50,6 +50,6 @@ internal class SumOfMultiplesTest {
         val expected = 0
         assertEquals(expected, number.sumOfMultiples())
         assertEquals(expected, tool.sumOfMultiplesVersionB(number))
-        //assertEquals(expected, tool.sumOfMultiplesVersionC(number))
+        assertEquals(expected, tool.sumOfMultiplesVersionC(number))
     }
 }

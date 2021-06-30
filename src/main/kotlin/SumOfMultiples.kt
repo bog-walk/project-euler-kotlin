@@ -1,3 +1,5 @@
+import java.util.stream.Collectors
+
 /**
  * Problem 1: Multiples of 3 & 5
  * Goal: Find sum of all natural numbers less than N that are
@@ -27,14 +29,17 @@ class SumOfMultiples {
         return sum
     }
 
-    // Issues with factorsList not multiplying upwards properly
     fun sumOfMultiplesVersionC(number: Int, vararg factors: Int): Int {
-        var count = 2
+        var count = 1
         val multiples = mutableSetOf<Int>()
         var factorsList = factors.toList()
         while (factorsList.isNotEmpty()) {
-            multiples.addAll(factorsList.filter { it < number })
-            factorsList = factorsList.map { it * count++ }
+            factorsList = factorsList.filter {
+                it * count < number
+            }.also { filtered ->
+                multiples.addAll(filtered.map { it * count })
+            }
+            count++
         }
         return multiples.sum()
     }
