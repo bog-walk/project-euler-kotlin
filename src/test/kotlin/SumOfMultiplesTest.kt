@@ -6,7 +6,7 @@ import java.math.BigInteger
 
 internal class SumOfMultiplesTest {
     // Issues getting multiple values to be converted to varargs
-    @ParameterizedTest
+    @ParameterizedTest(name="testAllVersions_singleFactor")
     @CsvSource(
             // lower limits for N
             "1, 0, 3", "2, 0, 3", "3, 0, 3", "4, 3, 3",
@@ -15,11 +15,12 @@ internal class SumOfMultiplesTest {
             // single factors
             "20, 36, 6"
     )
-    fun testAllVersion_singleFactor(number: Int, expected: Int, factor: Int) {
+    fun testAlgorithm(number: Int, expected: Int, factor: Int) {
         val tool = SumOfMultiples()
         assertEquals(expected, number.sumOfMultiples(factor))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, factor))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, factor))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, factor))
     }
 
     @Test
@@ -31,6 +32,7 @@ internal class SumOfMultiplesTest {
         assertEquals(expected, number.sumOfMultiples(*factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, *factors))
     }
 
     @Test
@@ -42,6 +44,7 @@ internal class SumOfMultiplesTest {
         assertEquals(expected, number.sumOfMultiples(*factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, *factors))
     }
 
     @Test
@@ -52,6 +55,7 @@ internal class SumOfMultiplesTest {
         assertEquals(expected, number.sumOfMultiples())
         assertEquals(expected, tool.sumOfMultiplesVersionB(number))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number))
     }
 
     @Test

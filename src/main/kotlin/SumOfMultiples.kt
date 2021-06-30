@@ -48,15 +48,13 @@ class SumOfMultiples {
     }
 
     fun sumOfMultiplesVersionD(number: Int, vararg factors: Int): BigInteger {
-        val factorsDistinct = factors.distinct()
-        val factorsOverlap = getOverlapFactors(factorsDistinct)
-        val sum = factorsDistinct.fold(BigInteger.ZERO) { acc, factor ->
-            acc + sumOfModulus(number - 1, factor)
+        val factorsList = getAllFactors(factors)
+        val sums: List<BigInteger> = factorsList.map { list ->
+            list.fold(BigInteger.ZERO) { acc, factor ->
+                acc + sumOfModulus(number - 1, factor)
+            }
         }
-        val sumOverlap = factorsOverlap.fold(BigInteger.ZERO) { acc, factor ->
-            acc + sumOfModulus(number - 1, factor)
-        }
-        return sum - sumOverlap
+        return sums[0] - sums[1]
     }
 
     // 3+6+9+12+...999 = 3*(1+2+3+4+...333) == f*(0.5*d*(d+1))
@@ -68,14 +66,18 @@ class SumOfMultiples {
     }
 
     // e.g. multiples of 3 & 5 would overlap with multiples of 15
-    private fun getOverlapFactors(factors: List<Int>): List<Int> {
+    private fun getAllFactors(factors: IntArray): List<List<Int>> {
+        val factorsDistinct = factors.distinct()
         val common = mutableSetOf<Int>()
-        for (i in 0 until factors.lastIndex) {
-            val x = factors[i]
-            for (j in (i + 1)..factors.lastIndex) {
-                common.add(x * factors[j])
+        for (i in 0 until factorsDistinct.lastIndex) {
+            val x = factorsDistinct[i]
+            for (j in (i + 1)..factorsDistinct.lastIndex) {
+                common.add(x * factorsDistinct[j])
             }
         }
-        return (common - factors).sorted()
+        return listOf(
+            factorsDistinct,
+            (common - factorsDistinct).sorted()
+        )
     }
 }
