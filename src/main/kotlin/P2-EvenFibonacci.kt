@@ -1,3 +1,5 @@
+import kotlin.streams.toList
+
 /**
  * Problem 2: Even Fibonacci Numbers
  * Goal: Find the sum of all even numbers in the Fibonacci sequence
@@ -6,20 +8,26 @@
  */
 
 class EvenFibonacci {
-    fun sumOfEvenFibonacci(n: Int): Int {
-
+    fun sumOfEvenFibonacci(max: Int): Int {
+        if (max <= 2) return 0
+        val allFibonacci = evenFibonacci(max)
+        var sum = 0
+        for (i in 2..allFibonacci.lastIndex step 3) {
+            sum += allFibonacci[i]
+        }
+        return sum
     }
 
-    private fun evenFibonacci(n: Int): List<Int> {
-        if (n == 0) return listOf(0)
-        val fibonacci = mutableListOf<Int>().apply { listOf(0, 1) }
+    private fun evenFibonacci(max: Int): List<Int> {
+        var index = 2
+        val fibonacci = mutableListOf<Int>().apply { addAll(listOf(0, 1)) }
         while (true) {
-            fibonacci.addAll(
-                evenFibonacci(fibonacci.last()) +
-                        evenFibonacci(fibonacci[fibonacci.lastIndex - 1])
-            )
-            if (fibonacci.last() >= n) break
+            val nextFib = fibonacci[index - 1] + fibonacci[index - 2]
+            if (nextFib < max) {
+                fibonacci.add(index++, nextFib)
+            } else break
         }
+        return fibonacci
     }
 }
 
