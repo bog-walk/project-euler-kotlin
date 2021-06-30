@@ -1,4 +1,4 @@
-import java.util.stream.Collectors
+import java.math.BigInteger
 
 /**
  * Problem 1: Multiples of 3 & 5
@@ -6,6 +6,7 @@ import java.util.stream.Collectors
  * multiples of any of the provided factors, with 1 <= N <= 1e9.
  * e.g. Sum of all multiples of 3 or 5 below 10 (i.e. 3, 5, 6, 9) = 23.
  */
+// OutOfMemoryError for N == 1e9
 fun Int.sumOfMultiples(vararg factors: Int): Int {
     return (1 until this).filter { num ->
         factors.any { factor ->
@@ -16,6 +17,7 @@ fun Int.sumOfMultiples(vararg factors: Int): Int {
 
 class SumOfMultiples {
 
+    // Overflow error for N == 1e9 or Time out
     fun sumOfMultiplesVersionB(number: Int, vararg factors: Int): Int {
         var sum = 0
         outer@for (n in 1 until number) {
@@ -29,6 +31,7 @@ class SumOfMultiples {
         return sum
     }
 
+    // OutOfMemoryError & Time out for N == 1e9
     fun sumOfMultiplesVersionC(number: Int, vararg factors: Int): Int {
         var count = 1
         val multiples = mutableSetOf<Int>()
@@ -42,5 +45,37 @@ class SumOfMultiples {
             count++
         }
         return multiples.sum()
+    }
+
+    fun sumOfMultiplesVersionD(number: Int, vararg factors: Int): BigInteger {
+        val factorsDistinct = factors.distinct()
+        val factorsOverlap = getOverlapFactors(factorsDistinct)
+        val sum = factorsDistinct.fold(BigInteger.ZERO) { acc, factor ->
+            acc + sumOfModulus(number - 1, factor)
+        }
+        val sumOverlap = factorsOverlap.fold(BigInteger.ZERO) { acc, factor ->
+            acc + sumOfModulus(number - 1, factor)
+        }
+        return sum - sumOverlap
+    }
+
+    // 3+6+9+12+...999 = 3*(1+2+3+4+...333) == f*(0.5*d*(d+1))
+    private fun sumOfModulus(number: Int, factor: Int): BigInteger {
+        // final multiple divided = d
+        val final = (number / factor).toBigInteger()
+        val parentheses = final * (final + BigInteger.ONE) / BigInteger.TWO
+        return parentheses.times(factor.toBigInteger())
+    }
+
+    // e.g. multiples of 3 & 5 would overlap with multiples of 15
+    private fun getOverlapFactors(factors: List<Int>): List<Int> {
+        val common = mutableSetOf<Int>()
+        for (i in 0 until factors.lastIndex) {
+            val x = factors[i]
+            for (j in (i + 1)..factors.lastIndex) {
+                common.add(x * factors[j])
+            }
+        }
+        return (common - factors).sorted()
     }
 }

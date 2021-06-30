@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.math.BigInteger
 
 internal class SumOfMultiplesTest {
     // Issues getting multiple values to be converted to varargs
@@ -51,5 +52,14 @@ internal class SumOfMultiplesTest {
         assertEquals(expected, number.sumOfMultiples())
         assertEquals(expected, tool.sumOfMultiplesVersionB(number))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number))
+    }
+
+    @Test
+    fun testUpperLimitOfN() {
+        val tool = SumOfMultiples()
+        val number = 1_000_000_000
+        val expected = 233333333166666668.toBigInteger()
+        val factors = intArrayOf(3, 5)
+        assertEquals(expected, tool.sumOfMultiplesVersionD(number, *factors))
     }
 }
