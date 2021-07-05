@@ -1,3 +1,5 @@
+import util.RollingQueue
+
 /**
  * Problem 2: Even Fibonacci Numbers
  * Goal: Find the sum of all even numbers in the Fibonacci sequence
@@ -26,6 +28,15 @@ class EvenFibonacci {
             } else break
         }
         return fibonacci
+    }
+
+    /**
+     * Uses class RollingQueue to reduce memory of stored fibonnaci
+     * numbers as they are only needed to accumulate sum.
+     */
+    fun evenFibonacci_rollingSum(max: Long): Long {
+        val fibonacci = RollingQueue<Long>(2).apply { addAll(listOf(1L, 1L)) }
+        TODO()
     }
 }
 
