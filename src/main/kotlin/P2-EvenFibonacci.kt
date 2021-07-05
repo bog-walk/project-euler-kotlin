@@ -34,9 +34,17 @@ class EvenFibonacci {
      * Uses class RollingQueue to reduce memory of stored fibonnaci
      * numbers as they are only needed to accumulate sum.
      */
-    fun evenFibonacci_rollingSum(max: Long): Long {
+    fun evenFibonacciRollingSum(max: Long): Long {
+        var sumOfEvens = 0L
         val fibonacci = RollingQueue<Long>(2).apply { addAll(listOf(1L, 1L)) }
-        TODO()
+        while (true) {
+            val nextFib = fibonacci.peek() + fibonacci.peekTail()!!
+            if (nextFib < max) {
+                fibonacci.add(nextFib)
+                if (nextFib % 2 == 0L) sumOfEvens += nextFib
+            } else break
+        }
+        return sumOfEvens
     }
 }
 
