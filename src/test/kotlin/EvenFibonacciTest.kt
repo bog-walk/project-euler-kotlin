@@ -20,7 +20,9 @@ internal class EvenFibonacciTest {
     )
     fun testAlgorithm(max: Long, expected: Long) {
         val tool = EvenFibonacci()
-        assertEquals(expected, tool.sumOfEvenFibonacci(max))
+        assertEquals(expected, tool.sumOfFibonacciFindEvens(max))
         assertEquals(expected, tool.evenFibonacciRollingSum(max))
+        assertEquals(expected, tool.evenFibonacciFourVariables(max))
+        assertEquals(expected, tool.sumOfEvenFibonacci(max))
     }
 }
