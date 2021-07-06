@@ -17,7 +17,8 @@ internal class LargestPalindromeProductTest {
     )
     fun testLargestPalindromeProduct(max: Int, expected: Int) {
         val tool = LargestPalindromeProduct()
-        assertEquals(expected, tool.largestPalindromeProduct(max))
+        //assertEquals(expected, tool.largestPalindromeProduct(max))
+        assertEquals(expected, tool.largestPalindromeProductCountingDown(max))
     }
 
     @Test

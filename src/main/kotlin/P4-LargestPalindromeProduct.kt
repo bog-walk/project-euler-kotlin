@@ -55,4 +55,33 @@ class LargestPalindromeProduct {
         }
         return 101101
     }
+
+    /**
+     * A palindrome of the product of two 3-digit integers must be 6-digits long &
+     * one of the integers must have a factor of 11, based on the following analysis:
+     * P = 100000x + 10000y + 1000z + 100z + 100y + x
+     * P = 11*(9091x + 910y + 100z).
+     */
+    fun largestPalindromeProductCountingDown(max: Int): Int {
+        var largest = 0
+        var x = 999
+        while (x > 100) {
+            var y = if (x % 11 == 0) 999 else 990
+            val deltaY = if (x % 11 == 0) 1 else 11
+            inner@while (y >= x) {
+                val product = y * x
+                if (product <= largest) break@inner // Combo will be too small to pursue further
+                if (product.isPalindrome()) largest = product
+                y -= deltaY
+            }
+            x--
+        }
+        return largest
+    }
+
+
+
+
+
+
 }
