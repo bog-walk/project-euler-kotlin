@@ -11,13 +11,16 @@ internal class LargestPrimeFactorTest {
         // normal values
         "17, 17", "48, 3", "147, 7", "330, 11",
         // larger values
-        "13195, 29", "200000, 5", "600851475143"
+        "13195, 29", "200000, 5", "600851475143, 6857",
         // higher constraint values
-        //"10000000000000000, "
+        "10000000000000000, 5"
     )
-    fun testAlgorithm_largestPrime(n: Long, expected: Int) {
+    fun testAlgorithm_largestPrime_recursive(n: Long, expected: Int) {
         val tool = LargestPrimeFactor()
-        assertEquals(expected, tool.largestPrime(n))
+        val primes = tool.getPrimeFactorsRecursive(n)
+        val primesImproved = tool.getPrimeFactorsRecursiveImproved(n)
+        assertEquals(expected, tool.largestPrime(primes))
+        assertEquals(expected, tool.largestPrime(primesImproved))
     }
 
     @Test
@@ -34,19 +37,38 @@ internal class LargestPrimeFactorTest {
         "12, 2, true, 6", "147, 3, true, 49",
         "12, 11, false, 1", "147, 2, false, 73"
     )
-    fun testAlgorithm_divide(n: Long, factor: Int, whole: Boolean, ans: Int) {
-        assertEquals(Pair(whole, ans), n.divide(factor))
+    fun testAlgorithm_divide(n: Long, factor: Int, whole: Boolean, ans: Long) {
+        val (actualFirst, actualSecond) = n.divide(factor)
+        assertEquals(whole, actualFirst)
+        assertEquals(ans, actualSecond)
     }
 
     @Test
     fun testGetPrimeFactors() {
+        val nums = listOf<Long>(1, 2, 3, 12, 48, 147, 330, 13195)
+        val expected = listOf(
+            emptyList(), listOf(2), listOf(3), listOf(2, 2, 3), listOf(2, 2, 2, 2, 3),
+            listOf(3, 7, 7), listOf(2, 3, 5, 11), listOf(5, 7, 13, 29)
+        )
         val tool = LargestPrimeFactor()
-        assertEquals(emptyList<Int>(), tool.getPrimeFactors(1L))
-        assertEquals(listOf(2), tool.getPrimeFactors(2L))
-        assertEquals(listOf(3), tool.getPrimeFactors(3L))
-        assertEquals(listOf(2, 2, 2, 2, 3), tool.getPrimeFactors(48L))
-        assertEquals(listOf(2, 2, 3), tool.getPrimeFactors(12L))
-        assertEquals(listOf(3, 7, 7), tool.getPrimeFactors(147L))
-        assertEquals(listOf(5, 7, 13, 29), tool.getPrimeFactors(13195L))
+        nums.forEachIndexed { index, num ->
+            assertEquals(expected[index], tool.getPrimeFactors(num))
+        }
+    }
+
+    @Test
+    fun testGetPrimeFactors_recursive() {
+        val nums = listOf<Long>(1, 2, 3, 12, 48, 147, 330, 13195, 200000, 600851475143)
+        val expected = listOf(
+            emptyList(), listOf(2), listOf(3), listOf(2, 2, 3), listOf(2, 2, 2, 2, 3),
+            listOf(3, 7, 7), listOf(2, 3, 5, 11), listOf(5, 7, 13, 29),
+            listOf(2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5),
+            listOf(71, 839, 1471, 6857)
+        )
+        val tool = LargestPrimeFactor()
+        nums.forEachIndexed { index, num ->
+            assertEquals(expected[index], tool.getPrimeFactorsRecursive(num))
+            assertEquals(expected[index], tool.getPrimeFactorsRecursiveImproved(num))
+        }
     }
 }
