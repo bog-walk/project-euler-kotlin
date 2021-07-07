@@ -3,6 +3,16 @@ package util
 import kotlin.math.abs
 import kotlin.math.sqrt
 
+/**
+ * This exists solely for handling input in HackerRank submission.
+ */
+fun handleInput() {
+    repeat(readLine()!!.trim().toInt()) {
+        val ans = readLine()!!.trim().toInt()
+        println(ans)
+    }
+}
+
 fun getPrimeFactors(n: Long): Map<Long, Int> {
     var num = abs(n)
     val primes = mutableMapOf<Long, Int>()
