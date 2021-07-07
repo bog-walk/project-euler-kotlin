@@ -14,6 +14,7 @@ internal class SumSquareDifferenceTest {
     )
     fun testSumSquareDiff(max: Int, expected: Long) {
         val tool = SumSquareDifference()
-        assertEquals(expected, tool.sumSquareDiffBrute(max))
+        //assertEquals(expected, tool.sumSquareDiffBrute(max))
+        assertEquals(expected, tool.sumSquareDiffImproved(max))
     }
 }
