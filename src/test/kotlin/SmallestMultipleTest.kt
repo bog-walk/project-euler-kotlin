@@ -8,9 +8,9 @@ internal class SmallestMultipleTest {
        // lower constraints
         "1, 1", "2, 2", "3, 6",
         // normal values
-        "6, 120", "10, 2520", "20, 232792560",
-        // higher constraints - TOO LONG
-        //"30, 2329089562800", "40, "
+        "6, 60", "10, 2520", "20, 232792560",
+        // higher constraints
+        "30, 2329089562800", "40, 5342931457063200"
     )
     fun testSmallestMultiple(n: Int, expected: Long) {
         val tool = SmallestMultiple()

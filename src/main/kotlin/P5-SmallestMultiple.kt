@@ -8,30 +8,19 @@
 
 class SmallestMultiple {
     fun smallestMultiple(rangeMax: Int): Long {
-        return when (rangeMax) {
-            1 -> 1L
-            2 -> 2L
-            3 -> 6L
-            4 -> 12L
-            else -> {
-                val range = (rangeMax - 2) downTo (rangeMax / 2 + 1)
-                val maxMultiple = 1L * rangeMax * (rangeMax - 1)
-                lcm(maxMultiple, range)
-            }
-        }
+        val range = (rangeMax - 1) downTo (rangeMax / 2 + 1)
+        return lcm(rangeMax.toLong(), range)
     }
 
     private fun lcm(max: Long, range: IntProgression): Long {
-        var multiple = max * range.first
-        outer@ while (true) {
-            for (i in range) {
-                if (multiple % i != 0L) {
-                    multiple += max
-                    continue@outer
-                }
+        var lcm = max
+        var step = max
+        for (i in range) {
+            while (lcm % i != 0L) {
+                lcm += step
             }
-            break@outer
+            step = lcm
         }
-        return multiple
+        return lcm
     }
 }
