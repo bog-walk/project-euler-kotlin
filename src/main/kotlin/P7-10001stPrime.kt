@@ -9,13 +9,11 @@ import util.isPrime
 class The10001stPrime {
     fun getNthPrime(n: Int): Int {
         if (n == 1) return 2
-        var prime = n - 1
+        var count = n - 1
         var number = 1
-        while (prime > 0) {
+        while (count > 0) {
             number += 2
-            if (number.isPrime()) {
-                prime--
-            }
+            if (number.isPrime()) count--
         }
         return number
     }

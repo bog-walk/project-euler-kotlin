@@ -1,6 +1,7 @@
 package util
 
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.sqrt
 
 /**
@@ -33,13 +34,34 @@ fun getPrimeFactors(n: Long): Map<Long, Int> {
     return primes
 }
 
+/**
+ * This algorithm uses all facts about primes to test primality of N.
+ */
 fun Int.isPrime(): Boolean {
-    val max = sqrt(this.toDouble()).toInt()
-    return (2..max).all {
-        this % it != 0
+    return when {
+        this < 2 -> false
+        this < 4 -> true // 2 & 3
+        this % 2 == 0 -> false // 2 is only even prime
+        this < 9 -> true // 4, 6, & 8 already excluded
+        this % 3 == 0 -> false // primes >3 are of form 6k+/-1 (never multiples of 3)
+        else -> {
+            // N can only have 1 prime factor > sqrt(N): N itself!
+            val max = floor(sqrt(this.toDouble()))
+            var step = 5 // as the next number not yet excluded is 10
+            while (step <= max) {
+                if (this % step == 0) return false
+                if (this % (step + 2) == 0) return false
+                step += 6
+            }
+            true
+        }
     }
 }
 
+/**
+ * Consider using Sieve of Eratosthenes since an upper bound
+ * is being provided in advance.
+ */
 fun getPrimeNumbers(max: Int): List<Int> {
     return (2..max).filter {
         it.isPrime()
