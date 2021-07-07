@@ -1,6 +1,10 @@
 import util.getPrimeFactors
+import util.getPrimeNumbers
 import java.math.BigInteger
+import kotlin.math.floor
+import kotlin.math.log2
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Problem 5: Smallest Multiple
@@ -76,6 +80,12 @@ class SmallestMultiple {
         return lcm
     }
 
+    /**
+     * BigInteger class has in-built gcd function with optimum performance,
+     * as it uses Euclidean algorithm initially along with MutableBigInteger
+     * instances to avoid frequent memory allocations, then switches to binary
+     * gcd algorithm at smaller values to increase speed.
+     */
     fun lcmUsingBigInteger(rangeMax: Int): BigInteger {
         var lcm = rangeMax.toBigInteger()
         val range: IntProgression = (rangeMax - 1) downTo (rangeMax / 2 + 1)
@@ -88,6 +98,25 @@ class SmallestMultiple {
         return lcm
     }
 
-
+    /**
+     * An improved form of the prime factorisation method. e.g. when max = 6,
+     * the exponent of p[1] = 2 will be 2 as 2^3 > 6, p[2] = 3 will be 1, &
+     * p[3] = 5 will be 1, so 2^2 * 3^1 * 5^1 = 60. Based on formula ->
+     * p[i]^a[i] = k
+     * a[i] * log(p[i]) = log(k)
+     * a[i] = floor(log(k) / log(p[i]))
+     */
+    fun lcmUsingPrimes(rangeMax: Int): Long {
+        var lcm = 1L
+        val limit = sqrt(rangeMax.toDouble())
+        val primes = getPrimeNumbers(rangeMax)
+        for (prime in primes) {
+            val power = if (prime <= limit) {
+                floor(log2(rangeMax.toDouble()) / log2(prime.toDouble()))
+            } else 1.0
+            lcm *= ((prime.toDouble()).pow(power)).toLong()
+        }
+        return lcm
+    }
 
 }

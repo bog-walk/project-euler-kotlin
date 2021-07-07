@@ -11,10 +11,10 @@ import kotlin.math.sqrt
  */
 
 fun Long.isComposite(): Boolean {
-    for (i in 2 until this) {
-        if (this % i == 0L) return true
+    val max = sqrt(this.toFloat()).toLong()
+    return (2L..max).any {
+        this % it ==0L
     }
-    return false
 }
 
 fun Long.divide(factor: Long): Pair<Boolean, Long> {

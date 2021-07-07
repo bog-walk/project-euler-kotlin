@@ -17,6 +17,7 @@ internal class SmallestMultipleTest {
         //assertEquals(expected, tool.lcmIterative(n))
         //assertEquals(expected, tool.lcmPrimeFactors(n))
         //assertEquals(expected, tool.lcmUsingGCD(n))
-        assertEquals(expected.toBigInteger(), tool.lcmUsingBigInteger(n))
+        //assertEquals(expected.toBigInteger(), tool.lcmUsingBigInteger(n))
+        assertEquals(expected, tool.lcmUsingPrimes(n))
     }
 }

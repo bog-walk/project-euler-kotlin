@@ -22,3 +22,16 @@ fun getPrimeFactors(n: Long): Map<Long, Int> {
     if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
     return primes
 }
+
+fun Int.isPrime(): Boolean {
+    val max = sqrt(this.toDouble()).toInt()
+    return (2..max).all {
+        this % it != 0
+    }
+}
+
+fun getPrimeNumbers(max: Int): List<Int> {
+    return (2..max).filter {
+        it.isPrime()
+    }.toList()
+}
