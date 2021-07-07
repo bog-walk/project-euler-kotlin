@@ -4,8 +4,8 @@ import util.getPrimeFactors
  * Problem 4: Largest Palindrome Product
  * Goal: Find the largest palindrome less than N, with 101101 < N < 1000000,
  * made from the product of two 3-digit numbers.
- * e.g. The largest palindrome from the product of two 3-digit
- * numbers (91 * 99) is 9009.
+ * e.g. The largest palindrome less than 1000000 from the product of two 3-digit
+ * numbers (913 * 993) is 906609.
  */
 
 fun Int.isPalindrome(): Boolean {
