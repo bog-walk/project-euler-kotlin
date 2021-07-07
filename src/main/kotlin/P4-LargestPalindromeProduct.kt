@@ -29,7 +29,9 @@ class LargestPalindromeProduct {
 
     fun is3DigProduct(palindrome: Int): Boolean {
         val range = 101..999
-        val primeFactors = getPrimeFactors(palindrome.toLong())
+        val primeFactors = getPrimeFactors(palindrome.toLong()).flatMap {
+            (k, v) -> List(v) { k }
+        }
         val distinctPrimes = primeFactors.distinct()
         val validFactors = distinctPrimes.filter { it in range }.toMutableSet()
         distinctPrimes.forEach { p1 ->

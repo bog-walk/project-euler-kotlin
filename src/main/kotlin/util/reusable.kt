@@ -3,7 +3,7 @@ package util
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-fun getPrimeFactors(n: Long): List<Long> {
+fun getPrimeFactors(n: Long): Map<Long, Int> {
     var num = abs(n)
     val primes = mutableMapOf<Long, Int>()
     while (num % 2 == 0L) {
@@ -20,7 +20,5 @@ fun getPrimeFactors(n: Long): List<Long> {
         }
     }
     if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
-    return primes.flatMap {
-            (k, v) -> List(v) { k }
-    }
+    return primes
 }

@@ -14,6 +14,9 @@ internal class SmallestMultipleTest {
     )
     fun testSmallestMultiple(n: Int, expected: Long) {
         val tool = SmallestMultiple()
-        assertEquals(expected, tool.smallestMultiple(n))
+        //assertEquals(expected, tool.lcmIterative(n))
+        //assertEquals(expected, tool.lcmPrimeFactors(n))
+        //assertEquals(expected, tool.lcmUsingGCD(n))
+        assertEquals(expected.toBigInteger(), tool.lcmUsingBigInteger(n))
     }
 }
