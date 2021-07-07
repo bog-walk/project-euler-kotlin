@@ -20,9 +20,10 @@ internal class LargestPrimeFactorTest {
     fun testAlgorithm_largestPrime_recursive(n: Long, expected: Long) {
         val tool = LargestPrimeFactor()
         //val primes = tool.getPrimeFactorsRecursive(n)
-        val primesImproved = tool.getPrimeFactorsRecursiveImproved(n)
+        //val primesImproved = tool.getPrimeFactorsRecursiveImproved(n)
         //assertEquals(expected, tool.largestPrime(primes))
-        assertEquals(expected, tool.largestPrime(primesImproved))
+        //assertEquals(expected, tool.largestPrime(primesImproved))
+        assertEquals(expected, tool.getLargestPrimeImproved(n))
     }
 
     @Test
