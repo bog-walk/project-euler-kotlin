@@ -70,18 +70,15 @@ class LargestPalindromeProduct {
             val deltaY = if (x % 11 == 0) 1 else 11
             inner@while (y >= x) {
                 val product = y * x
-                if (product <= largest) break@inner // Combo will be too small to pursue further
-                if (product.isPalindrome()) largest = product
+                // Combo will be too small to pursue further
+                if (product <= largest) break@inner
+                if (product.isPalindrome() && product < max) {
+                    largest = product
+                }
                 y -= deltaY
             }
             x--
         }
         return largest
     }
-
-
-
-
-
-
 }
