@@ -18,9 +18,9 @@ internal class SpecialPythagoreanTripletTest {
     @ParameterizedTest(name="{0} has ({1}, {2}, {3})")
     @CsvSource(
         "12, 3, 4, 5", "24, 6, 8, 10",
-        "30, 5, 12, 13", "90, 9, 40, 41",
+        "30, 5, 12, 13", "90, 15, 36, 39",
         "650, 25, 312, 313", "1000, 200, 375, 425",
-        "2214, 533, 756, 925", "3000, 500, 1200, 1300"
+        "2214, 533, 756, 925", "3000, 750, 1000, 1250"
     )
     fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
         val tool = SpecialPythagoreanTriplet()
@@ -29,16 +29,16 @@ internal class SpecialPythagoreanTripletTest {
         //assertEquals(expected, tool.findTripletsLoopImproved(n))
         assertEquals(expected, tool.findTripletsParametrisation(n))
     }
-    /**
+
     @ParameterizedTest(name="N={0} gives {1}")
     @CsvSource(
         "1, -1", "10, -1", "1231, -1",
-        "12, 60", "90, 14760", "1000, 31875000",
-        "3000, 780000000"
+        "12, 60", "90, 21060", "1000, 31875000",
+        "3000, 937500000"
     )
     fun testMaxTripletsProduct(n: Int, expected: Long) {
         val tool = SpecialPythagoreanTriplet()
         assertEquals(expected, tool.maxTripletProduct(n))
     }
-    */
+
 }

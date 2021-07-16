@@ -1,5 +1,6 @@
 import util.gcd
 import kotlin.math.ceil
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -14,10 +15,11 @@ import kotlin.math.sqrt
  * 6^2 + 8^2 = 10^2.
  */
 
+fun Triple<Int, Int, Int>.sum(): Int = first + second + third
 fun Triple<Int, Int, Int>.product(): Long = 1L * first * second * third
 
 class SpecialPythagoreanTriplet {
-    fun maxTripletProduct(n: Int): Long = findTripletsLoop(n)?.product() ?: -1L
+    fun maxTripletProduct(n: Int): Long = findTripletsParametrisation(n)?.product() ?: -1L
 
     /**
      * A primitive Pythagorean triplet has gcd(a,b,c) = 1, as gdc(a,b) =
@@ -31,6 +33,9 @@ class SpecialPythagoreanTriplet {
      * and exactly one of m or n being even.
      */
     fun findTripletsParametrisation(n: Int): Triple<Int, Int, Int>? {
+        if (n % 2 != 0) return null
+        var maxTriplet: Triple<Int, Int, Int>? = null
+        var maxProduct = 0L
         val nMax = n / 2
         val mMax = ceil(sqrt(1.0 * nMax)).toInt() - 1
         for (m in 2..mMax) {
@@ -40,22 +45,29 @@ class SpecialPythagoreanTriplet {
                     kMax /= 2
                 }
                 var k = if (m % 2 == 1) m + 2 else m + 1
-                while (k < 2 *m && k <= kMax) {
+                while (k < 2 * m && k <= kMax) {
                     if (kMax % k == 0 && gcd(k, m) == 1) {
-                        return pythagoreanTriplet(m, k - m, nMax / (k * m))
+                        val triplet = pythagoreanTriplet(m, k - m, nMax / (k * m))
+                        if (triplet.sum() == n) {
+                            val product = triplet.product()
+                            if (product >= maxProduct) {
+                                maxProduct = product
+                                maxTriplet = triplet
+                            }
+                        }
                     }
                     k += 2
                 }
             }
         }
-        return null
+        return maxTriplet
     }
 
     private fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
         val a = (m * m - n * n) * d
         val b = 2 * m * n * d
         val c = (m * m + n * n) * d
-        return Triple(a, b, c)
+        return Triple(minOf(a, b), maxOf(a, b), c)
     }
 
     /**
