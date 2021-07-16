@@ -17,7 +17,8 @@ internal class SpecialPythagoreanTripletTest {
     @CsvSource(
         "12, 3, 4, 5", "24, 6, 8, 10",
         "30, 5, 12, 13", "90, 9, 40, 41",
-        "650, 25, 312, 313", "2214, 533, 756, 925"
+        "650, 25, 312, 313", "2214, 533, 756, 925",
+        "1000, 200, 375, 425"
     )
     fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
         val tool = SpecialPythagoreanTriplet()
