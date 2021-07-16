@@ -15,7 +15,14 @@ import kotlin.math.sqrt
 fun Triple<Int, Int, Int>.product(): Long = 1L * first * second * third
 
 class SpecialPythagoreanTriplet {
-    fun maxTripletProduct(n: Int): Long = findTriplets(n)?.product() ?: -1L
+    fun maxTripletProduct(n: Int): Long = findTripletsLoop(n)?.product() ?: -1L
+
+    /**
+     * A primitive Pythagorean triplet
+     */
+    fun findTripletsParametrisation(n: Int): Triple<Int, Int, Int>? {
+
+    }
 
     /**
      * The set of triples must either be all evens OR
@@ -24,7 +31,7 @@ class SpecialPythagoreanTriplet {
      * is an even number and the sum of 2 odds is an even
      * number as well.
      */
-    fun findTriplets(n: Int): Triple<Int, Int, Int>? {
+    fun findTripletsLoop(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         outer@for (c in (n / 2 - 1) downTo 5) {
             val diff = n - c
@@ -41,5 +48,25 @@ class SpecialPythagoreanTriplet {
 
     private fun isPythagoras(a: Int, b: Int, c: Int): Boolean {
         return sqrt(1.0 * a * a + b * b) == 1.0 * c
+    }
+
+    /**
+     * Based on c >= 5 and a >= 3, with a <= (N - 3)/3 and
+     * b < (N - a)/2, the loop can be slightly adjusted.
+     */
+    fun findTripletsLoopImproved(n: Int): Triple<Int, Int, Int>? {
+        if (n % 2 != 0) return null
+        for (c in (n / 2 - 1) downTo 5) {
+            val diff = n - c
+            inner@for (a in (n - 3) / 3 downTo 3) {
+                val b = diff - a
+                // Will this condition ever be reached?
+                if (a >= b || b > (n - a) / 2) continue@inner
+                if (isPythagoras(a, b, c)) {
+                    return Triple(a, b, c)
+                }
+            }
+        }
+        return null
     }
 }
