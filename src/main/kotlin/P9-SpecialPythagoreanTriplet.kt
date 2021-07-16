@@ -1,3 +1,5 @@
+import util.gcd
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 /**
@@ -18,10 +20,42 @@ class SpecialPythagoreanTriplet {
     fun maxTripletProduct(n: Int): Long = findTripletsLoop(n)?.product() ?: -1L
 
     /**
-     * A primitive Pythagorean triplet
+     * A primitive Pythagorean triplet has gcd(a,b,c) = 1, as gdc(a,b) =
+     * gcd(b,c) = gcd(c,a) = 1. All triplets can be found from 2 numbers
+     * m > n > 0, using the following:
+     * a = m^2 - n^2, b = 2 * m * n, c = m^2 + n^2; and
+     * these triplets will be primitive if exactly one of m or n is
+     * even and gcd(m,n) = 1. All triplets can be reduced to a primitive
+     * one by dividing out the gcd(a,b,c) = d, such that:
+     * a + b + c = 2 * m * (m + n) * d, with m > n > 0, gcd(m, n) = 1
+     * and exactly one of m or n being even.
      */
     fun findTripletsParametrisation(n: Int): Triple<Int, Int, Int>? {
+        val nMax = n / 2
+        val mMax = ceil(sqrt(1.0 * nMax)).toInt() - 1
+        for (m in 2..mMax) {
+            if (nMax % m == 0) { // Find even divisor m (> 1) of n/2
+                var kMax = nMax / m
+                while (kMax % 2 == 0) { // Find odd divisor k (= m + n) of n/2m
+                    kMax /= 2
+                }
+                var k = if (m % 2 == 1) m + 2 else m + 1
+                while (k < 2 *m && k <= kMax) {
+                    if (kMax % k == 0 && gcd(k, m) == 1) {
+                        return pythagoreanTriplet(m, k - m, nMax / (k * m))
+                    }
+                    k += 2
+                }
+            }
+        }
+        return null
+    }
 
+    private fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
+        val a = (m * m - n * n) * d
+        val b = 2 * m * n * d
+        val c = (m * m + n * n) * d
+        return Triple(a, b, c)
     }
 
     /**

@@ -10,7 +10,8 @@ internal class SpecialPythagoreanTripletTest {
         val nums = listOf(1, 4, 6, 31, 99, 100)
         for (n in nums) {
             //assertNull(tool.findTripletsLoop(n))
-            assertNull(tool.findTripletsLoopImproved(n))
+            //assertNull(tool.findTripletsLoopImproved(n))
+            assertNull(tool.findTripletsParametrisation(n))
         }
     }
 
@@ -25,7 +26,8 @@ internal class SpecialPythagoreanTripletTest {
         val tool = SpecialPythagoreanTriplet()
         val expected = Triple(a, b, c)
         //assertEquals(expected, tool.findTripletsLoop(n))
-        assertEquals(expected, tool.findTripletsLoopImproved(n))
+        //assertEquals(expected, tool.findTripletsLoopImproved(n))
+        assertEquals(expected, tool.findTripletsParametrisation(n))
     }
     /**
     @ParameterizedTest(name="N={0} gives {1}")

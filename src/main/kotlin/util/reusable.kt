@@ -14,6 +14,20 @@ fun handleInput() {
     }
 }
 
+/**
+ * gcd(x, y) = gcd(|x * y|, |x|); where |x| >= |y|
+ * &
+ * gcd(x, 0) = gcd(0, x) = |x|
+ */
+fun gcd(n1: Int, n2: Int): Int {
+    val x = abs(n1)
+    val y = abs(n2)
+    if (x == 0 || y == 0) return x + y
+    val bigger = maxOf(x, y)
+    val smaller = minOf(x, y)
+    return gcd(bigger % smaller, smaller)
+}
+
 fun getPrimeFactors(n: Long): Map<Long, Int> {
     var num = abs(n)
     val primes = mutableMapOf<Long, Int>()
