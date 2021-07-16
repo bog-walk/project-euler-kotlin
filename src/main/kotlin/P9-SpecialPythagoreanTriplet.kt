@@ -79,17 +79,24 @@ class SpecialPythagoreanTriplet {
      */
     fun findTripletsLoop(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
+        var maxTriplet: Triple<Int, Int, Int>? = null
+        var maxProduct = 0L
         outer@for (c in (n / 2 - 1) downTo 5) {
             val diff = n - c
             for (b in (c - 1) downTo (diff / 2)) {
                 val a = diff - b
                 if (b <= a) continue@outer
                 if (isPythagoras(a, b, c)) {
-                    return Triple(a, b, c)
+                    val triplet = Triple(a, b, c)
+                    val product = triplet.product()
+                    if (product >= maxProduct) {
+                        maxTriplet = triplet
+                        maxProduct = product
+                    }
                 }
             }
         }
-        return null
+        return maxTriplet
     }
 
     private fun isPythagoras(a: Int, b: Int, c: Int): Boolean {
@@ -102,6 +109,8 @@ class SpecialPythagoreanTriplet {
      */
     fun findTripletsLoopImproved(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
+        var maxTriplet: Triple<Int, Int, Int>? = null
+        var maxProduct = 0L
         for (c in (n / 2 - 1) downTo 5) {
             val diff = n - c
             inner@for (a in (n - 3) / 3 downTo 3) {
@@ -109,10 +118,15 @@ class SpecialPythagoreanTriplet {
                 // Will this condition ever be reached?
                 if (a >= b || b > (n - a) / 2) continue@inner
                 if (isPythagoras(a, b, c)) {
-                    return Triple(a, b, c)
+                    val triplet = Triple(a, b, c)
+                    val product = triplet.product()
+                    if (product >= maxProduct) {
+                        maxTriplet = triplet
+                        maxProduct = product
+                    }
                 }
             }
         }
-        return null
+        return maxTriplet
     }
 }
