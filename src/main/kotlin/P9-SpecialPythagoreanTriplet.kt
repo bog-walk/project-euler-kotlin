@@ -1,6 +1,5 @@
 import util.gcd
 import kotlin.math.ceil
-import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -22,6 +21,7 @@ class SpecialPythagoreanTriplet {
     fun maxTripletProduct(n: Int): Long = findTripletsParametrisation(n)?.product() ?: -1L
 
     /**
+     * Optimised performance solution.
      * A primitive Pythagorean triplet has gcd(a,b,c) = 1, as gdc(a,b) =
      * gcd(b,c) = gcd(c,a) = 1. All triplets can be found from 2 numbers
      * m > n > 0, using the following:
