@@ -8,20 +8,29 @@ import kotlin.math.sqrt
  * Note that a Pythagorean triplet is a set of 3 natural numbers
  * such that a < b < c && a^2 + b^2 = c^2.
  * e.g. 3^2 + 4^2 = 5^2.
- * Test: 12 -> product = 60 (above 3 * 4 * 5). 4 -> product = -1.
+ * A scaled up version of the example would also produce a triplet:
+ * 6^2 + 8^2 = 10^2.
  */
 
-fun Triple<Int, Int, Int>.product(): Int = first * second * third
+fun Triple<Int, Int, Int>.product(): Long = 1L * first * second * third
 
 class SpecialPythagoreanTriplet {
-    fun maxTripletProduct(n: Int): Int = findTriplets(n)?.product() ?: -1
+    fun maxTripletProduct(n: Int): Long = findTriplets(n)?.product() ?: -1L
 
+    /**
+     * The set of triples must either be all evens OR
+     * 2 odds with 1 even. Therefore, the sum of triples
+     * will only ever be even numbers as the sum of evens
+     * is an even number and the sum of 2 odds is an even
+     * number as well.
+     */
     fun findTriplets(n: Int): Triple<Int, Int, Int>? {
-        outer@for (c in n - 3 downTo 3) {
+        if (n % 2 != 0) return null
+        outer@for (c in (n / 2 - 1) downTo 5) {
             val diff = n - c
-            for (a in 1 until diff) {
-                val b = diff - a
-                if (a >= b) continue@outer
+            for (b in (c - 1) downTo (diff / 2)) {
+                val a = diff - b
+                if (b <= a) continue@outer
                 if (isPythagoras(a, b, c)) {
                     return Triple(a, b, c)
                 }
