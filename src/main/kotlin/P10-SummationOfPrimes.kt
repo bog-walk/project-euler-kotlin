@@ -1,4 +1,3 @@
-import util.getPrimeNumbers
 import kotlin.math.sqrt
 
 /**
@@ -15,15 +14,20 @@ class SummationOfPrimes {
 
     /**
      * Sieve of Eratosthenes algorithm: an efficient way to find all primes
-     * less than a provided integer.
+     * less than a provided integer, best up to 10^5, then consider
+     * performing trial division by these primes.
+     * This algorithm marks all composites of the divisors as false.
      */
     fun getPrimesUsingSieve(max: Int): List<Int> {
         if (max < 2) return emptyList()
-        val primesBool = BooleanArray(max - 1) { true }
-        for (p in 2..(sqrt(1.0 * max).toInt())) {
-            if (p * p > max) break
+        // immediately set all even numbers except for 2 as false
+        val primesBool = BooleanArray(max - 1) { !(it != 0 && it % 2 == 0) }
+        // only iterate through odd numbers
+        for (p in 3..(sqrt(1.0 * max).toInt()) step 2) {
             if (primesBool[p - 2]) {
-                for (m in (p * p)..max step p) {
+                if (p * p > max) break
+                // Steps of 2p for odd primes avoids already marked out multiples of 2
+                for (m in (p * p)..max step 2 * p) {
                     primesBool[m - 2] = false
                 }
             }
@@ -31,5 +35,27 @@ class SummationOfPrimes {
         return primesBool.mapIndexed { i, isPrime ->
             if (isPrime) i + 2 else null
         }.filterNotNull()
+    }
+
+    /**
+     *  This optimisation discriminates against even numbers entirely, thereby
+     *  using only half of memory & fewer iterations, for multiple draws.
+     *  Returns array of sums of prime numbers less than or equal to index + 2.
+     */
+    fun sumOfPrimesQuickDraw(): LongArray {
+        val max = 1_000_000
+        val primesBool = BooleanArray(max) { it >= 2 }
+        val sums = LongArray (max) { 0L }
+        for (i in 2 until max) {
+            if (primesBool[i]) {
+                sums[i] = sums[i - 1] + i
+                for (j in (i * i) until max step i) {
+                    primesBool[j] = false
+                }
+            } else {
+                sums[i] = sums[i - 1]
+            }
+        }
+        return sums
     }
 }
