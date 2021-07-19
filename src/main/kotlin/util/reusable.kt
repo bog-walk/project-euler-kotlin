@@ -77,7 +77,10 @@ fun Int.isPrime(): Boolean {
  * is being provided in advance.
  */
 fun getPrimeNumbers(max: Int): List<Int> {
-    return (2..max).filter {
+    if (max < 2) return emptyList()
+    val primes = mutableListOf(2)
+    (3..max step 2).filter {
         it.isPrime()
-    }.toList()
+    }.toCollection(primes)
+    return primes
 }

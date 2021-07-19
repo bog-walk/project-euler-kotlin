@@ -7,7 +7,7 @@ import util.getPrimeNumbers
  */
 
 class SummationOfPrimes {
-    fun sumOfPrimesBrute(n: Int): Int {
-        return getPrimeNumbers(n).sum()
+    fun sumOfPrimesBrute(n: Int): Long {
+        return getPrimeNumbers(n).sumOf { it.toLong() }
     }
 }
