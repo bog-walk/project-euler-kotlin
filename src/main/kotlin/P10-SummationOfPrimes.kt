@@ -1,4 +1,5 @@
 import util.getPrimeNumbers
+import kotlin.math.sqrt
 
 /**
  * Problem 10: Summation of Primes
@@ -7,7 +8,28 @@ import util.getPrimeNumbers
  */
 
 class SummationOfPrimes {
-    fun sumOfPrimesBrute(n: Int): Long {
-        return getPrimeNumbers(n).sumOf { it.toLong() }
+    // Takes either brute iterative function (top-level) or efficient sieve function below
+    fun sumOfPrimes(n: Int, primesFunc: (Int) -> List<Int>): Long {
+        return primesFunc(n).sumOf { it.toLong() }
+    }
+
+    /**
+     * Sieve of Eratosthenes algorithm: an efficient way to find all primes
+     * less than a provided integer.
+     */
+    fun getPrimesUsingSieve(max: Int): List<Int> {
+        if (max < 2) return emptyList()
+        val primesBool = BooleanArray(max - 1) { true }
+        for (p in 2..(sqrt(1.0 * max).toInt())) {
+            if (p * p > max) break
+            if (primesBool[p - 2]) {
+                for (m in (p * p)..max step p) {
+                    primesBool[m - 2] = false
+                }
+            }
+        }
+        return primesBool.mapIndexed { i, isPrime ->
+            if (isPrime) i + 2 else null
+        }.filterNotNull()
     }
 }
