@@ -1,3 +1,6 @@
+package batch1
+
+import SummationOfPrimes
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
@@ -7,7 +10,7 @@ import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class SummationOfPrimesTest {
-    val allPrimes = SummationOfPrimes().sumOfPrimesQuickDraw()
+    private val allPrimes = SummationOfPrimes().sumOfPrimesQuickDraw()
 
     @ParameterizedTest(name="N={0} gives {1}")
     @CsvSource(

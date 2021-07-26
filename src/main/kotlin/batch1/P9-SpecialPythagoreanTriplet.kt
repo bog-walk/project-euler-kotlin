@@ -1,3 +1,5 @@
+package batch1
+
 import util.gcd
 import kotlin.math.ceil
 import kotlin.math.sqrt

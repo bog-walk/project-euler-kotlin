@@ -1,3 +1,5 @@
+package batch1
+
 /**
  * Problem 8: Largest Product in a Series
  * Goal: Find the K adjacent digits in an N-digit number
