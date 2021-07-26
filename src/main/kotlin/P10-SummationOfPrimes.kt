@@ -43,18 +43,23 @@ class SummationOfPrimes {
      *  Returns array of sums of prime numbers less than or equal to index + 2.
      */
     fun sumOfPrimesQuickDraw(): LongArray {
-        val max = 1_000_000
-        val primesBool = BooleanArray(max) { it >= 2 }
-        val sums = LongArray (max) { 0L }
-        for (i in 2 until max) {
+        val max = 1_000_000 // must be even (or include loop check)
+        val primesBool = BooleanArray(max + 1) {
+            it == 2 || it >2 && it % 2 != 0
+        }
+        val sums = LongArray (max + 1) { 0L }.apply { this[2] = 2L }
+        for (i in 3..max step 2) {
             if (primesBool[i]) {
                 sums[i] = sums[i - 1] + i
-                for (j in (i * i) until max step i) {
-                    primesBool[j] = false
+                if (1L * i * i < max.toLong()) {
+                    for (j in (i * i)..max step i) {
+                        primesBool[j] = false
+                    }
                 }
             } else {
                 sums[i] = sums[i - 1]
             }
+            sums[i + 1] = sums[i]
         }
         return sums
     }
