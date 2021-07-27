@@ -63,4 +63,18 @@ internal class IntMatrix2DTest {
         assertTrue(leading.contentEquals(actual[0]))
         assertTrue(counter.contentEquals(actual[1]))
     }
+
+    @Test
+    fun testTranspose() {
+        val matrix = IntMatrix2D(3, 3).apply {
+            this[0] = intArrayOf(1, 2, 3)
+            this[1] = intArrayOf(4, 5, 6)
+            this[2] = intArrayOf(7, 8, 9)
+        }
+        val expected = "[ 1 4 7 ]\n" +
+                "[ 2 5 8 ]\n" +
+                "[ 3 6 9 ]"
+        val actual = matrix.transpose()
+        assertEquals(expected, actual.toString())
+    }
 }

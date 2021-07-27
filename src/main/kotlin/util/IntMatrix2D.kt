@@ -58,8 +58,10 @@ class IntMatrix2D(
         return matrix[j]
     }
 
-    operator fun set(i: Int, value: IntArray) {
+    operator fun set(i: Int, value: IntArray): Boolean {
+        if (value.size != cols) return false
         matrix[i] = value
+        return true
     }
 }
 
