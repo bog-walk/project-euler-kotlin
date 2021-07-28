@@ -23,7 +23,7 @@ internal class LargestProductInGridTest {
         val tool = LargestProductInGrid()
         assertEquals(6, tool.maxFromGrid(smallGrid))
         assertEquals(15, tool.maxFromGrid(midGrid))
-        assertEquals(73812150, tool.maxFromGrid(largeGrid))
+        assertEquals(70600674, tool.maxFromGrid(largeGrid))
     }
 
     @Test
