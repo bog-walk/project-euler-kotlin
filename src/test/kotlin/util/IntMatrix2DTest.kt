@@ -43,14 +43,6 @@ internal class IntMatrix2DTest {
     }
 
     @Test
-    fun testProduct() {
-        val matrix = IntMatrix2D(3, 3).apply { this + 2 }
-        for (row in matrix.iterator()) {
-            assertEquals(8, matrix.product(row))
-        }
-    }
-
-    @Test
     fun testGetDiagonals() {
         val leading = intArrayOf(1, 2, 3)
         val counter = intArrayOf(1, 2, 0)
@@ -76,5 +68,37 @@ internal class IntMatrix2DTest {
                 "[ 3 6 9 ]"
         val actual = matrix.transpose()
         assertEquals(expected, actual.toString())
+    }
+
+    @Test
+    fun testIterate() {
+        val matrix = IntMatrix2D(3, 3).apply {
+            this[0] = intArrayOf(1, 2, 3)
+            this[1] = intArrayOf(4, 5, 6)
+            this[2] = intArrayOf(7, 8, 9)
+        }
+        var actual = ""
+        for (row in matrix) {
+            actual += "Row ${row.contentToString()} "
+        }
+        val expected = "Row [1, 2, 3] Row [4, 5, 6] Row [7, 8, 9] "
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun testCreationUsingTopLevelFunc() {
+        val array = Array(2) { r -> IntArray(4) { c -> r * c } }
+        val expected = "[ 0 0 0 0 ]\n" +
+                "[ 0 1 2 3 ]"
+        val actual = intMatrixOf(array)
+        assertEquals(expected, actual.toString())
+    }
+
+    @Test
+    fun testProduct() {
+        val matrix = IntMatrix2D(3, 3).apply { this + 2 }
+        for (row in matrix.iterator()) {
+            assertEquals(8, row.product())
+        }
     }
 }

@@ -1,6 +1,7 @@
 package batch2
 
 import util.IntMatrix2D
+import util.product
 
 /**
  * Problem 11: Largest Product in a Grid
@@ -11,21 +12,17 @@ import util.IntMatrix2D
 
 class LargestProductInGrid {
     fun maxProductSmallest(grid: IntMatrix2D): Int {
+        return maxOf(
+            getMaxProduct(grid.getDiagonals()),
+            getMaxProduct(grid),
+            getMaxProduct(grid.transpose())
+        )
+    }
+
+    private fun getMaxProduct(iterable: Iterable<IntArray>): Int {
         var maxProd = 0
-        for (diagonal in grid.getDiagonals()) {
-            val prod = grid.product(diagonal)
-            if (prod > maxProd) {
-                maxProd = prod
-            }
-        }
-        for (row in grid.iterator()) {
-            val prod = grid.product(row)
-            if (prod > maxProd) {
-                maxProd = prod
-            }
-        }
-        for (row in grid.transpose().iterator()) {
-            val prod = grid.product(row)
+        for (intArray in iterable) {
+            val prod = intArray.product()
             if (prod > maxProd) {
                 maxProd = prod
             }

@@ -24,10 +24,6 @@ class IntMatrix2D(
         }
     }
 
-    fun product(row: IntArray): Int {
-        return row.reduce { acc, n -> acc * n }
-    }
-
     fun getDiagonals(): List<IntArray> {
         if (rows != cols) return emptyList()
         val leading = IntArray(cols)
@@ -78,4 +74,16 @@ class IntMatrix2DIterator(
     override fun next(): IntArray {
         return matrix[initRow++]
     }
+}
+
+fun intMatrixOf(grid: Array<IntArray>): IntMatrix2D {
+    val matrix = IntMatrix2D(grid.size, grid[0].size)
+    grid.forEachIndexed { i, row ->
+        matrix[i] = row
+    }
+    return matrix
+}
+
+fun IntArray.product(): Int {
+    return reduce { acc, n -> acc * n }
 }
