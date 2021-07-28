@@ -86,6 +86,27 @@ internal class IntMatrix2DTest {
     }
 
     @Test
+    fun testClip_invalid() {
+        val matrix = IntMatrix2D(3, 3)
+        assertNull(matrix.clip(0, 0, 5)) // Too large
+        assertNull(matrix.clip(4, 5, 2)) // Out of bounds start
+        assertNull(matrix.clip(1, 1, 3)) // Out of bounds end
+    }
+
+    @Test
+    fun testClip_valid() {
+        val matrix = IntMatrix2D(4, 4).apply {
+            this[0] = intArrayOf(1, 2, 3, 4)
+            this[1] = intArrayOf(4, 5, 6, 7)
+            this[2] = intArrayOf(7, 8, 9, 9)
+        }
+        val expected = "[ 6 7 ]\n" +
+                "[ 9 9 ]"
+        val actual = matrix.clip(1, 2, 2)
+        assertEquals(expected, actual.toString())
+    }
+
+    @Test
     fun testCreationUsingTopLevelFunc() {
         val array = Array(2) { r -> IntArray(4) { c -> r * c } }
         val expected = "[ 0 0 0 0 ]\n" +

@@ -59,6 +59,23 @@ class IntMatrix2D(
         matrix[i] = value
         return true
     }
+
+    /**
+     * Remove a smaller square matrix of the provided size.
+     */
+    fun clip(startX: Int, startY: Int, size: Int): IntMatrix2D? {
+        if (size == 0 || size > rows || size > cols) return null
+        if (startX !in 0 until rows - 1 || startY !in 0 until cols - 1) return null
+        val endXIncl = startX + size - 1
+        val endYIncl = startY + size - 1
+        if (endXIncl > rows - 1 || endYIncl > cols - 1) return null
+        val clip = matrix.sliceArray(startX..endXIncl).apply {
+            forEachIndexed { i, row ->
+                this[i] = row.sliceArray(startY..endYIncl)
+            }
+        }
+        return intMatrixOf(clip)
+    }
 }
 
 class IntMatrix2DIterator(
