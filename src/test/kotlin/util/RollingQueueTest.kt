@@ -17,6 +17,16 @@ internal class RollingQueueTest {
     }
 
     @Test
+    fun testPeekTail_lessThanCapacity() {
+        val queue = RollingQueue<Int>(5).apply {
+            repeat(3) {
+                add(it)
+            }
+        }
+        assertNull(queue.peekTail())
+    }
+
+    @Test
     fun testPeekTail_withinCapacity() {
         val queue = RollingQueue<Int>(5).apply {
             repeat(5) {
@@ -24,6 +34,16 @@ internal class RollingQueueTest {
             }
         }
         assertEquals(4, queue.peekTail())
+    }
+
+    @Test
+    fun testPeekTail_beyondCapacity() {
+        val queue = RollingQueue<Int>(5).apply {
+            repeat(8) {
+                add(it)
+            }
+        }
+        assertEquals(7, queue.peekTail())
     }
 
     @Test
@@ -62,15 +82,5 @@ internal class RollingQueueTest {
         }
         val expected = "[4, 5, 6, 7, 100, 200, 300, 400]"
         assertEquals(expected, queue.toString())
-    }
-
-    @Test
-    fun testPeekTail_beyondCapacity() {
-        val queue = RollingQueue<Int>(5).apply {
-            repeat(8) {
-                add(it)
-            }
-        }
-        assertEquals(7, queue.peekTail())
     }
 }
