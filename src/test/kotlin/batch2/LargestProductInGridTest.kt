@@ -19,6 +19,14 @@ internal class LargestProductInGridTest {
     )
 
     @Test
+    fun testMaxFromGrid() {
+        val tool = LargestProductInGrid()
+        assertEquals(6, tool.maxFromGrid(smallGrid))
+        assertEquals(15, tool.maxFromGrid(midGrid))
+        assertEquals(73812150, tool.maxFromGrid(largeGrid))
+    }
+
+    @Test
     fun testMaxProduct_smallest() {
         val matrix = intMatrixOf(smallGrid)
         val tool = LargestProductInGrid()
@@ -26,10 +34,24 @@ internal class LargestProductInGridTest {
     }
 
     @Test
-    fun testMaxProduct_mid() {
-        val matrix = intMatrixOf(midGrid)
+    fun testAssessRows() {
         val tool = LargestProductInGrid()
-        assertEquals(15, tool.maxProductSmallest(matrix))
+        assertEquals(3, tool.assessRows(smallGrid))
+        assertEquals(15, tool.assessRows(midGrid))
+    }
+
+    @Test
+    fun testAssessCols() {
+        val tool = LargestProductInGrid()
+        assertEquals(6, tool.assessCols(smallGrid))
+        assertEquals(5, tool.assessCols(midGrid))
+    }
+
+    @Test
+    fun testAssessDiagonals() {
+        val tool = LargestProductInGrid()
+        assertEquals(3, tool.assessDiagonals(smallGrid))
+        assertEquals(1, tool.assessDiagonals(midGrid))
     }
 
     @Test
