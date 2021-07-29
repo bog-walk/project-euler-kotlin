@@ -31,6 +31,7 @@ internal class HighlyDivisibleTriangularNumberTest {
     fun testFirstTrianglesBounded_1000Divisors() {
         val tool = HighlyDivisibleTriangularNumber()
         val actual = tool.firstTrianglesBounded(1000)
+        assertEquals(76576500, actual[500])
         assertEquals(842161320, actual[1000])
     }
 
