@@ -35,4 +35,19 @@ internal class HighlyDivisibleTriangularNumberTest {
         assertEquals(842161320, actual[1000])
     }
 
+    // Previous = 2806ms; Improved = 75ms
+    @Test
+    fun testSpeedDiff() {
+        val tool = HighlyDivisibleTriangularNumber()
+        val draftBefore = System.currentTimeMillis()
+        val draftOutput = tool.firstTrianglesBounded(1000)
+        val draftAfter = System.currentTimeMillis()
+        val improvedBefore = System.currentTimeMillis()
+        val improvedOutput = tool.firstTrianglesImproved(1000)
+        val improvedAfter = System.currentTimeMillis()
+        println("Previous solution took ${draftAfter - draftBefore}ms\n" +
+                "Improved solution took ${improvedAfter - improvedBefore}ms")
+        assertTrue(improvedOutput.contentEquals(draftOutput))
+    }
+
 }

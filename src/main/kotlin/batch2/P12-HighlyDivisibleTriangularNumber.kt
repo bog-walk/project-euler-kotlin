@@ -14,6 +14,10 @@ import util.getPrimeFactors
 class HighlyDivisibleTriangularNumber {
     private fun Int.gaussSum(): Int = this * (this + 1) / 2
 
+    /**
+     * e.g. 28 = 2^2 * 7^1 (prime factors)
+     * Therefore, num of divisors of 28 = (2 + 1) * (7 + 1)
+     */
     fun countDivisors(n: Int): Int {
         val primeFactors = getPrimeFactors(1L * n)
         return primeFactors.values
@@ -45,10 +49,52 @@ class HighlyDivisibleTriangularNumber {
         }
         return triangles
     }
+
+    /**
+     * Since the components of the gaussian sum are co-prime (cannot have a
+     * common prime factor and no common divisor, the amount of divisors (D) can
+     * be gotten from :
+     * [if n is even] D(t) = D(n/2) * D(n+1) OR
+     * [if (n+1) is even] D(t) = D(n) * D((n+1)/2)
+     * The second part of the 1st equation will carry over to the next.
+     */
+    fun firstTrianglesImproved(n: Int): IntArray {
+        val triangles = IntArray(n + 1).apply {
+            this[0] = 1
+            this[1] = 3
+            this[2] = 6
+        }
+        var lastT = 3 // D(3) = D(3) * D(2)
+        var lastDn1 = 2
+        var lastTriangle = 6
+        var lastCount = 4
+        for (i in 3..n) {
+            if (i < lastCount) {
+                triangles[i] = lastTriangle
+                continue
+            }
+            var nextT = lastT + 1
+            do {
+                val triangle = nextT.gaussSum()
+                val dn2 = if (nextT % 2 == 0) countDivisors(nextT+1) else countDivisors((nextT+1)/2)
+                val count = lastDn1 * dn2
+                lastDn1 = dn2
+                if (i < count) {
+                    triangles[i] = triangle
+                    lastTriangle = triangle
+                    lastT = nextT
+                    lastCount = count
+                    break
+                }
+                nextT++
+            } while (true)
+        }
+        return triangles
+    }
 }
 
 fun main() {
     val tool = HighlyDivisibleTriangularNumber()
-    val triangles = tool.firstTrianglesBounded(1000)
-    println(triangles.sliceArray(990..1000).contentToString())
+    val ans = tool.firstTrianglesImproved(20)
+    println(ans.contentToString())
 }
