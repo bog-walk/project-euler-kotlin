@@ -22,4 +22,28 @@ class HighlyDivisibleTriangularNumber {
             .map { it + 1 }
             .reduce { acc, v -> acc * v }
     }
+
+    fun firstTrianglesBounded(n: Int): IntArray {
+        val triangles = IntArray(n + 1).apply { this[0] = 1 }
+        var lastT = 2
+        for (i in 1..n) {
+            var nextT = lastT
+            do {
+                val triangle = nextT.gaussSum()
+                if (countDivisors(triangle) > i) {
+                    triangles[i] = triangle
+                    lastT = nextT
+                    break
+                }
+                nextT++
+            } while (true)
+        }
+        return triangles
+    }
+}
+
+fun main() {
+    val tool = HighlyDivisibleTriangularNumber()
+    val triangles = tool.firstTrianglesBounded(1000)
+    println(triangles.sliceArray(990..1000).contentToString())
 }
