@@ -1,8 +1,8 @@
 package util
 
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -30,5 +30,20 @@ internal class ReusableTest {
     )
     fun testGCD(x: Int, y: Int, expected: Int) {
         assertEquals(expected, gcd(x, y))
+    }
+
+    // Basic: 24ms; Sieve: 3ms
+    @Test
+    fun testGetPrimes() {
+        val max = 10000
+        val basicBefore = System.currentTimeMillis()
+        val basic = getPrimeNumbers(max)
+        val basicAfter = System.currentTimeMillis()
+        val sieveBefore = System.currentTimeMillis()
+        val sieve = getPrimesUsingSieve(max)
+        val sieveAfter = System.currentTimeMillis()
+        println("Basic algorithm took ${basicAfter - basicBefore}ms\n" +
+                "Sieve algorithm tool ${sieveAfter - sieveBefore}ms")
+        assertEquals(basic, sieve)
     }
 }

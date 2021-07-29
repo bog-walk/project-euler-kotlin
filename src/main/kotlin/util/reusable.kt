@@ -84,3 +84,19 @@ fun getPrimeNumbers(max: Int): List<Int> {
     }.toCollection(primes)
     return primes
 }
+
+fun getPrimesUsingSieve(max: Int): List<Int> {
+    if (max < 2) return emptyList()
+    val primesBool = BooleanArray(max - 1) { !(it != 0 && it % 2 == 0) }
+    for (p in 3..(sqrt(1.0 * max).toInt()) step 2) {
+        if (primesBool[p - 2]) {
+            if (p * p > max) break
+            for (m in (p * p)..max step 2 * p) {
+                primesBool[m - 2] = false
+            }
+        }
+    }
+    return primesBool.mapIndexed { i, isPrime ->
+        if (isPrime) i + 2 else null
+    }.filterNotNull()
+}

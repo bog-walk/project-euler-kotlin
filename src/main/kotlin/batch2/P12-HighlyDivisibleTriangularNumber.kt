@@ -1,6 +1,7 @@
 package batch2
 
 import util.getPrimeFactors
+import util.getPrimesUsingSieve
 
 /**
  * Problem 12: Highly Divisible Triangular Number
@@ -91,10 +92,42 @@ class HighlyDivisibleTriangularNumber {
         }
         return triangles
     }
+
+    fun firstTriangleOverN(n: Int): Int {
+        val primes = getPrimesUsingSieve(n * 2)
+        var prime = 3
+        var dn = 2 // min num of divisors for any prime
+        var count = 0
+        while (count <= n) {
+            prime++
+            var n1 = prime
+            if (n1 % 2 == 0) n1 /= 2
+            var dn1 = 1
+            for (i in primes.indices) {
+                //When the prime divisor would be greater than the residual n1
+                // that residual n1 is the last prime factor with an exponent=1.
+                // No need to identify it.
+                if (primes[i] * primes[i] > n1) {
+                    dn1 *= 2
+                    break
+                }
+                var exponent = 1
+                while (n1 % primes[i] == 0) {
+                    exponent++
+                    n1 /= primes[i]
+                }
+                if (exponent > 1) dn1 *= exponent
+                if (n1 == 1) break
+            }
+            count = dn * dn1
+            dn = dn1
+        }
+        return prime * (prime - 1) / 2
+    }
 }
 
 fun main() {
     val tool = HighlyDivisibleTriangularNumber()
-    val ans = tool.firstTrianglesImproved(20)
-    println(ans.contentToString())
+    val ans = tool.firstTriangleOverN(20)
+    println(ans)
 }
