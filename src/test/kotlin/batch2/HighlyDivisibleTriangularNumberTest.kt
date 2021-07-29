@@ -31,11 +31,20 @@ internal class HighlyDivisibleTriangularNumberTest {
     fun testFirstTrianglesBounded_1000Divisors() {
         val tool = HighlyDivisibleTriangularNumber()
         //val actual = tool.firstTrianglesBounded(1000)
-        //val actual = tool.firstTrianglesImproved(1000)
-        //assertEquals(76576500, actual[500])
-        //assertEquals(842161320, actual[1000])
-        val triangle = tool.firstTriangleOverN(1000)
-        assertEquals(842161320, triangle)
+        val actual = tool.firstTrianglesImproved(1000)
+        assertEquals(76576500, actual[500])
+        assertEquals(842161320, actual[1000])
+    }
+
+    @ParameterizedTest(name="First t over {0} divisors is {1}")
+    @CsvSource(
+        "1, 3", "2, 6", "4, 28",
+        "12, 120", "500, 76576500", "1000, 842161320"
+    )
+    fun testFirstTriangleOverN(n: Int, expected: Int) {
+        val tool = HighlyDivisibleTriangularNumber()
+        assertEquals(expected, tool.firstTriangleOverN(n))
+        assertEquals(expected, tool.firstTriangleOverNImproved(n))
     }
 
     // Previous = 2806ms; Improved = 75ms
@@ -53,19 +62,18 @@ internal class HighlyDivisibleTriangularNumberTest {
         assertTrue(improvedOutput.contentEquals(draftOutput))
     }
 
-    // Multi-output: 104ms; Single-output: 38ms
+    // Basic: 126ms; Improved: 36ms
     @Test
     fun testSpeedDiff_pickSingle() {
         val tool = HighlyDivisibleTriangularNumber()
-        val improvedMultiBefore = System.currentTimeMillis()
-        val improvedMultiOutput = tool.firstTrianglesImproved(1000)
-        val improvedMultiPick = improvedMultiOutput[1000]
-        val improvedMultiAfter = System.currentTimeMillis()
-        val improvedSingleBefore = System.currentTimeMillis()
-        val improvedSinglePick = tool.firstTriangleOverN(1000)
-        val improvedSingleAfter = System.currentTimeMillis()
-        println("Multiple output solution took ${improvedMultiAfter - improvedMultiBefore}ms\n" +
-                "Single output solution took ${improvedSingleAfter - improvedSingleBefore}ms")
-        assertEquals(improvedMultiPick, improvedSinglePick)
+        val basicBefore = System.currentTimeMillis()
+        val basicPick = tool.firstTriangleOverN(1000)
+        val basicAfter = System.currentTimeMillis()
+        val improvedBefore = System.currentTimeMillis()
+        val improvedPick = tool.firstTriangleOverNImproved(1000)
+        val improvedAfter = System.currentTimeMillis()
+        println("Basic solution took ${basicAfter - basicBefore}ms\n" +
+                "Improved solution took ${improvedAfter - improvedBefore}ms")
+        assertEquals(basicPick, improvedPick)
     }
 }

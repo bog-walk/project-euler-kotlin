@@ -94,6 +94,21 @@ class HighlyDivisibleTriangularNumber {
     }
 
     fun firstTriangleOverN(n: Int): Int {
+        if (n == 1) return 3
+        var t = 2 // D(2) = D(1) * D(3)
+        var dn1 = 2 // D(3) = 2
+        var count = 2
+        while (count <= n) {
+            t++
+            val dn2 = if (t % 2 == 0) countDivisors(t+1) else countDivisors((t+1)/2)
+            count = dn1 * dn2
+            dn1 = dn2
+        }
+        return t.gaussSum()
+    }
+
+    fun firstTriangleOverNImproved(n: Int): Int {
+        if (n == 1) return 3
         val primes = getPrimesUsingSieve(n * 2)
         var prime = 3
         var dn = 2 // min num of divisors for any prime
@@ -124,10 +139,4 @@ class HighlyDivisibleTriangularNumber {
         }
         return prime * (prime - 1) / 2
     }
-}
-
-fun main() {
-    val tool = HighlyDivisibleTriangularNumber()
-    val ans = tool.firstTriangleOverN(20)
-    println(ans)
 }
