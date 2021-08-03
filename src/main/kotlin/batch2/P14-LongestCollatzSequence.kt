@@ -2,8 +2,8 @@ package batch2
 
 /**
  * Problem 14: Longest Collatz Sequence
- * Goal: Find the starting number N, such that
- * 1 < N < 10^6, the produces the longest Collatz chain.
+ * Goal: Find the largest starting number <= N, such that
+ * 1 <= N <= 5 x 10^6, the produces the longest Collatz chain.
  * Collatz sequences, thought to all finish at 1, are defined
  * for positive integer starting numbers as:
  * n -> n / 2 (if n is even) & n -> 3n + 1 (if n is odd).
@@ -23,15 +23,25 @@ class LongestCollatzSequence {
 
     fun longestCollatz(max: Int): Int {
         val sizes = mutableMapOf(1 to 1)
-        for (starter in 2 until max) {
+        var longestStarter = 1
+        var longest = 1
+        for (starter in 2..max) {
             if (sizes.containsKey(starter)) continue
             var factor = sizes.getOrPut(starter) { collatzSequence(starter).size }
+            if (factor >= longest) {
+                longestStarter = starter
+                longest = factor
+            }
             var multiple = starter * 2
-            while (multiple < max) {
+            while (multiple <= max) {
                 factor = sizes.getOrPut(multiple) { factor + 1 }
+                if (factor >= longest) {
+                    longestStarter = starter
+                    longest = factor
+                }
                 multiple *= 2
             }
         }
-        return sizes.keys.maxByOrNull { sizes[it]!! }!!
+        return longestStarter
     }
 }

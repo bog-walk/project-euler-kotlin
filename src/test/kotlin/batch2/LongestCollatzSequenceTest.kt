@@ -26,7 +26,8 @@ internal class LongestCollatzSequenceTest {
 
     @ParameterizedTest(name="Longest under {0} starts at {1}")
     @CsvSource(
-        "2, 1", "3, 2", "5, 3", "10, 9", "15, 9", "26, 25"
+        "1, 1", "2, 2", "3, 3", "5, 3", "10, 9", "15, 9",
+        "20, 19", "26, 25"
     )
     fun testLongestCollatz(max: Int, expected: Int) {
         val tool = LongestCollatzSequence()
