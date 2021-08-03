@@ -20,4 +20,18 @@ class LongestCollatzSequence {
         }
         return sequence
     }
+
+    fun longestCollatz(max: Int): Int {
+        val sizes = mutableMapOf(1 to 1)
+        for (starter in 2 until max) {
+            if (sizes.containsKey(starter)) continue
+            var factor = sizes.getOrPut(starter) { collatzSequence(starter).size }
+            var multiple = starter * 2
+            while (multiple < max) {
+                factor = sizes.getOrPut(multiple) { factor + 1 }
+                multiple *= 2
+            }
+        }
+        return sizes.keys.maxByOrNull { sizes[it]!! }!!
+    }
 }
