@@ -1,5 +1,6 @@
 package util
 
+import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.sqrt
@@ -11,6 +12,15 @@ fun handleInput() {
     repeat(readLine()!!.trim().toInt()) {
         val ans = readLine()!!.trim().toInt()
         println(ans)
+    }
+}
+
+tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
+    require(this >= 0) { "Integer must not be negative" }
+    return when (this) {
+        0 -> BigInteger.ONE
+        1 -> run
+        else -> (this - 1).factorial(run * this.toBigInteger())
     }
 }
 

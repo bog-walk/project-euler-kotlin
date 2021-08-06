@@ -1,13 +1,29 @@
 package util
 
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.math.BigInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class ReusableTest {
+    @ParameterizedTest(name="{0}! = {1}")
+    @CsvSource(
+        "0, 1", "1, 1", "2, 2", "3, 6", "4, 24",
+        "5, 120", "10, 3628800"
+    )
+    fun testFactorial(n: Int, expected: Long) {
+        assertEquals(expected.toBigInteger(), n.factorial())
+    }
+
+    @Test
+    fun testFactorial_invalid() {
+        assertThrows<IllegalArgumentException> { (-5).factorial() }
+    }
+
     @Test
     fun testIsPrime() {
         assertFalse(1.isPrime())
