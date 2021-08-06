@@ -1,8 +1,6 @@
 package batch2
 
 import kotlin.math.log2
-import kotlin.math.nextDown
-import kotlin.math.pow
 
 /**
  * Problem 14: Longest Collatz Sequence
@@ -14,6 +12,9 @@ import kotlin.math.pow
  */
 
 class LongestCollatzSequence {
+    private val countedSeq = IntArray(5000001) { if (it == 0) 1 else 0 }
+    private val longestCountedUnderN = IntArray(5000001) { if (it == 0) 1 else 0 }
+
     fun collatzSequence(start: Int): List<Int> {
         val sequence = mutableListOf(start)
         var prev = start
@@ -38,6 +39,49 @@ class LongestCollatzSequence {
             }
         }
         return count
+    }
+
+    private fun collatzLengthSaved(start: Long): Int {
+        return if (start <= 5000000L && countedSeq[start.toInt() - 1] != 0) {
+            countedSeq[start.toInt() - 1]
+        } else {
+            val count: Int = if (start % 2L == 0L) {
+                1 + collatzLengthSaved(start / 2)
+            } else {
+                2 + collatzLengthSaved((3 * start + 1) / 2)
+            }
+            if (start <= 5000000L) countedSeq[start.toInt() - 1] = count
+            count
+        }
+    }
+
+    fun generateLongestSequences() {
+        var longest = 1
+        var longestCount = 1
+        for (i in 2..5000000) {
+            val count = collatzLengthSaved(1L * i)
+            if (count >= longestCount) {
+                longest = i
+                longestCount = count
+            }
+            longestCountedUnderN[i - 1] = longest
+        }
+    }
+
+    fun longestCollatzMemo(max: Int): Int = longestCountedUnderN[max - 1]
+
+    fun longestCollatzImproved(max: Int): Int {
+        var longest = 1
+        var longestStarter = 1
+        val min = (max / 2).coerceAtLeast(1)
+        for (starter in min..max) {
+            val count = collatzLengthSaved(1L * starter)
+            if (count >= longest) {
+                longest = count
+                longestStarter = starter
+            }
+        }
+        return longestStarter
     }
 
     fun longestCollatz(max: Int): Int {
@@ -93,35 +137,6 @@ class LongestCollatzSequence {
                 }
                 multiple *= 2
             }
-        }
-        return longestStarter
-    }
-
-    fun longestCollatzImproved(max: Int): Int {
-        val counted = mutableMapOf(1 to 1)
-        var longest = 1
-        var longestStarter = 1
-        var starter = (max / 2).coerceAtLeast(1)
-        var step = 1
-        fun collatzCount(start: Int): Int {
-            if (counted.containsKey(start)) return counted.getValue(start)
-            counted[start] = if (start.isPowerOfTwo()) {
-                log2(1.0 * start).toInt() - 1 + 2
-            } else if (start % 2 == 0) {
-                1 + collatzCount(start / 2)
-            } else {
-                2 + collatzCount((3 * start + 1) / 2)
-            }
-            return counted.getValue(start)
-        }
-        while (starter < max) {
-            val count = collatzCount(starter)
-            if (count >= longest) {
-                longest = count
-                longestStarter = starter
-            }
-            if (starter == 55) step = 2
-            starter += step
         }
         return longestStarter
     }
