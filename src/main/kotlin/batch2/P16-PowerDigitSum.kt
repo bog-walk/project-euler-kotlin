@@ -1,5 +1,7 @@
 package batch2
 
+import java.math.BigInteger
+
 /**
  * Problem 16: Power Digit Sum
  * Goal: Find the sum of the digits of the number 2^N,
@@ -10,6 +12,7 @@ package batch2
 
 class PowerDigitSum {
     fun expDigSum(n: Int): Int {
-        
+        val power = BigInteger.TWO.pow(n).toString()
+        return power.map(Char::digitToInt).sum()
     }
 }
