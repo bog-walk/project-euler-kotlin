@@ -11,7 +11,6 @@ import java.math.BigInteger
  * e.g. For a 2x2 grid, & only being able to move right & down,
  * there are 6 routes to get from the top left corner to the
  * bottom right corner {RRDD, RDRD, RDDR, DRRD, DRDR, DDRR}.
- * Test: 1x1 has 2. 3x3 has . 3x2 grid has 10 routes.
  */
 
 class LatticePaths {
@@ -22,6 +21,8 @@ class LatticePaths {
      * groups of indistinguishable items that must be multiplied.
      * e.g. 2x2 grid has 4 steps {R:2 , D: 2}. So, # of routes =
      * 4! / (2! * 2!) = 24 / 4 = 6
+     * Identical to formula: n! / k! * (n-k)!, where k is the number of R, as once
+     * all the Rs ar chosen the Ds can only be placed in a deterministic way.
      * As number of routes may be very large, the amount returned is the total
      * routes % (10^9 + 7).
      */
