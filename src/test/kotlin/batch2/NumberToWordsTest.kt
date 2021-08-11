@@ -1,6 +1,7 @@
 package batch2
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
@@ -17,8 +18,12 @@ internal class NumberToWordsTest {
         "100, 'One Hundred'", "5000, 'Five Thousand'",
         // triple digit triple combo
         "243, 'Two Hundred Forty Three'",
+        // powers of ten
+        "1000, 'One Thousand'", "10000, 'Ten Thousand'", "100000, 'One Hundred Thousand'",
+        "1000000, 'One Million'", "10000000, 'Ten Million'", "100000000, 'One Hundred Million'",
         // long combos
         "8004792, 'Eight Million Four Thousand Seven Hundred Ninety Two'",
+        "10000000010, 'Ten Billion Ten'",
         "104382426112, 'One Hundred Four Billion Three Hundred Eighty Two Million Four Hundred Twenty Six Thousand One Hundred Twelve'"
     )
     fun testNumberWritten_withoutAnd(number: Long, expected: String) {
@@ -32,7 +37,8 @@ internal class NumberToWordsTest {
         "4, 'Four'", "11, 'Eleven'", "66, 'Sixty Six'", "1000000000, 'One Billion'",
         // 'and' should be added
         "243, 'Two Hundred And Forty Three'",
-        "8004792, 'Eight Million Four Thousand Seven Hundred And Ninety Two'",
+        "10000000010, 'Ten Billion And Ten'",
+        "8004792, 'Eight Million And Four Thousand Seven Hundred And Ninety Two'",
         "104382426112, 'One Hundred And Four Billion Three Hundred And Eighty Two Million Four Hundred And Twenty Six Thousand One Hundred And Twelve'"
     )
     fun testNumberWritten_withAnd(number: Long, expected: String) {
@@ -51,5 +57,16 @@ internal class NumberToWordsTest {
     fun testCountLetters(number: String, expected: Int) {
         val tool = NumberToWords()
         assertEquals(expected, tool.countLetters(number))
+    }
+
+    @Test
+    fun testCountFirstThousandPositives() {
+        val tool = NumberToWords()
+        var count = 0
+        for (i in 1..1000) {
+            val numAsString = tool.numberWritten(1L * i, true)
+            count += tool.countLetters(numAsString)
+        }
+        assertEquals(21124, count)
     }
 }

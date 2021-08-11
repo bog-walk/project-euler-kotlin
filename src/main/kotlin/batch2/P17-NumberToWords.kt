@@ -16,7 +16,7 @@ class NumberToWords {
         20 to "Twenty", 30 to "Thirty", 40 to "Forty", 50 to "Fifty", 60 to "Sixty",
         70 to "Seventy", 80 to "Eighty", 90 to "Ninety"
     )
-    private val multiplesOfTen = listOf("Hundred", "Thousand", "Million", "Billion")
+    private val powersOfTen = listOf("Hundred", "Thousand", "Million", "Billion")
 
     fun numberWritten(n: Long, andIncluded: Boolean = false): String {
         val digits = n.toString().map(Char::digitToInt).reversed()
@@ -26,27 +26,28 @@ class NumberToWords {
         do {
             val nextDigit = digits[digit - 1]
             when {
-                nextDigit == 0 -> {
-                    if (digits.size == 1) {
-                        words.add(baseNumbers.getValue(nextDigit))
-                    }
-                }
                 digit % 3 == 0 -> {
-                    if (andIncluded && words.isNotEmpty()) words.add("And")
+                    if (andIncluded && words.isNotEmpty()
+                        && words.last() !in powersOfTen) words.add("And")
                     if (nextDigit != 0) {
-                        words.add(multiplesOfTen[0])
+                        words.add(powersOfTen[0])
                         words.add(baseNumbers.getValue(nextDigit))
                     }
                 }
                 digit % 3 == 1 -> {
-                    if (hundreds > 0) words.add(multiplesOfTen[hundreds])
+                    if (hundreds > 0) {
+                        if (words.isNotEmpty() && words.last() in powersOfTen) {
+                            words.removeLast()
+                        }
+                        words.add(powersOfTen[hundreds])
+                    }
                     words.add(baseNumbers.getValue(nextDigit))
                 }
                 else -> {
+                    if (words.last() == "Zero" || nextDigit == 1) words.removeLast()
                     if (nextDigit == 1) {
-                        if (words.isNotEmpty()) words.removeLast()
                         words.add(baseNumbers.getValue(digits[digit - 2] + 10))
-                    } else {
+                    } else if (nextDigit > 1) {
                         words.add(baseNumbers.getValue(nextDigit * 10))
                     }
                 }
@@ -58,14 +59,4 @@ class NumberToWords {
     }
 
     fun countLetters(number: String): Int = number.count { it.isLetter() }
-}
-
-fun main() {
-    val tool = NumberToWords()
-    var count = 0
-    for (i in 1..1000) {
-        val numAsString = tool.numberWritten(1L * i, true)
-        count += tool.countLetters(numAsString)
-    }
-    println(count)
 }
