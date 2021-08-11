@@ -16,45 +16,56 @@ class NumberToWords {
         20 to "Twenty", 30 to "Thirty", 40 to "Forty", 50 to "Fifty", 60 to "Sixty",
         70 to "Seventy", 80 to "Eighty", 90 to "Ninety"
     )
+    private val multiplesOfTen = listOf("Hundred", "Thousand", "Million", "Billion")
 
     fun numberWritten(n: Long, andIncluded: Boolean = false): String {
+        val digits = n.toString().map(Char::digitToInt).reversed()
         var digit = 1
-        val digits = n.toString().map(Char::digitToInt)
+        var hundreds = 0
         val words = mutableListOf<String>()
         do {
+            val nextDigit = digits[digit - 1]
             when {
-                digit % 3 == 0 -> {
-                    words.add("And")
-                    if (digits[digit - 1] != 0) {
-                        words.add("Hundred")
-                        words.add(baseNumbers.getValue(digits[digit - 1]))
+                nextDigit == 0 -> {
+                    if (digits.size == 1) {
+                        words.add(baseNumbers.getValue(nextDigit))
                     }
                 }
-                digit == 4 -> {
-                    words.add("Thousand")
+                digit % 3 == 0 -> {
+                    if (andIncluded && words.isNotEmpty()) words.add("And")
+                    if (nextDigit != 0) {
+                        words.add(multiplesOfTen[0])
+                        words.add(baseNumbers.getValue(nextDigit))
+                    }
                 }
-                digit == 7 -> {
-                    words.add("Million")
-                }
-                digit == 10 -> {
-                    words.add("Billion")
+                digit % 3 == 1 -> {
+                    if (hundreds > 0) words.add(multiplesOfTen[hundreds])
+                    words.add(baseNumbers.getValue(nextDigit))
                 }
                 else -> {
-                    if (digits[digit] == 1) {
-                        words.add(baseNumbers.getValue(digits[digit - 1] + 10))
+                    if (nextDigit == 1) {
+                        if (words.isNotEmpty()) words.removeLast()
+                        words.add(baseNumbers.getValue(digits[digit - 2] + 10))
                     } else {
-                        words.add(baseNumbers.getValue(digits[digit]* 10))
-                        if (digits[digit - 1] != 0) {
-                            words.add(baseNumbers.getValue(digits[digit - 1]))
-                        }
+                        words.add(baseNumbers.getValue(nextDigit * 10))
                     }
-                    digit++
                 }
             }
             digit++
+            if (digit % 3 == 1) hundreds++
         } while (digit <= digits.size)
         return words.reversed().joinToString(" ")
     }
 
     fun countLetters(number: String): Int = number.count { it.isLetter() }
+}
+
+fun main() {
+    val tool = NumberToWords()
+    var count = 0
+    for (i in 1..1000) {
+        val numAsString = tool.numberWritten(1L * i, true)
+        count += tool.countLetters(numAsString)
+    }
+    println(count)
 }
