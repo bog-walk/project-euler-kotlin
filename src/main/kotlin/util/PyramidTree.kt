@@ -10,7 +10,7 @@ package util
 class PyramidNode(
     val value: Int,
     var leftAdjacent: PyramidNode? = null,
-    var rightAdjacent: PyramidNode? = null,
+    var rightAdjacent: PyramidNode? = null
 )
 
 class PyramidTree(levels: Int, vararg elements: Int) {

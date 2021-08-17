@@ -1,5 +1,7 @@
 package batch2
 
+import util.PyramidTree
+
 /**
  * Problem 18: Maximum Path Sum 1
  * Goal: Find the maximum sum from tree root to leaf node of a tree
@@ -8,5 +10,8 @@ package batch2
  */
 
 class MaximumPathSum1 {
-
+    fun maxPathSum(levels: Int, vararg elements: Int): Int {
+        val tree = PyramidTree(levels, *elements)
+        return tree.maxSumPostOrderTraversal()
+    }
 }
