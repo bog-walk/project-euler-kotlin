@@ -18,8 +18,12 @@ class NumberToWords {
     )
     private val powersOfTen = listOf("Hundred", "Thousand", "Million", "Billion")
 
-    fun numberWritten(n: Long, andIncluded: Boolean = false): String {
-        val digits = n.toString().map(Char::digitToInt).reversed()
+    fun numberWrittenImproved(n: String, andIncluded: Boolean): String {
+        TODO()
+    }
+
+    fun numberWritten(n: String, andIncluded: Boolean = false): String {
+        val digits = n.map(Char::digitToInt).reversed()
         var digit = 1
         var hundreds = 0
         val words = mutableListOf<String>()
