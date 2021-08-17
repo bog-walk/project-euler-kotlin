@@ -31,7 +31,8 @@ internal class NumberToWordsTest {
     )
     fun testNumberWritten_withoutAnd(number: String, expected: String) {
         val tool = NumberToWords()
-        assertEquals(expected, tool.numberWritten(number))
+        //assertEquals(expected, tool.numberWritten(number))
+        assertEquals(expected, tool.numberWrittenImproved(number.toLong()))
     }
 
     @ParameterizedTest(name="{0} = {1}")
