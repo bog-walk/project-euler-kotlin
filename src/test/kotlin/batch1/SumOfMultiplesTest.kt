@@ -18,10 +18,10 @@ internal class SumOfMultiplesTest {
     )
     fun testAlgorithm(number: Int, expected: Int, factor: Int) {
         val tool = SumOfMultiples()
-        assertEquals(expected, number.sumOfMultiples(factor))
+        assertEquals(expected, tool.sumOfMultiples(number, factor))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, factor))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, factor))
-        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, factor))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesFinal(number, factor))
     }
 
     @Test
@@ -30,10 +30,10 @@ internal class SumOfMultiplesTest {
         val number = 100
         val expected = 2318
         val factors = intArrayOf(3, 5)
-        assertEquals(expected, number.sumOfMultiples(*factors))
+        assertEquals(expected, tool.sumOfMultiples(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
-        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, *factors))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesFinal(number, *factors))
     }
 
     @Test
@@ -42,10 +42,10 @@ internal class SumOfMultiplesTest {
         val number = 10
         val expected = 18
         val factors = intArrayOf(3, 3, 3)
-        assertEquals(expected, number.sumOfMultiples(*factors))
+        assertEquals(expected, tool.sumOfMultiples(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number, *factors))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number, *factors))
-        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number, *factors))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesFinal(number, *factors))
     }
 
     @Test
@@ -53,10 +53,10 @@ internal class SumOfMultiplesTest {
         val tool = SumOfMultiples()
         val number = 1_000_000
         val expected = 0
-        assertEquals(expected, number.sumOfMultiples())
+        assertEquals(expected, tool.sumOfMultiples(number))
         assertEquals(expected, tool.sumOfMultiplesVersionB(number))
         assertEquals(expected, tool.sumOfMultiplesVersionC(number))
-        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesVersionD(number))
+        assertEquals(expected.toBigInteger(), tool.sumOfMultiplesFinal(number))
     }
 
     @Test
@@ -65,6 +65,6 @@ internal class SumOfMultiplesTest {
         val number = 1_000_000_000
         val expected = 233333333166666668.toBigInteger()
         val factors = intArrayOf(3, 5)
-        assertEquals(expected, tool.sumOfMultiplesVersionD(number, *factors))
+        assertEquals(expected, tool.sumOfMultiplesFinal(number, *factors))
     }
 }

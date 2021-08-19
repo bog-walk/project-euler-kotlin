@@ -3,23 +3,28 @@ package batch1
 import java.math.BigInteger
 
 /**
- * Problem 1: Multiples of 3 & 5
- * Goal: Find sum of all natural numbers less than N that are
- * multiples of any of the provided factors, with 1 <= N <= 1e9.
- * e.g. Sum of all multiples of 3 or 5 below 10 (i.e. 3, 5, 6, 9) = 23.
+ * Problem 1: Multiples of 3 or 5
+ *
+ * https://projecteuler.net/problem=1
+ *
+ * * Goal: Find the sum of all natural numbers less than N that are
+ * multiples of any of the provided factors Ki, with 1 <= N <= 1e9 and
+ * 1 <= i <= 5 and 1 <= K <= N.
+ *
+ * e.g.: Sum of all multiples of 3 or 5 below 10 (i.e. 3, 5, 6, 9) = 23.
  */
-// OutOfMemoryError for N == 1e9
-fun Int.sumOfMultiples(vararg factors: Int): Int {
-    return (1 until this).filter { num ->
-        factors.any { factor ->
-            num % factor == 0
-        }
-    }.sum()
-}
 
 class SumOfMultiples {
+    // OutOfMemoryError for N == 1e9
+    fun sumOfMultiples(number: Int, vararg factors: Int): Int {
+        return (1 until number).filter { num ->
+            factors.any { factor ->
+                num % factor == 0
+            }
+        }.sum()
+    }
 
-    // Overflow error for N == 1e9 or Time out
+    // OutOfMemoryError & Time out for N == 1e9
     fun sumOfMultiplesVersionB(number: Int, vararg factors: Int): Int {
         var sum = 0
         outer@for (n in 1 until number) {
@@ -49,7 +54,7 @@ class SumOfMultiples {
         return multiples.sum()
     }
 
-    fun sumOfMultiplesVersionD(number: Int, vararg factors: Int): BigInteger {
+    fun sumOfMultiplesFinal(number: Int, vararg factors: Int): BigInteger {
         val factorsList = getAllFactors(factors)
         val sums: List<BigInteger> = factorsList.map { list ->
             list.fold(BigInteger.ZERO) { acc, factor ->
