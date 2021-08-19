@@ -2,9 +2,17 @@ import util.RollingQueue
 
 /**
  * Problem 2: Even Fibonacci Numbers
+ *
+ * https://projecteuler.net/problem=2
+ *
  * Goal: Find the sum of all even numbers in the Fibonacci sequence
- * that do not exceed N, with 10 <= N <= 4x10^16.
- * e.g. Even Fibonacci < N = 10 is {2, 8} with sum = 10.
+less than or equal to N.
+ *
+ * Constraints: 10 <= N <= 4e16.
+ *
+ * e.g.: N = 44
+ *       even fibonacci <= N = {2, 8, 34}
+ *       sum = 44
  */
 
 class EvenFibonacci {
