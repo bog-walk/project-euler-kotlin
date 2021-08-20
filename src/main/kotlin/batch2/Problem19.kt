@@ -8,7 +8,7 @@ package batch2
  * Goal: Find the number of Sundays that fell on the 1st day of the month between
  * 2 dates YYYY MM DD inclusive.
  *
- * Constraints: 1900 <= Y1 <= 10^16, Y1 <= Y2 <= Y1 + 1000
+ * Constraints: 1900 <= Y1 <= 10^16, Y1 <= Y2 <= Y1 + 1000, 1 <= M1, M2 <= 12, 1 <= D1, D2 <= 31
  *
  * e.g.: Y1 M1 D1 = 1900 1 1, Y2 M2 D2 = 1910 1 1
  *       num of Sundays on the 1st = 18
