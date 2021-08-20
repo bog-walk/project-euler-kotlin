@@ -8,10 +8,10 @@ import java.math.BigInteger
  *
  * https://projecteuler.net/problem=1
  *
- * * Goal: Find the sum of all natural numbers less than N that are
+ * Goal: Find the sum of all natural numbers less than N that are
  * multiples of either of the provided factors K1 or K2.
  *
- * Constraints: 1 <= N <= 1e9, 1 <= K < N.
+ * Constraints: 1 <= N <= 1e9, 1 <= K < N
  *
  * e.g.: N = 10, K1 = 3, K2 = 5
  *       multiples of K1 || K2 < N = {3, 5, 6, 9}

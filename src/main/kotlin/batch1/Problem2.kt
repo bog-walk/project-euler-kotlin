@@ -1,3 +1,5 @@
+package batch1
+
 import util.RollingQueue
 
 /**
@@ -6,7 +8,7 @@ import util.RollingQueue
  * https://projecteuler.net/problem=2
  *
  * Goal: Find the sum of all even numbers in the Fibonacci sequence
-less than or equal to N.
+ * less than or equal to N.
  *
  * Constraints: 10 <= N <= 4e16.
  *
