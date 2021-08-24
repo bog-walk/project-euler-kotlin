@@ -75,9 +75,3 @@ class MultiplesOf3Or5 {
         return parentheses.times(factor.toBigInteger())
     }
 }
-
-fun main() {
-    val tool = MultiplesOf3Or5()
-    val ans = tool.sumOfMultiplesBruteB(1_000_000_000,3, 5)
-    println(ans)
-}

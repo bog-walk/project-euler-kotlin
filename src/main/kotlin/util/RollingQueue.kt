@@ -4,8 +4,8 @@ import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * This bounded blocking queue backed by a fixed-sized array is a
- * classic circular buffer implementation of a queue for FIFO. Both enqueue
- * and dequeue are O(1).
+ * classic circular buffer implementation of a queue for FIFO.
+ * Both enqueue and dequeue are O(1).
  */
 class RollingQueue<E>(
     capacity: Int
@@ -14,21 +14,19 @@ class RollingQueue<E>(
     private var tail: E? = null
 
     /**
-     * Inserts specified element at tail of queue without
-     * exceeding capacity, by removing head if full. Returns
-     * true upon success. Original method would block if
-     * queue was full prior to adding new element. Could use
-     * offer() as a condition if wanting to avoid catching
-     * exceptions.
+     * Inserts specified element at tail of queue without exceeding capacity,
+     * by removing head if full. Returns true upon success. Original method
+     * would block if queue was full prior to adding new element by throwing
+     * IllegalStateException. Always returns true.
      */
     override fun add(element: E): Boolean {
-        return try {
-            super.add(element)
-        } catch (e: IllegalStateException) {
-            poll()
-            super.add(element)
-        } finally {
+        return if (offer(element)) {
             if (remainingCapacity() == 0) tail = element
+            true
+        } else {
+            poll()
+            tail = element
+            offer(element)
         }
     }
 

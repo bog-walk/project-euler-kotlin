@@ -3,12 +3,13 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.Test
 
 internal class EvenFibonacciTest {
     @ParameterizedTest(name="Max {0}: sum {1}")
     @CsvSource(
         // lower constraint max
-        "1, 0", "2, 0", "3, 2", "10, 10",
+        "10, 10",
         // normal max values
         "30, 10", "200, 188", "2200, 798",
         // max value is an even fibonacci
@@ -22,9 +23,32 @@ internal class EvenFibonacciTest {
     )
     fun testAlgorithm(max: Long, expected: Long) {
         val tool = EvenFibonacci()
-        assertEquals(expected, tool.sumOfFibonacciFindEvens(max))
+        assertEquals(expected, tool.sumOfFibonacciBrute(max))
         assertEquals(expected, tool.evenFibonacciRollingSum(max))
         assertEquals(expected, tool.evenFibonacciFourVariables(max))
         assertEquals(expected, tool.sumOfEvenFibonacci(max))
+    }
+
+    /**
+     * evenFibonacciFourVariables: 24_500ms (FASTEST)
+     * sumOfEvenFibonacci: 2_332_300ms
+     * evenFibonacciRollingSum: 3_795_000ms
+     * sumOfFibonacciBrute: 4_612_700ms (SLOWEST)
+     */
+    @Test
+    fun testMaxSpeed() {
+        val tool = EvenFibonacci()
+        val solutions = listOf(
+            tool::sumOfFibonacciBrute, tool::sumOfEvenFibonacci,
+            tool::evenFibonacciRollingSum, tool::evenFibonacciFourVariables
+        )
+        val max = 40000000000000000L
+        val expected = 49597426547377748L
+        for (solution in solutions) {
+            val startTime = System.nanoTime()
+            assertEquals(expected, solution(max))
+            val elapsedTime = System.nanoTime() - startTime
+            println("${solution.name}: ${elapsedTime}ms")
+        }
     }
 }
