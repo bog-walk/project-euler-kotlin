@@ -17,16 +17,16 @@ package batch2
 class CountingSundays {
     private val daysInMonth = intArrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
-    fun isLeapYear(year: Int): Boolean {
-        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
+    fun isLeapYear(year: Long): Boolean {
+        return year % 4 == 0L && (year % 100 != 0L || year % 400 == 0L)
     }
 
     /**
      * Returns day of week on January 1st as an integer, with Sunday = 0.
      */
-    fun getJanFirstOfYear(year: Int): Int {
-        var start = 1900
-        var day = 1 // January 1st 1900 was a Monday
+    fun getJanFirstOfYear(year: Long): Long {
+        var start = 1900L
+        var day = 1L // January 1st 1900 was a Monday
         while (start < year) {
             day = if (isLeapYear(start)) (day + 2) % 7 else (day + 1) % 7
             start++
@@ -46,32 +46,33 @@ class CountingSundays {
      * 5. End loop when end date exceeded.
      */
     fun countSundayFirsts(
-        startY: Int, startM: Int, startD: Int,
-        endY: Int, endM: Int, endD: Int
+        startY: Long, startM: Long, startD: Long,
+        endY: Long, endM: Long, endD: Long
     ): Int {
         var count = 0
         var currentYear = startY
-        var currentMonth = if (startD == 1) startM else {
-            if (startM == 12) {
+        var currentMonth = if (startD == 1L) startM else {
+            if (startM == 12L) {
                 currentYear++
             }
             (startM + 1) % 12
         }
         val janFirst = getJanFirstOfYear(currentYear)
-        var sunday = if (janFirst == 0) 1 else 8 - janFirst
-        if (sunday == 1) count++
+        var sunday = if (janFirst == 0L) 1 else 8 - janFirst
+        if (currentYear == endY && currentMonth > endM) return 0
+        if (sunday == 1L) count++
         while (currentYear <= endY) {
             sunday += 7
             val monthDays = when (currentMonth) {
-                2 -> if (isLeapYear(currentYear)) 29 else 28
-                else -> daysInMonth[currentMonth - 1]
+                2L -> if (isLeapYear(currentYear)) 29 else 28
+                else -> daysInMonth[currentMonth.toInt() - 1]
             }
             if (sunday > monthDays) {
                 sunday -= monthDays
                 currentMonth++ // Move forward to next month
             }
-            if (sunday == 1) count++
             if (currentYear == endY && currentMonth == endM && sunday > endD) break
+            if (sunday == 1L) count++
             if (currentMonth > 12) {
                 currentYear++
                 currentMonth = 1
@@ -88,11 +89,11 @@ class CountingSundays {
      * of the preceding year.
      * @return Int from 0 to 6 with 0 being Saturday, 1 Sunday, 2 Monday,...
      */
-    fun getWeekday(day: Int, month: Int, year: Int): Int {
+    fun getWeekday(day: Long, month: Long, year: Long): Long {
         var m = month
         var y = year
         if (month < 3) {
-            m = if (month == 1) 13 else 14
+            m += 12
             y--
         }
         val k = y % 100
@@ -110,22 +111,24 @@ class CountingSundays {
      * solution, only end month.
      */
     fun countSundayFirstsZeller(
-        startY: Int, startM: Int, startD: Int,
-        endY: Int, endM: Int
+        startY: Long, startM: Long, startD: Long,
+        endY: Long, endM: Long
     ): Int {
         var count = 0
         var currentYear = startY
-        var currentMonth = if (startD == 1) startM else {
-            if (startM == 12) {
+        var currentMonth = if (startD == 1L) startM else {
+            if (startM == 12L) {
                 currentYear++
+                1L
+            } else {
+                startM + 1
             }
-            (startM + 1) % 12
         }
         while (currentYear <= endY) {
-            val weekdayOfMonthFirst = getWeekday(1, currentMonth, currentYear)
-            if (weekdayOfMonthFirst == 1) count++ // 1 == Sunday using Zeller's Congruence
-            currentMonth++
             if (currentYear == endY && currentMonth > endM) break
+            val weekdayOfMonthFirst = getWeekday(1, currentMonth, currentYear)
+            if (weekdayOfMonthFirst == 1L) count++ // 1 == Sunday using Zeller's Congruence
+            currentMonth++
             if (currentMonth > 12) {
                 currentYear++
                 currentMonth = 1
