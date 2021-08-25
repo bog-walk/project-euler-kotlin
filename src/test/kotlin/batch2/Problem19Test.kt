@@ -33,6 +33,15 @@ internal class CountingSundaysTest {
         assertEquals(expected, tool.getJanFirstOfYear(year))
     }
 
+    @ParameterizedTest(name="{0}/{1}/{2}")
+    @CsvSource(
+        "1, 1, 1900, 2", "17, 10, 2021, 1", "24, 8, 2000, 5", "25, 12, 1982, 0"
+    )
+    fun testGetWeekday(day: Int, month: Int, year: Int, expected: Int) {
+        val tool = CountingSundays()
+        assertEquals(expected, tool.getWeekday(day, month, year))
+    }
+
     @ParameterizedTest(name="{0} to {1} has {2} Sunday 1sts")
     @CsvSource(
         // whole decades
@@ -49,5 +58,6 @@ internal class CountingSundaysTest {
         val (y1, m1, d1) = start.split(" ").map(String::toInt)
         val (y2, m2, d2) = end.split(" ").map(String::toInt)
         assertEquals(expected, tool.countSundayFirsts(y1, m1, d1, y2, m2, d2))
+        assertEquals(expected, tool.countSundayFirstsZeller(y1, m1, d1, y2, m2))
     }
 }
