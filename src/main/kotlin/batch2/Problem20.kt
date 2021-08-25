@@ -1,5 +1,7 @@
 package batch2
 
+import util.factorial
+
 /**
  * Problem 20: Factorial Digit Sum
  *
@@ -13,5 +15,12 @@ package batch2
  *       10! = 10 * 9 * ... * 2 * 1 = 3628800
  *       sum  = 3 + 6 + 2 + 8 + 8 + 0 + 0 = 27
  */
-// Test 100! PE
-// 3! = 6 -> 6, 6! = 720 -> 9
+
+class FactorialDigitSum {
+    fun factorialDigitSum(num: Int): Int {
+        return num.factorial()
+            .toString()
+            .map(Char::digitToInt)
+            .sum()
+    }
+}
