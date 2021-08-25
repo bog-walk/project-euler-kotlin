@@ -10,7 +10,7 @@ import util.RollingQueue
  * Goal: Find the sum of all even numbers in the Fibonacci sequence
  * less than N.
  *
- * Constraints: 10 <= N <= 4e16.
+ * Constraints: 10 <= N <= 4e16
  *
  * e.g.: N = 44
  *       even fibonacci < N = {2, 8, 34}

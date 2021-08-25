@@ -1,108 +1,104 @@
 package batch1
 
-import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
  * Problem 3: Largest Prime Factor
- * Goal: Find the largest prime factor of N, given 2 <= N <= 10^12.
- * Prime factorisation involves finding set of prime factors that
- * multiply to form N. e.g. 12 = 2 * 2 * 3. There will only ever be a
- * unique set of prime factors for a number: Fundamental Theorem of Arithmetic.
- * e.g. The largest prime factor of 13195 is 29, from {5, 7, 13, 29}.
+ *
+ * https://projecteuler.net/problem=3
+ *
+ * Goal: Find the largest prime factor of N.
+ *
+ * Constraints: 10 <= N <= 1e12
+ *
+ * Fundamental Theorem of Arithmetic: There will only ever be a
+ * unique set of prime factors for any number.
+ *
+ * e.g. N = 10
+ *      prime factors = {2, 5}
+ *      largest = 5
  */
-
-fun Long.isComposite(): Boolean {
-    val max = sqrt(this.toFloat()).toLong()
-    return (2L..max).any {
-        this % it ==0L
-    }
-}
-
-fun Long.divide(factor: Long): Pair<Boolean, Long> {
-    return Pair(this % factor == 0L, this / factor)
-}
 
 class LargestPrimeFactor {
     fun largestPrime(primes: List<Long>): Long = primes.maxOrNull()!!
 
-    // Problematic for higher level constraint values (time out)
-    fun getPrimeFactors(n: Long): List<Long> {
-        var i = 1L
+    /**
+     * Start from the smallest prime & repeatedly divide until
+     * dividend cannot be divided exactly, then increase factor
+     * and repeat.
+     * Very slow &/or TimeOut for N >= 1e8.
+     */
+    fun getPrimeFactorsBrute(n: Long): List<Long> {
+        var factor = 1L
         var dividend = n
         val factors = mutableListOf<Long>()
-        while (i <= n) {
-            i++
-            if (i.isComposite()) continue
-            var division = dividend.divide(i)
+        while (factor <= n) {
+            factor++
+            if (isComposite(factor)) continue
+            var division = divide(dividend, factor)
             while (division.first) {
-                factors.add(i)
+                factors.add(factor)
                 dividend = division.second
-                division = dividend.divide(i)
+                division = divide(dividend, factor)
             }
         }
         return factors
     }
 
-    fun getLargestPrimeImproved(n: Long): Long {
-        var num = abs(n)
-        val primes = mutableMapOf<Long, Int>()
-        while (num % 2 == 0L) {
-            primes[2] = primes.getOrDefault(2, 0) + 1
-            num /= 2
+    /**
+     * Determines if number has at least 1 divisor other than 1 and
+     * itself. This is the opposite of a prime number.
+     */
+    private fun isComposite(n: Long): Boolean {
+        val max = sqrt(n.toFloat()).toLong()
+        return (2L..max).any {
+            n % it == 0L
         }
-        if (num > 1) {
-            val maxFactor = sqrt(num.toDouble()).toLong()
-            for (i in 3L..maxFactor step 2L) {
-                while (num % i == 0L) {
-                    primes[i] = primes.getOrDefault(i, 0) + 1
-                    num /= i
-                }
+    }
+
+    private fun divide(n: Long, factor: Long): Pair<Boolean, Long> {
+        return Pair(n % factor == 0L, n / factor)
+    }
+
+    /**
+     * Stores prime factors as keys in a map with their exponent values.
+     * Only tests odd factors as 2 is the only even prime number.
+     * Limits factors as the largest prime factor will not be > sqrt(N).
+     * Map could be converted to a list to return all prime factors.
+     */
+    fun getLargestPrimeExponent(n: Long): Long {
+        var num = n
+        val primes = mutableMapOf<Long, Int>()
+        val maxFactor = sqrt(num.toDouble()).toLong()
+        val factors = listOf(2L) + (3L..maxFactor step 2L)
+        for (factor in factors) {
+            while (num % factor == 0L) {
+                primes[factor] = primes.getOrDefault(factor, 0) + 1
+                num /= factor
             }
         }
         if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
         return primes.keys.maxOrNull()!!
     }
 
+    /**
+     * Recursive implementation that also limits factors to 2, then steps
+     * through only odd factors (as 2 is the only even prime), & stops once
+     * the sqrt(N) is reached.
+     */
     fun getPrimeFactorsRecursive(
         n: Long,
         primes: MutableList<Long> = mutableListOf()
     ): List<Long> {
-        for (i in 2 until n) {
-            if (n % i == 0L) {
-                primes.add(i)
-                return getPrimeFactorsRecursive(n / i, primes)
+        val maxFactor = sqrt(n.toDouble()).toLong()
+        val factors = listOf(2L) + (3L..maxFactor step 2L)
+        for (factor in factors) {
+            if (n % factor == 0L) {
+                primes.add(factor)
+                return getPrimeFactorsRecursive(n / factor, primes)
             }
         }
-        primes.add(n)
-        return primes
-    }
-
-    /**
-     * 2 is the only even prime number so it is treated separately, so
-     * as to allow stepping through iteration to odd numbers only later
-     * on. No need to iterate until the target number as will not have
-     * a prime factor greater than its square root.
-     */
-    fun getPrimeFactorsRecursiveImproved(
-        n: Long,
-        primes: MutableList<Long> = mutableListOf()
-    ): List<Long> {
-        var num = n
-        while (num % 2 == 0L) {
-            primes.add(2)
-            num /= 2
-        }
-        if (num > 1) {
-            val maxFactor = sqrt(num.toDouble()).toInt()
-            for (i in 3..maxFactor step 2) {
-                if (num % i == 0L) {
-                    primes.add(i.toLong())
-                    return getPrimeFactorsRecursiveImproved(num / i, primes)
-                }
-            }
-        }
-        if (num > 2) primes.add(num)
+        if (n > 2) primes.add(n)
         return primes
     }
 }
