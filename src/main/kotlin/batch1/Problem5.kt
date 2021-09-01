@@ -1,3 +1,5 @@
+package batch1
+
 import util.primeFactors
 import util.getPrimeNumbers
 import java.math.BigInteger
@@ -8,10 +10,16 @@ import kotlin.math.sqrt
 
 /**
  * Problem 5: Smallest Multiple
- * Goal: Find the smallest positive number that can be divided by each number
- * in the range 1..N, with 1 <= N <= 40.
- * e.g. The smallest number that can be evenly divided by every number from 1 to 10
- * is 2520.
+ *
+ * https://projecteuler.net/problem=5
+ *
+ * Goal: Find the smallest positive number that can be evenly divided by each number
+ * in the range 1..N.
+ *
+ * Constraints: 1 <= N <= 40
+ *
+ * e.g.: N = 3
+ *       {1, 2, 3} evenly divides 6 to give quotient {6, 3, 2}
  */
 
 class SmallestMultiple {

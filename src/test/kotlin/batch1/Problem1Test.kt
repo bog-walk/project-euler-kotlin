@@ -6,6 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 internal class MultiplesOf3Or5Test {
+    private val tool = MultiplesOf3Or5()
+
     @ParameterizedTest(name="N={0}, K1={1}, K2={2}, Sum={3}")
     @CsvSource(
             // lower limits for N
@@ -20,7 +22,6 @@ internal class MultiplesOf3Or5Test {
             "23000, 8, 21, 44087172", "10000000, 20, 32, 3749995000000"
     )
     fun testAllVersions(number: Int, factor1: Int, factor2: Int, expected: Long) {
-        val tool = MultiplesOf3Or5()
         assertEquals(expected, tool.sumOfMultiplesBruteA(number, factor1, factor2))
         assertEquals(expected, tool.sumOfMultiplesBruteB(number, factor1, factor2))
         assertEquals(expected.toBigInteger(), tool.sumOfMultiples(number, factor1, factor2))
@@ -28,7 +29,6 @@ internal class MultiplesOf3Or5Test {
 
     @Test
     fun testUpperLimits() {
-        val tool = MultiplesOf3Or5()
         val number = 1_000_000_000
         val expected = 233333333166666668.toBigInteger()
         assertEquals(expected, tool.sumOfMultiples(number, 3, 5))

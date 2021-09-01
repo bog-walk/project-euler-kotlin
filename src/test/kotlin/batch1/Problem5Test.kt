@@ -1,11 +1,12 @@
 package batch1
 
-import SmallestMultiple
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 internal class SmallestMultipleTest {
+    private val tool = SmallestMultiple()
+
     @ParameterizedTest(name="1..{0} = {1}")
     @CsvSource(
        // lower constraints
@@ -16,7 +17,6 @@ internal class SmallestMultipleTest {
         "30, 2329089562800", "40, 5342931457063200"
     )
     fun testSmallestMultiple(n: Int, expected: Long) {
-        val tool = SmallestMultiple()
         //assertEquals(expected, tool.lcmIterative(n))
         //assertEquals(expected, tool.lcmPrimeFactors(n))
         //assertEquals(expected, tool.lcmUsingGCD(n))

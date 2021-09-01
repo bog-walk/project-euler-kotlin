@@ -6,6 +6,8 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class EvenFibonacciTest {
+    private val tool = EvenFibonacci()
+
     @ParameterizedTest(name="Max {0}: sum {1}")
     @CsvSource(
         // lower constraint max
@@ -22,7 +24,6 @@ internal class EvenFibonacciTest {
         "40000000000000000, 49597426547377748"
     )
     fun testAlgorithm(max: Long, expected: Long) {
-        val tool = EvenFibonacci()
         assertEquals(expected, tool.sumOfFibonacciBrute(max))
         assertEquals(expected, tool.evenFibonacciRollingSum(max))
         assertEquals(expected, tool.evenFibonacciFourVariables(max))
@@ -37,7 +38,6 @@ internal class EvenFibonacciTest {
      */
     @Test
     fun testMaxSpeed() {
-        val tool = EvenFibonacci()
         val solutions = listOf(
             tool::sumOfFibonacciBrute, tool::sumOfEvenFibonacci,
             tool::evenFibonacciRollingSum, tool::evenFibonacciFourVariables

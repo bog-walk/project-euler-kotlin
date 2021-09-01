@@ -6,6 +6,8 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class LargestPrimeFactorTest {
+    private val tool = LargestPrimeFactor()
+
     @Test
     fun testGetPrimeFactorsBrute() {
         val nums = listOf<Long>(10, 12, 17, 48, 147, 330, 13195, 1000000)
@@ -14,7 +16,6 @@ internal class LargestPrimeFactorTest {
             listOf(3, 7, 7), listOf(2, 3, 5, 11), listOf(5, 7, 13, 29),
             listOf(2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5)
         )
-        val tool = LargestPrimeFactor()
         nums.forEachIndexed { index, num ->
             assertEquals(expected[index], tool.getPrimeFactorsBrute(num))
         }
@@ -31,7 +32,6 @@ internal class LargestPrimeFactorTest {
             listOf(2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5),
             listOf(71, 839, 1471, 6857)
         )
-        val tool = LargestPrimeFactor()
         nums.forEachIndexed { index, num ->
             assertEquals(expected[index], tool.getPrimeFactorsRecursive(num))
         }
@@ -49,7 +49,6 @@ internal class LargestPrimeFactorTest {
         "7919, 7919", "2147483647, 2147483647", "67280421310721, 67280421310721"
     )
     fun testAlgorithm_largestPrime(n: Long, expected: Long) {
-        val tool = LargestPrimeFactor()
         // Recursive solution
         val primesRecursive = tool.getPrimeFactorsRecursive(n)
         assertEquals(expected, tool.largestPrime(primesRecursive))
@@ -61,7 +60,6 @@ internal class LargestPrimeFactorTest {
     fun testLargestPrimeUpperConstraints() {
         val upperN = listOf(9007199254740991, 10000000000000000)
         val expected = listOf(20394401, 5)
-        val tool = LargestPrimeFactor()
         upperN.forEachIndexed { index, n ->
             // Recursive solution
             val primesRecursive = tool.getPrimeFactorsRecursive(n)
