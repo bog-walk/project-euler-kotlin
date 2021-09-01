@@ -6,52 +6,62 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class LargestPalindromeProductTest {
+    private val tool = LargestPalindromeProduct()
+
+    @Test
+    fun testIsPalindrome_allPalindromes() {
+        val palindromes = listOf(5, 22, 303, 9119)
+        palindromes.forEach { palindrome ->
+            assertTrue(tool.isPalindrome(palindrome))
+        }
+    }
+
+    @Test
+    fun testIsPalindrome_nonePalindromes() {
+        val numbers = listOf(10, 523, 8018, 124521)
+        numbers.forEach { number ->
+            assertFalse(tool.isPalindrome(number))
+        }
+    }
+
+    @Test
+    fun testGetPrevPalindrome() {
+        val numbers = listOf(101110, 800000, 200003, 650001, 333333)
+        val expected = listOf(101101, 799997, 200002, 649946, 332233)
+        numbers.forEachIndexed { index, number ->
+            assertEquals(expected[index], tool.getPrevPalindrome(number))
+        }
+    }
+
+    @Test
+    fun testIs3DigProduct_allTrue() {
+        val palindromes = listOf(793397, 101101, 649946)
+        palindromes.forEach { palindrome ->
+            assertTrue(tool.is3DigProduct(palindrome))
+        }
+    }
+
+    @Test
+    fun testIs3DigProduct_allFalse() {
+        val palindromes = listOf(200002, 799997)
+        palindromes.forEach { palindrome ->
+            assertFalse(tool.is3DigProduct(palindrome))
+        }
+    }
+
     @ParameterizedTest(name="Less than {0}")
     @CsvSource(
-        // lower constraint
+        // lower constraints
         "101102, 101101", "101110, 101101",
         // normal value
         "794000, 793397", "650001, 649946",
         // palindrome value
         "332233, 330033",
-        // higher constraint
+        // upper constraints
         "1000000, 906609"
     )
     fun testLargestPalindromeProduct(max: Int, expected: Int) {
-        val tool = LargestPalindromeProduct()
         assertEquals(expected, tool.largestPalindromeProduct(max))
         assertEquals(expected, tool.largestPalindromeProductCountingDown(max))
-    }
-
-    @Test
-    fun testIsPalindrome() {
-        assertTrue(5.isPalindrome())
-        assertTrue(22.isPalindrome())
-        assertTrue(303.isPalindrome())
-        assertTrue(9119.isPalindrome())
-        assertFalse(10.isPalindrome())
-        assertFalse(523.isPalindrome())
-        assertFalse(8018.isPalindrome())
-        assertFalse(124521.isPalindrome())
-    }
-
-    @Test
-    fun testGetPrevPalindrome() {
-        val tool = LargestPalindromeProduct()
-        assertEquals(101101, tool.getPrevPalindrome(101110))
-        assertEquals(799997, tool.getPrevPalindrome(800000))
-        assertEquals(200002, tool.getPrevPalindrome(200003))
-        assertEquals(649946, tool.getPrevPalindrome(650001))
-        assertEquals(332233, tool.getPrevPalindrome(333333))
-    }
-
-    @Test
-    fun testIs3DigProduct() {
-        val tool = LargestPalindromeProduct()
-        assertTrue(tool.is3DigProduct(793397))
-        assertTrue(tool.is3DigProduct(101101))
-        assertTrue(tool.is3DigProduct(649946))
-        assertFalse(tool.is3DigProduct(200002))
-        assertFalse(tool.is3DigProduct(799997))
     }
 }

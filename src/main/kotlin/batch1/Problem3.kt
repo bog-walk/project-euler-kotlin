@@ -14,7 +14,7 @@ import kotlin.math.sqrt
  * Fundamental Theorem of Arithmetic: There will only ever be a
  * unique set of prime factors for any number.
  *
- * e.g. N = 10
+ * e.g.: N = 10
  *      prime factors = {2, 5}
  *      largest = 5
  */

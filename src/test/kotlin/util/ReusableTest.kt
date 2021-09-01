@@ -3,13 +3,23 @@ package util
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.math.BigInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class ReusableTest {
+    @ParameterizedTest(name="gcd({0}, {1}) is {2}")
+    @CsvSource(
+        "366, 60, 6", "81, 153, 9",
+        "10, 100, 10", "1, 1, 1",
+        "456, 32, 8", "-100, 10, 10",
+        "-60, -366, 6"
+    )
+    fun testGCD(x: Int, y: Int, expected: Int) {
+        assertEquals(expected, gcd(x, y))
+    }
+
     @ParameterizedTest(name="{0}! = {1}")
     @CsvSource(
         "0, 1", "1, 1", "2, 2", "3, 6", "4, 24",
@@ -25,6 +35,19 @@ internal class ReusableTest {
     }
 
     @Test
+    fun testPrimeFactors() {
+        val numbers = listOf<Long>(2, 12, 100, 999)
+        val expected = listOf<List<Long>>(
+            listOf(2), listOf(2, 2, 3), listOf(2, 2, 5, 5), listOf(3, 3, 3, 37))
+        numbers.forEachIndexed { index, number ->
+            val primeFactors = primeFactors(number).flatMap {
+                    (prime, exp) -> List(exp) { prime }
+            }
+            assertEquals(expected[index], primeFactors)
+        }
+    }
+
+    @Test
     fun testIsPrime() {
         assertFalse(1.isPrime())
         assertTrue(2.isPrime())
@@ -35,17 +58,6 @@ internal class ReusableTest {
         assertFalse(15.isPrime())
         assertFalse(21.isPrime())
         assertTrue(17.isPrime())
-    }
-
-    @ParameterizedTest(name="gcd({0}, {1}) is {2}")
-    @CsvSource(
-        "366, 60, 6", "81, 153, 9",
-        "10, 100, 10", "1, 1, 1",
-        "456, 32, 8", "-100, 10, 10",
-        "-60, -366, 6"
-    )
-    fun testGCD(x: Int, y: Int, expected: Int) {
-        assertEquals(expected, gcd(x, y))
     }
 
     // Basic: 24ms; Sieve: 3ms

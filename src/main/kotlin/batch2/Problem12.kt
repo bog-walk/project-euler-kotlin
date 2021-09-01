@@ -1,6 +1,6 @@
 package batch2
 
-import util.getPrimeFactors
+import util.primeFactors
 import util.getPrimesUsingSieve
 
 /**
@@ -20,7 +20,7 @@ class HighlyDivisibleTriangularNumber {
      * Therefore, num of divisors of 28 = (2 + 1) * (7 + 1)
      */
     fun countDivisors(n: Int): Int {
-        val primeFactors = getPrimeFactors(1L * n)
+        val primeFactors = primeFactors(1L * n)
         return primeFactors.values
             .map { it + 1 }
             .reduce { acc, v -> acc * v }

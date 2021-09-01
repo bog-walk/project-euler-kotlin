@@ -15,15 +15,6 @@ fun handleInput() {
     }
 }
 
-tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
-    require(this >= 0) { "Integer must not be negative" }
-    return when (this) {
-        0 -> BigInteger.ONE
-        1 -> run
-        else -> (this - 1).factorial(run * this.toBigInteger())
-    }
-}
-
 /**
  * gcd(x, y) = gcd(|x * y|, |x|); where |x| >= |y|
  * &
@@ -38,20 +29,29 @@ fun gcd(n1: Int, n2: Int): Int {
     return gcd(bigger % smaller, smaller)
 }
 
-fun getPrimeFactors(n: Long): Map<Long, Int> {
-    var num = abs(n)
-    val primes = mutableMapOf<Long, Int>()
-    while (num % 2 == 0L) {
-        primes[2] = primes.getOrDefault(2, 0) + 1
-        num /= 2
+tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
+    require(this >= 0) { "Integer must not be negative" }
+    return when (this) {
+        0 -> BigInteger.ONE
+        1 -> run
+        else -> (this - 1).factorial(run * this.toBigInteger())
     }
-    if (num > 1) {
-        val maxFactor = sqrt(num.toDouble()).toLong()
-        for (i in 3L..maxFactor step 2L) {
-            while (num % i == 0L) {
-                primes[i] = primes.getOrDefault(i, 0) + 1
-                num /= i
-            }
+}
+
+/**
+ * Returns prime decomposition in exponential form.
+ * N = 12 returns {2=2, 3=1} -> 2^2 * 3^1 = 12
+ */
+fun primeFactors(n: Long): Map<Long, Int> {
+    require(n > 1) { "Must provide a natural number greater than 1" }
+    var num = n
+    val primes = mutableMapOf<Long, Int>()
+    val maxFactor = sqrt(num.toDouble()).toLong()
+    val factors = listOf(2L) + (3L..maxFactor step 2L)
+    for (factor in factors) {
+        while (num % factor == 0L) {
+            primes[factor] = primes.getOrDefault(factor, 0) + 1
+            num /= factor
         }
     }
     if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1

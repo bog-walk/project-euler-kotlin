@@ -1,4 +1,4 @@
-import util.getPrimeFactors
+import util.primeFactors
 import util.getPrimeNumbers
 import java.math.BigInteger
 import kotlin.math.floor
@@ -37,7 +37,7 @@ class SmallestMultiple {
         val primeFactors = mutableMapOf<Long, Int>()
         val range = rangeMax downTo (rangeMax / 2 + 1)
         for (i in range) {
-            val primes = getPrimeFactors(i.toLong())
+            val primes = primeFactors(i.toLong())
             for ((prime, freq) in primes.entries) {
                 primeFactors[prime] = maxOf(
                     primeFactors.getOrDefault(prime, 0),
