@@ -1,6 +1,7 @@
 package batch1
 
 import util.gcd
+import util.lcm
 import java.math.BigInteger
 
 /**
@@ -57,9 +58,9 @@ class MultiplesOf3Or5 {
      */
     fun sumOfMultiples(number: Int, factor1: Int, factor2: Int): BigInteger {
         val max = number - 1
-        val lcm = (factor1 * factor2) / gcd(factor1, factor2)
-        return sumOfArithProgression(max, factor1)
-            .plus(sumOfArithProgression(max, factor2))
+        val lcm = lcm(factor1.toLong(), factor2.toLong())
+        return sumOfArithProgression(max, factor1.toLong())
+            .plus(sumOfArithProgression(max, factor2.toLong()))
             .minus(sumOfArithProgression(max, lcm))
     }
 
@@ -69,7 +70,7 @@ class MultiplesOf3Or5 {
      * with f being the factor (delta in sequence) & d being the number
      * of terms in sequence (final sequence element / factor).
      */
-    private fun sumOfArithProgression(number: Int, factor: Int): BigInteger {
+    private fun sumOfArithProgression(number: Int, factor: Long): BigInteger {
         val terms = (number / factor).toBigInteger()
         val parentheses = terms * (terms + BigInteger.ONE) / BigInteger.TWO
         return parentheses.times(factor.toBigInteger())

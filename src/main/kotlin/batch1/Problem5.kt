@@ -2,6 +2,7 @@ package batch1
 
 import util.primeFactors
 import util.getPrimeNumbers
+import util.lcm
 import java.math.BigInteger
 import kotlin.math.floor
 import kotlin.math.log2
@@ -60,30 +61,11 @@ class SmallestMultiple {
         return lcm.toLong()
     }
 
-    /**
-     * gcd(x, y) = gcd(|x * y|, |x|); where |x| >= |y|
-     * &
-     * gcd(x, 0) = gcd(0, x) = |x|
-     */
-    private fun gcdEuclidean(x: Long, y: Long): Long {
-        if (x == 0L || y == 0L) return x + y
-        val bigger = maxOf(x, y)
-        val smaller = minOf(x, y)
-        return gcdEuclidean(bigger % smaller, smaller)
-    }
-
-    /**
-     * lcm(x, y) = |x * y| / gcd(x, y)
-     */
-    private fun lcmTwoNumbers(x: Long, y: Long): Long {
-        return x * y / gcdEuclidean(x, y)
-    }
-
     fun lcmUsingGCD(rangeMax: Int): Long {
         var lcm = rangeMax.toLong()
         val range: LongProgression = (rangeMax - 1).toLong() downTo (rangeMax / 2 + 1)
         for (i in range) {
-            lcm = lcmTwoNumbers(lcm, i)
+            lcm = lcm(lcm, i)
         }
         return lcm
     }

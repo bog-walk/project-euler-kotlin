@@ -20,10 +20,10 @@ fun handleInput() {
  * &
  * gcd(x, 0) = gcd(0, x) = |x|
  */
-fun gcd(n1: Int, n2: Int): Int {
+fun gcd(n1: Long, n2: Long): Long {
     val x = abs(n1)
     val y = abs(n2)
-    if (x == 0 || y == 0) return x + y
+    if (x == 0L || y == 0L) return x + y
     val bigger = maxOf(x, y)
     val smaller = minOf(x, y)
     return gcd(bigger % smaller, smaller)
@@ -56,6 +56,14 @@ fun primeFactors(n: Long): Map<Long, Int> {
     }
     if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
     return primes
+}
+
+/**
+ * lcm(x, y) = |x * y| / gcd(x, y)
+ */
+fun lcm(n1: Long, n2: Long): Long {
+    require(n1 != 0L && n2 != 0L) { "Neither parameter can be 0" }
+    return abs(n1 * n2) / gcd(n1, n2)
 }
 
 /**

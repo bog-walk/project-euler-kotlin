@@ -16,7 +16,7 @@ internal class ReusableTest {
         "456, 32, 8", "-100, 10, 10",
         "-60, -366, 6"
     )
-    fun testGCD(x: Int, y: Int, expected: Int) {
+    fun testGCD(x: Long, y: Long, expected: Long) {
         assertEquals(expected, gcd(x, y))
     }
 
@@ -45,6 +45,23 @@ internal class ReusableTest {
             }
             assertEquals(expected[index], primeFactors)
         }
+    }
+
+    @ParameterizedTest(name="lcm({0}, {1}) is {2}")
+    @CsvSource(
+        "1, 2, 2", "12, 24, 24", "3, 64, 192",
+        "-4, 41, 164", "-6, -27, 54",
+        "101, 63, 6363"
+    )
+    fun testLCM(x: Long, y: Long, expected: Long) {
+        assertEquals(expected, lcm(x, y))
+    }
+
+    @Test
+    fun testLCM_invalid() {
+        assertThrows<IllegalArgumentException> { lcm(0, 2) }
+        assertThrows<IllegalArgumentException> { lcm(2, 0) }
+        assertThrows<IllegalArgumentException> { lcm(0, 0) }
     }
 
     @Test
