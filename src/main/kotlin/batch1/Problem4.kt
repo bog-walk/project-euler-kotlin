@@ -51,8 +51,8 @@ class LargestPalindromeProduct {
         var distinctPrimes: Set<Long>
         val primeFactors: List<Long> = primeFactors(palindrome.toLong()).also{
             distinctPrimes = it.keys
-        }.flatMap {
-            (k, v) -> List(v) { k }
+        }.flatMap { (k, v) ->
+            List(v) { k }
         }
         val validFactors = distinctPrimes.filter { it in range }
         distinctPrimes.forEach { p1 ->

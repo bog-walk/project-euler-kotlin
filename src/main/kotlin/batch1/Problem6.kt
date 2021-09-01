@@ -1,10 +1,21 @@
+package batch1
+
 import kotlin.math.pow
 
 /**
  * Problem 6: Sum Square Difference
- * Goal: Find the absolute difference between the sum of the squares & the square
- * of the sum of the first N natural numbers {1,2,3,..,N}, with 1 <= N <= 10^4.
- * e.g. 1st 10 -> sum of squares = 385, square of sum = 3025; diff = 2640.
+ *
+ * https://projecteuler.net/problem=6
+ *
+ * Goal: Find the absolute difference between the sum of the squares of &
+ * the square of the sum of the first N natural numbers.
+ *
+ * Constraints: 1 <= N <= 10^4
+ *
+ * e.g.: N = 3 -> {1,2,3}
+ *       sum of squares = {1,4,9} = 14
+ *       square of sum = 6^2 = 36
+ *       diff = |14 - 36| = 22
  */
 
 class SumSquareDifference {

@@ -1,6 +1,5 @@
 package batch1
 
-import util.gcd
 import util.lcm
 import java.math.BigInteger
 

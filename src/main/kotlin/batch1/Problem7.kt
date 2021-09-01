@@ -1,3 +1,5 @@
+package batch1
+
 import util.isPrime
 
 /**

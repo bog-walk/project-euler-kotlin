@@ -17,10 +17,18 @@ internal class SmallestMultipleTest {
         "30, 2329089562800", "40, 5342931457063200"
     )
     fun testSmallestMultiple(n: Int, expected: Long) {
-        //assertEquals(expected, tool.lcmIterative(n))
-        //assertEquals(expected, tool.lcmPrimeFactors(n))
-        //assertEquals(expected, tool.lcmUsingGCD(n))
-        //assertEquals(expected.toBigInteger(), tool.lcmUsingBigInteger(n))
-        assertEquals(expected, tool.lcmUsingPrimes(n))
+        val solutions = listOf(
+            tool::lcmBrute, tool::lcmUsingGCD, tool::lcmUsingGCDAndReduce,
+            tool::lcmUsingPrimeFactors, tool::lcmUsingPrimes,
+            tool::lcmUsingBigInteger
+        )
+        for (solution in solutions) {
+          val result = if (solution.name == "lcmUsingBigInteger") {
+              expected.toBigInteger()
+          } else {
+              expected
+          }
+          assertEquals(result, solution(n))
+        }
     }
 }
