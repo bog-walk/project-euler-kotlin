@@ -10,7 +10,7 @@ internal class The10001stPrimeTest {
 
     @Test
     fun testIsPrime_allTrue() {
-        val nums = listOf(2, 3, 5, 11, 17)
+        val nums = listOf(2, 5, 11, 17, 29)
         for (num in nums) {
             assertTrue(tool.isPrime(num))
         }
@@ -18,7 +18,7 @@ internal class The10001stPrimeTest {
 
     @Test
     fun testIsPrime_allFalse() {
-        val nums = listOf(1, 6, 14, 15, 21)
+        val nums = listOf(1, 4, 9, 14)
         for (num in nums) {
             assertFalse(tool.isPrime(num))
         }
@@ -36,7 +36,6 @@ internal class The10001stPrimeTest {
         "5000, 48611", "10000, 104729", "10001, 104743"
     )
     fun testGetNthPrime(n: Int, expected: Int) {
-
         assertEquals(expected, tool.getNthPrime(n))
     }
 }
