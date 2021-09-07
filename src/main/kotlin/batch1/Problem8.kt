@@ -2,37 +2,57 @@ package batch1
 
 /**
  * Problem 8: Largest Product in a Series
- * Goal: Find the K adjacent digits in an N-digit number
- * with the greatest product, where 1 <= K <= 13 & K <= N <= 1000.
- * e.g. The greatest product of 5 adjacent digits in 3675356291
- * is 3150 from [7,5,3,5,6].
+ *
+ * https://projecteuler.net/problem=8
+ *
+ * Goal: Find the largest product of K adjacent digits in
+ * an N-digit number.
+ *
+ * Constraints: 1 <= K <= 13, K <= N <= 1000
+ *
+ * e.g.: input = 3675356291; N = 10
+ *       K = 5
+ *       products LTR = {1890,3150,3150,900,1620,540}
+ *       largest = 3150 -> {6*7*5*3*5} or {7*5*3*5*6}
  */
 
-// Receiver will not exceed 13 characters, so max
-// would be all 9s, which the product is less than Long.MAX_VALUE
-fun String.seriesProduct(): Long {
-    return fold(1L) { acc, c ->
-        if (c == '0') {
-            return 0L
-        } else {
-            acc * c.digitToInt()
-        }
-    }
-}
 
 class LargestProductInSeries {
-    fun largestSeriesProduct(number: String, digits: Int, series: Int): Long {
-        return when {
-            digits == 1 -> number.toLong()
-            series == 1 -> number.maxOf { it.digitToInt() }.toLong()
-            digits == series -> number.seriesProduct()
-            else -> findLargestSeries(number, series).seriesProduct()
+
+    /**
+     * The constraints of this solution ensure that a substring will not
+     * exceed 13 characters, so the max product of 13 '9's would be
+     * less than Long.MAX_VALUE.
+     */
+    fun stringProduct(series: String): Long {
+        return series.fold(1L) { acc, c ->
+            if (c == '0') {
+                return 0L // Prevents further folding
+            } else {
+                acc * c.digitToInt()
+            }
         }
     }
 
-    private fun findLargestSeries(number: String, series: Int): String {
-        return number.windowed(series).maxByOrNull { window ->
-            window.seriesProduct()
-        } ?: "0"
+    /**
+     * Original solution did not use recursion, but instead used windowed() to map
+     * stringProduct() then find maxOrNull() of resulting list.
+     * Recursion provides improvement in performance of 56ms to 3ms (for a 1000-digit
+     * number searching through 4-digit substrings).
+     */
+    fun largestSeriesProduct(number: String, digits: Int, seriesSize: Int): Long {
+        return when {
+            digits == 1 -> number.toLong()
+            seriesSize == 1 -> number.maxOf { it.digitToInt() }.toLong()
+            digits == seriesSize -> stringProduct(number)
+            else -> {
+                maxOf(
+                    // first substring with k-adjacent digits
+                    largestSeriesProduct(number.take(seriesSize), seriesSize, seriesSize),
+                    // original string minus the first digit
+                    largestSeriesProduct(number.drop(1), digits - 1, seriesSize)
+                )
+            }
+        }
     }
 }

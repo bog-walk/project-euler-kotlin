@@ -6,19 +6,23 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class LargestProductInSeriesTest {
+    private val tool = LargestProductInSeries()
+
     @ParameterizedTest(name="{0} *..* = {1}")
     @CsvSource(
         "'8', 8", "'1234', 24", "'63972201', 0",
         "'1111111111111', 1", "'3675356291', 1020600"
     )
-    fun testSeriesProduct(number: String, expected: Long) {
-        assertEquals(expected, number.seriesProduct())
+    fun testStringProduct(number: String, expected: Long) {
+        assertEquals(expected, tool.stringProduct(number))
     }
 
     @ParameterizedTest(name="{0} = {3}")
     @CsvSource(
-        // N == 1 || K == 1
-        "'8', 1, 1, 8", "'1234', 4, 1, 4", "'63972201', 8, 1, 9",
+        // N == 1
+        "'8', 1, 1, 8",
+        // K == 1
+        "'63972201', 8, 1, 9",
         // N == K
         "'1234', 4, 4, 24", "'1111111111111', 13, 13, 1",
         // number contains 0 in all series
@@ -28,19 +32,19 @@ internal class LargestProductInSeriesTest {
         // number is not very large
         "'3675356291', 10, 5, 3150"
     )
-    fun testLargestProduct(number: String, digits: Int, series: Int, expected: Long) {
-        val tool = LargestProductInSeries()
-        assertEquals(expected, tool.largestSeriesProduct(number, digits, series))
+    fun testLargestSeriesProduct(number: String, digits: Int, seriesSize: Int, expected: Long) {
+        assertEquals(expected, tool.largestSeriesProduct(number, digits, seriesSize))
     }
 
     @Test
-    fun testLargeNumber() {
+    fun test100DigitNumber() {
         val number = StringBuilder()
+        // Create a number of all '1's except for 6 adjacent '6's
         repeat(100) { i ->
             number.append(if (i in 60..65) 6 else 1)
         }
-        val tool = LargestProductInSeries()
-        assertEquals(46656L, tool.largestSeriesProduct(number.toString(), 100, 6))
+        val expected: Long = 46656 // 6^6
+        assertEquals(expected, tool.largestSeriesProduct(number.toString(), 100, 6))
     }
 
     @Test
@@ -65,7 +69,6 @@ internal class LargestProductInSeriesTest {
                 "84580156166097919133875499200524063689912560717606" +
                 "05886116467109405077541002256983155200055935729725" +
                 "71636269561882670428252483600823257530420752963450"
-        val tool = LargestProductInSeries()
         assertEquals(5832L, tool.largestSeriesProduct(number, 1000, 4))
         assertEquals(23514624000, tool.largestSeriesProduct(number, 1000, 13))
     }
