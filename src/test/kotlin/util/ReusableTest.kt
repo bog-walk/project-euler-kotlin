@@ -5,8 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 internal class ReusableTest {
     @ParameterizedTest(name="gcd({0}, {1}) is {2}")
@@ -65,30 +63,21 @@ internal class ReusableTest {
     }
 
     @Test
-    fun testIsPrime() {
-        assertFalse(1.isPrime())
-        assertTrue(2.isPrime())
-        assertFalse(6.isPrime())
-        assertTrue(5.isPrime())
-        assertTrue(11.isPrime())
-        assertFalse(14.isPrime())
-        assertFalse(15.isPrime())
-        assertFalse(21.isPrime())
-        assertTrue(17.isPrime())
+    fun testPrimeNumbers_small() {
+        val max = 30
+        val expected = listOf(2, 3, 5, 7, 11, 13, 17, 19, 23, 29)
+        assertEquals(expected, primeNumbers(max))
     }
 
-    // Basic: 24ms; Sieve: 3ms
     @Test
-    fun testGetPrimes() {
+    fun testPrimeNumbers_large() {
         val max = 10000
-        val basicBefore = System.currentTimeMillis()
-        val basic = getPrimeNumbers(max)
-        val basicAfter = System.currentTimeMillis()
-        val sieveBefore = System.currentTimeMillis()
-        val sieve = getPrimesUsingSieve(max)
-        val sieveAfter = System.currentTimeMillis()
-        println("Basic algorithm took ${basicAfter - basicBefore}ms\n" +
-                "Sieve algorithm tool ${sieveAfter - sieveBefore}ms")
-        assertEquals(basic, sieve)
+        val actual = primeNumbers(max)
+        val expectedSize = 1229
+        val expectedTail = listOf(
+            9887, 9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973
+        )
+        assertEquals(expectedSize, actual.size)
+        assertEquals(expectedTail, actual.takeLast(10))
     }
 }

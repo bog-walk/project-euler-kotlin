@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import util.getPrimeNumbers
+import util.primeNumbers
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -29,7 +29,7 @@ internal class SummationOfPrimesTest {
         val tool = SummationOfPrimes()
         val list = listOf(2, 3, 5, 10, 25, 71, 100, 500, 999, 2000, 10000)
         list.forEach {
-            assertEquals(getPrimeNumbers(it), tool.getPrimesUsingSieve(it))
+            assertEquals(primeNumbers(it), tool.getPrimesUsingSieve(it))
         }
     }
 }

@@ -67,48 +67,18 @@ fun lcm(n1: Long, n2: Long): Long {
 }
 
 /**
- * This algorithm uses all facts about primes to test primality of N.
+ * Uses Sieve of Eratosthenes method to output all prime numbers
+ * less than or equal to the upper bound provided.
  */
-fun Int.isPrime(): Boolean {
-    return when {
-        this < 2 -> false
-        this < 4 -> true // 2 & 3
-        this % 2 == 0 -> false // 2 is only even prime
-        this < 9 -> true // 4, 6, & 8 already excluded
-        this % 3 == 0 -> false // primes >3 are of form 6k+/-1 (never multiples of 3)
-        else -> {
-            // N can only have 1 prime factor > sqrt(N): N itself!
-            val max = floor(sqrt(this.toDouble()))
-            var step = 5 // as the next number not yet excluded is 10
-            while (step <= max) {
-                if (this % step == 0) return false
-                if (this % (step + 2) == 0) return false
-                step += 6
-            }
-            true
-        }
-    }
-}
-
-/**
- * Consider using Sieve of Eratosthenes since an upper bound
- * is being provided in advance.
- */
-fun getPrimeNumbers(max: Int): List<Int> {
+fun primeNumbers(max: Int): List<Int> {
     if (max < 2) return emptyList()
-    val primes = mutableListOf(2)
-    (3..max step 2).filter {
-        it.isPrime()
-    }.toCollection(primes)
-    return primes
-}
-
-fun getPrimesUsingSieve(max: Int): List<Int> {
-    if (max < 2) return emptyList()
+    // Creates BooleanArray representing range of 2..max, with all even numbers
+    // except 2 (index 0) marked False
     val primesBool = BooleanArray(max - 1) { !(it != 0 && it % 2 == 0) }
     for (p in 3..(sqrt(1.0 * max).toInt()) step 2) {
         if (primesBool[p - 2]) {
             if (p * p > max) break
+            // Mark all multiples of p that are >= the square of p
             for (m in (p * p)..max step 2 * p) {
                 primesBool[m - 2] = false
             }

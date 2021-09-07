@@ -1,7 +1,7 @@
 package batch2
 
 import util.primeFactors
-import util.getPrimesUsingSieve
+import util.primeNumbers
 
 /**
  * Problem 12: Highly Divisible Triangular Number
@@ -109,7 +109,7 @@ class HighlyDivisibleTriangularNumber {
 
     fun firstTriangleOverNImproved(n: Int): Int {
         if (n == 1) return 3
-        val primes = getPrimesUsingSieve(n * 2)
+        val primes = primeNumbers(n * 2)
         var prime = 3
         var dn = 2 // min num of divisors for any prime
         var count = 0
