@@ -12,7 +12,7 @@ internal class The10001stPrimeTest {
     fun testIsPrime_allTrue() {
         val nums = listOf(2, 5, 11, 17, 29)
         for (num in nums) {
-            assertTrue(tool.isPrime(num))
+            kotlin.test.assertTrue(tool.isPrime(num))
         }
     }
 
@@ -20,7 +20,7 @@ internal class The10001stPrimeTest {
     fun testIsPrime_allFalse() {
         val nums = listOf(1, 4, 9, 14)
         for (num in nums) {
-            assertFalse(tool.isPrime(num))
+            kotlin.test.assertFalse(tool.isPrime(num))
         }
     }
 

@@ -10,7 +10,7 @@ import kotlin.math.pow
  * Goal: Find the absolute difference between the sum of the squares of &
  * the square of the sum of the first N natural numbers.
  *
- * Constraints: 1 <= N <= 10^4
+ * Constraints: 1 <= N <= 1e4
  *
  * e.g.: N = 3 -> {1,2,3}
  *       sum of squares = {1,4,9} = 14

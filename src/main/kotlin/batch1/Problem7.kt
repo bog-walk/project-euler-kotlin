@@ -32,7 +32,7 @@ class The10001stPrime {
                 // N can only have 1 prime factor > sqrt(N): N itself!
                 val max = floor(sqrt(1.0 * n))
                 var step = 5 // as multiples of prime 5 have not been assessed yet
-                // 11, 13, 17, 19, & 23 will all bypass this loop
+                // 11, 13, 17, 19, & 23 will all bypass n loop
                 while (step <= max) {
                     if (n % step == 0) return false
                     if (n % (step + 2) == 0) return false
@@ -42,6 +42,7 @@ class The10001stPrime {
             }
         }
     }
+
     fun getNthPrime(n: Int): Int {
         if (n == 1) return 2
         var count = n - 1
