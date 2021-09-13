@@ -12,7 +12,7 @@ internal class SpecialPythagoreanTripletTest {
     fun testMaxTriplet_noneFound() {
         val nums = listOf(1, 4, 6, 31, 99, 100)
         val solutions = listOf(
-            tool::maxTripletBrute, tool::maxTripletBruteAlternate,
+            tool::maxTripletBruteA, tool::maxTripletBruteB,
             tool::maxTripletParametrisation
         )
         nums.forEach { n ->
@@ -32,7 +32,7 @@ internal class SpecialPythagoreanTripletTest {
     fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
         val expected = Triple(a, b, c)
         val solutions = listOf(
-            tool::maxTripletBrute, tool::maxTripletBruteAlternate,
+            tool::maxTripletBruteA, tool::maxTripletBruteB,
             tool::maxTripletParametrisation
         )
         solutions.forEach { solution ->

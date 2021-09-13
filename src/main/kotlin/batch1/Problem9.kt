@@ -40,7 +40,7 @@ class SpecialPythagoreanTriplet {
      * the sum of evens is an even number and the sum of 2 odds is an even
      * number as well.
      */
-    fun maxTripletBrute(n: Int): Triple<Int, Int, Int>? {
+    fun maxTripletBruteA(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         var maxTriplet: Triple<Int, Int, Int>? = null
         var maxProduct = 0L
@@ -70,7 +70,7 @@ class SpecialPythagoreanTriplet {
      * Note that the above iterative option is faster than this
      * alternate option (38ms for N=10000, vs 76ms).
      */
-    fun maxTripletBruteAlternate(n: Int): Triple<Int, Int, Int>? {
+    fun maxTripletBruteB(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         var maxTriplet: Triple<Int, Int, Int>? = null
         var maxProduct = 0L

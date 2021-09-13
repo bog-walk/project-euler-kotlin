@@ -77,7 +77,8 @@ fun primeNumbers(max: Int): List<Int> {
     for (p in 3..(sqrt(1.0 * max).toInt()) step 2) {
         if (primesBool[p - 2]) {
             if (p * p > max) break
-            // Mark all multiples of p that are >= the square of p
+            // Mark all multiples (composites of the divisors) of p
+            // that are >= the square of p as false
             for (m in (p * p)..max step 2 * p) {
                 primesBool[m - 2] = false
             }
