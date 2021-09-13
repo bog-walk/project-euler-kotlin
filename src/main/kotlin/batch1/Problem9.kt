@@ -6,80 +6,41 @@ import kotlin.math.sqrt
 
 /**
  * Problem 9: Special Pythagorean Triplet
- * Goal: Given N, with 1 <= N <= 3000, check if there exists any
- * Pythagorean triplet for which a + b + c = N. Find the max product
- * a*b*c or return -1 if no triplets possible.
- * Note that a Pythagorean triplet is a set of 3 natural numbers
- * such that a < b < c && a^2 + b^2 = c^2.
- * e.g. 3^2 + 4^2 = 5^2.
- * A scaled up version of the example would also produce a triplet:
- * 6^2 + 8^2 = 10^2.
+ *
+ * https://projecteuler.net/problem=9
+ *
+ * Goal: If there exists any Pythagorean triplet for which a + b + c = N,
+ * find the maximum product among all such triplets, otherwise return -1.
+ *
+ * Constraints: 1 <= N <= 3000
+ *
+ * Pythagorean Triplet: a set of 3 natural numbers, such that
+ * a < b < c && a^2 + b^2 = c^2.
+ *
+ * e.g.: N = 12
+ *       triplets = {{3,4,5}}; as 3 + 4 + 5 == 12
+ *       product = 3*4*5 = 60
  */
 
 fun Triple<Int, Int, Int>.sum(): Int = first + second + third
 fun Triple<Int, Int, Int>.product(): Long = 1L * first * second * third
 
 class SpecialPythagoreanTriplet {
-    fun maxTripletProduct(n: Int): Long = findTripletsParametrisation(n)?.product() ?: -1L
 
-    /**
-     * Optimised performance solution.
-     * A primitive Pythagorean triplet has gcd(a,b,c) = 1, as gdc(a,b) =
-     * gcd(b,c) = gcd(c,a) = 1. All triplets can be found from 2 numbers
-     * m > n > 0, using the following:
-     * a = m^2 - n^2, b = 2 * m * n, c = m^2 + n^2; and
-     * these triplets will be primitive if exactly one of m or n is
-     * even and gcd(m,n) = 1. All triplets can be reduced to a primitive
-     * one by dividing out the gcd(a,b,c) = d, such that:
-     * a + b + c = 2 * m * (m + n) * d, with m > n > 0, gcd(m, n) = 1
-     * and exactly one of m or n being even.
-     */
-    fun findTripletsParametrisation(n: Int): Triple<Int, Int, Int>? {
-        if (n % 2 != 0) return null
-        var maxTriplet: Triple<Int, Int, Int>? = null
-        var maxProduct = 0L
-        val nMax = n / 2
-        val mMax = ceil(sqrt(1.0 * nMax)).toInt() - 1
-        for (m in 2..mMax) {
-            if (nMax % m == 0) { // Find even divisor m (> 1) of n/2
-                var kMax = nMax / m
-                while (kMax % 2 == 0) { // Find odd divisor k (= m + n) of n/2m
-                    kMax /= 2
-                }
-                var k = if (m % 2 == 1) m + 2 else m + 1
-                while (k < 2 * m && k <= kMax) {
-                    if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
-                        val triplet = pythagoreanTriplet(m, k - m, nMax / (k * m))
-                        if (triplet.sum() == n) {
-                            val product = triplet.product()
-                            if (product >= maxProduct) {
-                                maxProduct = product
-                                maxTriplet = triplet
-                            }
-                        }
-                    }
-                    k += 2
-                }
-            }
-        }
-        return maxTriplet
-    }
-
-    private fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
-        val a = (m * m - n * n) * d
-        val b = 2 * m * n * d
-        val c = (m * m + n * n) * d
-        return Triple(minOf(a, b), maxOf(a, b), c)
+    private fun isPythagoras(a: Int, b: Int, c: Int): Boolean {
+        return sqrt(1.0 * a * a + b * b) == 1.0 * c
     }
 
     /**
-     * The set of triples must either be all evens OR
-     * 2 odds with 1 even. Therefore, the sum of triples
-     * will only ever be even numbers as the sum of evens
-     * is an even number and the sum of 2 odds is an even
+     * Limits iterations through values of c and b based on:
+     * - Set {3,4,5} being the smallest existing triplet, means c >= 5.
+     * - b cannot be <= a.
+     * - Set of triples must either be all evens OR 2 odds with 1 even.
+     * Therefore, the sum of triples will only ever be even numbers as
+     * the sum of evens is an even number and the sum of 2 odds is an even
      * number as well.
      */
-    fun findTripletsLoop(n: Int): Triple<Int, Int, Int>? {
+    fun maxTripletBrute(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         var maxTriplet: Triple<Int, Int, Int>? = null
         var maxProduct = 0L
@@ -101,15 +62,15 @@ class SpecialPythagoreanTriplet {
         return maxTriplet
     }
 
-    private fun isPythagoras(a: Int, b: Int, c: Int): Boolean {
-        return sqrt(1.0 * a * a + b * b) == 1.0 * c
-    }
-
     /**
-     * Based on c >= 5 and a >= 3, with a <= (N - 3)/3 and
-     * b < (N - a)/2, the loop can be slightly adjusted.
+     * Similar iterative approach as above, but loops are adjusted to
+     * iterate through values of c and a based on:
+     * - Set {3,4,5} being the smallest existing triplet, means c >= 5 and a >= 3.
+     * - a must be <= (N - 3)/3 and b cannot be > (N - a)/2.
+     * Note that the above iterative option is faster than this
+     * alternate option (38ms for N=10000, vs 76ms).
      */
-    fun findTripletsLoopImproved(n: Int): Triple<Int, Int, Int>? {
+    fun maxTripletBruteAlternate(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         var maxTriplet: Triple<Int, Int, Int>? = null
         var maxProduct = 0L
@@ -117,7 +78,6 @@ class SpecialPythagoreanTriplet {
             val diff = n - c
             inner@for (a in (n - 3) / 3 downTo 3) {
                 val b = diff - a
-                // Will this condition ever be reached?
                 if (a >= b || b > (n - a) / 2) continue@inner
                 if (isPythagoras(a, b, c)) {
                     val triplet = Triple(a, b, c)
@@ -126,6 +86,59 @@ class SpecialPythagoreanTriplet {
                         maxTriplet = triplet
                         maxProduct = product
                     }
+                }
+            }
+        }
+        return maxTriplet
+    }
+
+    fun maxTripletProduct(n: Int): Long = maxTripletParametrisation(n)?.product() ?: -1L
+
+    /**
+     * All Pythagorean triplets can be found from 2 numbers m and n, with m > n > 0.
+     * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
+     */
+    private fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
+        val a = (m * m - n * n) * d
+        val b = 2 * m * n * d
+        val c = (m * m + n * n) * d
+        return Triple(minOf(a, b), maxOf(a, b), c)
+    }
+
+    /**
+     * Optimised solution (2ms for N=10000) based on:
+     * - A primitive Pythagorean triplet having gcd(a,b,c) = 1,
+     * as gdc(a,b) = gcd(b,c) = gcd(c,a) = 1.
+     * - A triplet being primitive if m XOR n is even and gcd(m,n) = 1.
+     * - All triplets can be reduced to a primitive one by dividing out
+     * the gcd(a,b,c) = d, such that:
+     * a + b + c = 2 * m * (m + n) * d, with n > m > 0.
+     */
+    fun maxTripletParametrisation(num: Int): Triple<Int, Int, Int>? {
+        if (num % 2 != 0) return null
+        var maxTriplet: Triple<Int, Int, Int>? = null
+        var maxProduct = 0L
+        val limit = num / 2
+        val mMax = ceil(sqrt(1.0 * limit)).toInt() - 1
+        for (m in 2..mMax) {
+            if (limit % m == 0) { // Find even divisor n (> 1) of num/2
+                var kMax = limit / m
+                while (kMax % 2 == 0) { // Find odd divisor k (= m + n) of num/2m
+                    kMax /= 2
+                }
+                var k = if (m % 2 == 1) m + 2 else m + 1
+                while (k < 2 * m && k <= kMax) {
+                    if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
+                        val triplet = pythagoreanTriplet(m, k - m, limit / (k * m))
+                        if (triplet.sum() == num) {
+                            val product = triplet.product()
+                            if (product >= maxProduct) {
+                                maxProduct = product
+                                maxTriplet = triplet
+                            }
+                        }
+                    }
+                    k += 2
                 }
             }
         }

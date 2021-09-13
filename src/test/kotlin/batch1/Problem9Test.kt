@@ -6,14 +6,19 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class SpecialPythagoreanTripletTest {
+    private val tool = SpecialPythagoreanTriplet()
+
     @Test
-    fun testFindTriplets_noneFound() {
-        val tool = SpecialPythagoreanTriplet()
+    fun testMaxTriplet_noneFound() {
         val nums = listOf(1, 4, 6, 31, 99, 100)
-        for (n in nums) {
-            //assertNull(tool.findTripletsLoop(n))
-            assertNull(tool.findTripletsLoopImproved(n))
-            //assertNull(tool.findTripletsParametrisation(n))
+        val solutions = listOf(
+            tool::maxTripletBrute, tool::maxTripletBruteAlternate,
+            tool::maxTripletParametrisation
+        )
+        nums.forEach { n ->
+            solutions.forEach { solution ->
+                assertNull(solution(n))
+            }
         }
     }
 
@@ -25,11 +30,14 @@ internal class SpecialPythagoreanTripletTest {
         "2214, 533, 756, 925", "3000, 750, 1000, 1250"
     )
     fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
-        val tool = SpecialPythagoreanTriplet()
         val expected = Triple(a, b, c)
-        //assertEquals(expected, tool.findTripletsLoop(n))
-        assertEquals(expected, tool.findTripletsLoopImproved(n))
-        //assertEquals(expected, tool.findTripletsParametrisation(n))
+        val solutions = listOf(
+            tool::maxTripletBrute, tool::maxTripletBruteAlternate,
+            tool::maxTripletParametrisation
+        )
+        solutions.forEach { solution ->
+            assertEquals(expected, solution(n))
+        }
     }
 
     @ParameterizedTest(name="N={0} gives {1}")
@@ -39,7 +47,6 @@ internal class SpecialPythagoreanTripletTest {
         "3000, 937500000"
     )
     fun testMaxTripletsProduct(n: Int, expected: Long) {
-        val tool = SpecialPythagoreanTriplet()
         assertEquals(expected, tool.maxTripletProduct(n))
     }
 

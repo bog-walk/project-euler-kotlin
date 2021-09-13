@@ -9,7 +9,7 @@ package batch3
  * then, given 1 of the names, multiply the sum of the value of all its
  * characters by its position in the alphabetical list.
  *
- * Constraints: 1 <= N <= 5200
+ * Constraints: 1 <= N <= 5200, len(NAME) < 12
  *
  * e.g.: Input = [ALEX, LUIS, JAMES, BRIAN, PAMELA]
  *       Sorted = [ALEX, BRIAN, JAMES, LUIS, PAMELA]
