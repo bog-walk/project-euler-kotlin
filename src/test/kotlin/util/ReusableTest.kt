@@ -93,7 +93,7 @@ internal class ReusableTest {
     @ParameterizedTest(name="d({0}) = {1}")
     @CsvSource(
         // lower constraints
-        "1, 0", "2, 1", "3, 1",
+        "1, 0", "2, 1", "3, 1", "12, 16", "20, 22",
         // perfect squares
         "36, 55", "49, 8",
         // normal values

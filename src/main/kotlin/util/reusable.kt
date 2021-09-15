@@ -100,11 +100,12 @@ fun Int.gaussianSum(): Long  = 1L * this * (this + 1) / 2
 fun sumProperDivisors(num: Int): Int {
     if (num < 2) return 0
     var sum = 1
-    val maxDivisor = sqrt(1.0 * num).toInt()
+    var maxDivisor = sqrt(1.0 * num).toInt()
     if (maxDivisor * maxDivisor == num) {
         sum += maxDivisor
+        maxDivisor--
     }
-    val range = if (num % 2 != 0) (3 until maxDivisor step 2) else (2 until maxDivisor)
+    val range = if (num % 2 != 0) (3..maxDivisor step 2) else (2..maxDivisor)
     for (d in range) {
         if (num % d == 0) {
             sum += d + num / d
