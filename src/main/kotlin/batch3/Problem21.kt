@@ -1,6 +1,6 @@
 package batch3
 
-import kotlin.math.sqrt
+import util.sumProperDivisors
 
 /**
  * Problem 21: Amicable Numbers
@@ -24,27 +24,6 @@ import kotlin.math.sqrt
  */
 
 class AmicableNumbers {
-    /**
-     * This solution is optimised based on the following:
-     * N == 1 has no proper divisor but 1 is a proper divisor of all other naturals;
-     * A perfect square would duplicate divisors if included in the loop range;
-     * Loop range differs for odd numbers as they cannot have even divisors.
-     */
-    fun sumProperDivisors(num: Int): Int {
-        if (num < 2) return 0
-        var sum = 1
-        var maxDivisor = sqrt(1.0 * num).toInt()
-        if (maxDivisor * maxDivisor == num) {
-            sum += maxDivisor
-        }
-        val range = if (num % 2 != 0) (3..maxDivisor step 2) else (2..maxDivisor)
-        for (d in range) {
-            if (num % d == 0) {
-                sum += d + num / d
-            }
-        }
-        return sum
-    }
 
     fun sumProperDivisorsPrimeFactors(num: Int): Int {
         if (num < 2) return 0

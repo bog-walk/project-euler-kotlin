@@ -17,7 +17,6 @@ class AmicableNumbersTest {
         "5500, 7604", "100000, 146078"
     )
     fun testSumProperDivisors(n: Int, expected: Int) {
-        //assertEquals(expected, tool.sumProperDivisors(n))
         assertEquals(expected, tool.sumProperDivisorsPrimeFactors(n))
     }
 

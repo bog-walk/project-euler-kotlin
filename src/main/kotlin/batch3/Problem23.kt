@@ -11,8 +11,10 @@ package batch3
  *
  * Perfect Number: the sum of its proper divisors equals itself.
  * e.g. proper_D(6) = {1,2,3}.sum() = 6
+ *
  * Deficient Number: the sum of its proper divisors is less than itself.
  * e.g. proper_D(4) = {1, 2}.sum() = 3
+ *
  * Abundant Number: the sum of its proper divisors exceeds itself.
  * e.g. proper_D(12) = {1,2,3,4,6}.sum() = 16
  *

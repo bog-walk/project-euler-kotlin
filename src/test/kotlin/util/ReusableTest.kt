@@ -89,4 +89,19 @@ internal class ReusableTest {
     fun testGaussianSum(n: Int, expected: Long) {
         assertEquals(expected, n.gaussianSum())
     }
+
+    @ParameterizedTest(name="d({0}) = {1}")
+    @CsvSource(
+        // lower constraints
+        "1, 0", "2, 1", "3, 1",
+        // perfect squares
+        "36, 55", "49, 8",
+        // normal values
+        "220, 284", "284, 220", "999, 521",
+        // upper constraints
+        "5500, 7604", "100000, 146078"
+    )
+    fun testSumProperDivisors(n: Int, expected: Int) {
+        assertEquals(expected, sumProperDivisors(n))
+    }
 }
