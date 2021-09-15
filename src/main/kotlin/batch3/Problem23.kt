@@ -1,6 +1,5 @@
 package batch3
 
-import util.primeNumbers
 import util.sumProperDivisors
 
 /**
