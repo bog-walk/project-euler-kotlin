@@ -8,6 +8,7 @@ import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class LargestProductInGridTest {
+    private val tool = LargestProductInGrid()
     private val smallGrid: Array<IntArray> = getTestGrid(
         "src/test/resources/LargestProductInGrid4By4", 4
     )
@@ -20,7 +21,6 @@ internal class LargestProductInGridTest {
 
     @Test
     fun testMaxFromGrid() {
-        val tool = LargestProductInGrid()
         assertEquals(6, tool.maxFromGrid(smallGrid))
         assertEquals(15, tool.maxFromGrid(midGrid))
         assertEquals(70600674, tool.maxFromGrid(largeGrid))

@@ -88,3 +88,5 @@ fun primeNumbers(max: Int): List<Int> {
         if (isPrime) i + 2 else null
     }.filterNotNull()
 }
+
+fun Int.gaussianSum(): Long  = 1L * this * (this + 1) / 2

@@ -1,5 +1,6 @@
 package batch1
 
+import util.gaussianSum
 import kotlin.math.pow
 
 /**
@@ -38,9 +39,7 @@ class SumSquareDifference {
      */
     fun sumSquareDiffImproved(max: Int): Long {
         val sumOfSquares: Double = (1.0 * max / 6) * (2 * max + 1) * (max + 1)
-        val squareOfSum: Double = (gaussianSum(max).toDouble()).pow(2)
+        val squareOfSum: Double = (max.gaussianSum().toDouble()).pow(2)
         return (squareOfSum - sumOfSquares).toLong()
     }
-
-    private fun gaussianSum(max: Int): Long  = 1L * max * (max + 1) / 2
 }

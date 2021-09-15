@@ -121,7 +121,7 @@ class SpecialPythagoreanTriplet {
         val limit = num / 2
         val mMax = ceil(sqrt(1.0 * limit)).toInt() - 1
         for (m in 2..mMax) {
-            if (limit % m == 0) { // Find even divisor n (> 1) of num/2
+            if (limit % m == 0) { // Find even divisor m (> 1) of num/2
                 var kMax = limit / m
                 while (kMax % 2 == 0) { // Find odd divisor k (= m + n) of num/2m
                     kMax /= 2

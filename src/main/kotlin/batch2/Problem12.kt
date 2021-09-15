@@ -1,5 +1,6 @@
 package batch2
 
+import util.gaussianSum
 import util.primeFactors
 import util.primeNumbers
 
@@ -13,7 +14,6 @@ import util.primeNumbers
  */
 
 class HighlyDivisibleTriangularNumber {
-    private fun Int.gaussSum(): Int = this * (this + 1) / 2
 
     /**
      * e.g. 28 = 2^2 * 7^1 (prime factors)
@@ -32,12 +32,12 @@ class HighlyDivisibleTriangularNumber {
         var lastCount = 2
         array@ for (i in 1..n) {
             if (i < lastCount) {
-                triangles[i] = lastT.gaussSum()
+                triangles[i] = lastT.gaussianSum().toInt()
                 continue@array
             }
             var nextT = lastT + 1
             tLoop@ do {
-                val triangle = nextT.gaussSum()
+                val triangle = nextT.gaussianSum().toInt()
                 val count = countDivisors(triangle)
                 if (i < count) {
                     triangles[i] = triangle
@@ -76,7 +76,7 @@ class HighlyDivisibleTriangularNumber {
             }
             var nextT = lastT + 1
             do {
-                val triangle = nextT.gaussSum()
+                val triangle = nextT.gaussianSum().toInt()
                 val dn2 = if (nextT % 2 == 0) countDivisors(nextT+1) else countDivisors((nextT+1)/2)
                 val count = lastDn1 * dn2
                 lastDn1 = dn2
@@ -104,7 +104,7 @@ class HighlyDivisibleTriangularNumber {
             count = dn1 * dn2
             dn1 = dn2
         }
-        return t.gaussSum()
+        return t.gaussianSum().toInt()
     }
 
     fun firstTriangleOverNImproved(n: Int): Int {

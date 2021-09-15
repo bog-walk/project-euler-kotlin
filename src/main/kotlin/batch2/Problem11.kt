@@ -6,8 +6,19 @@ import util.product
 
 /**
  * Problem 11: Largest Product in a Grid
- * Goal: Find the greatest product of 4 adjacent integers, with 0 <= N <= 100,
- * in the same direction (up, down, left, right, diagonal) in a 20x20 grid.
+ *
+ * https://projecteuler.net/problem=11
+ *
+ * Goal: Find the largest product of 4 adjacent integers in the
+ * same direction (up, down, left, right, diagonal) in an NxN grid.
+ *
+ * Constraints: 0 <= integer <= 100, 4 <= N <= 20
+ *
+ * e.g.: 1 1 1 1
+ *       1 1 2 1
+ *       1 1 3 1
+ *       1 1 1 1
+ *       column {1,2,3,1} = 6
  */
 
 class LargestProductInGrid {
@@ -78,7 +89,8 @@ class LargestProductInGrid {
         return Array(grid[0].size) { r ->
             IntArray(grid.size) { c ->
                 grid[c][r]
-            } }
+            }
+        }
     }
 
     private fun rotate(grid: Array<IntArray>): Array<IntArray> {

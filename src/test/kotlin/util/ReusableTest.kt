@@ -80,4 +80,13 @@ internal class ReusableTest {
         assertEquals(expectedSize, actual.size)
         assertEquals(expectedTail, actual.takeLast(10))
     }
+
+    @ParameterizedTest(name="{0} = {1}")
+    @CsvSource(
+        "1, 1", "2, 3", "3, 6", "50, 1275",
+        "100, 5050", "2234, 2496495"
+    )
+    fun testGaussianSum(n: Int, expected: Long) {
+        assertEquals(expected, n.gaussianSum())
+    }
 }
