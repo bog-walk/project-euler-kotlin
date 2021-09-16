@@ -20,38 +20,33 @@ import util.factorial
  */
 
 class LexicographicPermutations {
+    /**
+     * Recursive solution uses factorial (permutations without repetition)
+     * to calculate next character in permutation based on batch position.
+     * e.g. "abcd" has 4! = 24 permutations & each letter will have 6
+     * permutations in which that letter will be the 1st in the order.
+     *
+     * @param[n] the nth permutation requested; should be zero-indexed.
+     * @param[input] the object to generate permutations of; should be
+     * already sorted in ascending lexicographic order.
+     */
     fun lexicographicPerm(
-        n: Long, input: String, permutation: String = ""
+        n: Long,
+        input: String,
+        permutation: String = ""
     ): String {
         val permutations = (input.length).factorial().toLong()
         return when (n) {
-            1L -> {
-                println("Base case first reached")
-                permutation + input
-            }
-            permutations -> {
-                println("Base case last reached")
-                permutation + input.reversed()
-            }
+            0L -> permutation + input
             else -> {
-                // Find index of next letter
-                val i = (n / (permutations / input.length)).toInt() - 1
-                // Find new n for next recursion
-                val new_n = n % (permutations / input.length) + 1
-                // Remove letter at index above
-                val new_input = input.removeRange(i..i)
-                val ans_sofar = permutation + input[i]
-                println("Re-entering with n=$new_n input=$new_input ans=$ans_sofar")
+                val batchSize = permutations / input.length
+                val i = (n / batchSize).toInt()
                 lexicographicPerm(
-                    new_n, new_input, ans_sofar
+                    n % batchSize,
+                    input.removeRange(i..i),
+                    permutation + input[i]
                 )
             }
         }
     }
-}
-
-fun main() {
-    val tool = LexicographicPermutations()
-    val ans = tool.lexicographicPerm(2, "abc")
-    println(ans)
 }
