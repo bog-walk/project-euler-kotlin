@@ -1,6 +1,7 @@
 package batch3
 
-import util.gcd
+import util.primeNumbers
+import java.math.BigInteger
 
 /**
  * Problem 26: Reciprocal Cycles
@@ -27,19 +28,44 @@ import util.gcd
  */
 
 class ReciprocalCycles {
+
     /**
      * Repetend/Reptend: the infinitely repeated digit sequence of the
      * decimal representation of a number.
+     * - If a fraction contains a repetend, the latter's length (K) will never
+     * be greater than the fraction's denominator minus 1.
+     * - A denominator of 3 produces the first repetend, with K = 1.
+     * - All fractions that are a power of 1/2 or the product of 1/5 times a
+     * power of 1/2 will have exact decimal equivalents, not repetends.
+     * - Multiples of a denominator will have same K value (multiples of
+     * 7 are special in that both K and repetend will be equal).
+     * - For each 1/p, where p is a prime number but not 2 or 5, for
+     * k = 1,2,3,...n, [(10^k) - 1] / p = repetend, when there is no
+     * remainder.
+     * e.g. for p = 11, [(10^1) - 1] % 11 != 0, but [(10^2) - 1] / 11
+     * has 99 evenly divided by 11 giving 9. Since k = 2, there must be
+     * 2 repeating digits, so repetend = 09.
      */
-    fun isRepetend(n: Int): Boolean {
-        TODO()
-    }
-
-    fun longestRecurringDecimal(n: Int): Int {
-        TODO()
-    }
-
-    fun totient(n: Long): Int {
-        return (1L..n).count { k -> gcd(n, k) == 1L }
+    fun longestRepetendDenominator(n: Int): Int {
+        if (n <= 7) return 3
+        var denominator = 3
+        var longestK = 1
+        // Only primes considered as only smallest N required & anything
+        // larger would be a multiple of a smaller prime with equivalent K.
+        val primes = primeNumbers(n - 1) - listOf(2, 3, 5)
+        primes.forEach { p ->
+            val pAsBigInt = BigInteger.valueOf(1L * p)
+            for (k in 1 until p) {
+                val stringOfNines = BigInteger.valueOf(10L).pow(k) - BigInteger.ONE
+                if (stringOfNines.mod(pAsBigInt) == BigInteger.ZERO) {
+                    if (k > longestK) {
+                        longestK = k
+                        denominator = p
+                    }
+                    break
+                }
+            }
+        }
+        return denominator
     }
 }
