@@ -45,14 +45,15 @@ class ReciprocalCycles {
      * e.g. for p = 11, [(10^1) - 1] % 11 != 0, but [(10^2) - 1] / 11
      * has 99 evenly divided by 11 giving 9. Since k = 2, there must be
      * 2 repeating digits, so repetend = 09.
+     * Speed for N = 10000 -> 61109ms
      */
-    fun longestRepetendDenominator(n: Int): Int {
+    fun longestRepetendDenominatorUsingPrimes(n: Int): Int {
         if (n <= 7) return 3
-        var denominator = 3
-        var longestK = 1
         // Only primes considered as only smallest N required & anything
         // larger would be a multiple of a smaller prime with equivalent K.
         val primes = primeNumbers(n - 1) - listOf(2, 3, 5)
+        var denominator = 3
+        var longestK = 1
         primes.forEach { p ->
             val pAsBigInt = BigInteger.valueOf(1L * p)
             for (k in 1 until p) {
@@ -64,6 +65,31 @@ class ReciprocalCycles {
                     }
                     break
                 }
+            }
+        }
+        return denominator
+    }
+
+    /**
+     * Speed for N = 10000 -> 7ms
+     */
+    fun longestRepetendDenominator(n: Int): Int {
+        var denominator = 3
+        var longestK = 1
+        val upperN = if (n % 2 == 0) n -1 else n - 2
+        val lowerN = upperN / 2 - 1
+        for (i in upperN downTo lowerN step 2) {
+            if (longestK >= i) break
+            val remainders = IntArray(i) { 0 }
+            var remainder = 1
+            var position = 0
+            while (remainders[remainder] == 0 && remainder != 0) {
+                remainders[remainder] = position++
+                remainder = remainder * 10 % i
+            }
+            if (position - remainders[remainder] >= longestK) {
+                longestK = position - remainders[remainder]
+                denominator = i
             }
         }
         return denominator
