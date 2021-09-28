@@ -1,7 +1,6 @@
 package batch1
 
-import kotlin.math.floor
-import kotlin.math.sqrt
+import util.isPrime
 
 /**
  * Problem 7: The 10001st Prime
@@ -18,30 +17,6 @@ import kotlin.math.sqrt
  */
 
 class The10001stPrime {
-    /**
-     * This algorithm uses all facts about primes to test primality of N.
-     */
-    fun isPrime(n: Int): Boolean {
-        return when {
-            n < 2 -> false
-            n < 4 -> true // 2 & 3
-            n % 2 == 0 -> false // 2 is only even prime
-            n < 9 -> true // 4, 6, & 8 already excluded
-            n % 3 == 0 -> false // primes > (k=3) are of form 6k(+/-1) (i.e. never multiples of 3)
-            else -> {
-                // N can only have 1 prime factor > sqrt(N): N itself!
-                val max = floor(sqrt(1.0 * n))
-                var step = 5 // as multiples of prime 5 have not been assessed yet
-                // 11, 13, 17, 19, & 23 will all bypass n loop
-                while (step <= max) {
-                    if (n % step == 0) return false
-                    if (n % (step + 2) == 0) return false
-                    step += 6
-                }
-                true
-            }
-        }
-    }
 
     fun getNthPrime(n: Int): Int {
         if (n == 1) return 2

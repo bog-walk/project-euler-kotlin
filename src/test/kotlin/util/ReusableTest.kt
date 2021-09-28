@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class ReusableTest {
     @ParameterizedTest(name="gcd({0}, {1}) is {2}")
@@ -103,5 +105,21 @@ internal class ReusableTest {
     )
     fun testSumProperDivisors(n: Int, expected: Int) {
         assertEquals(expected, sumProperDivisors(n))
+    }
+
+    @Test
+    fun testIsPrime_allTrue() {
+        val nums = listOf(2, 5, 11, 17, 29)
+        for (num in nums) {
+            assertTrue(isPrime(num))
+        }
+    }
+
+    @Test
+    fun testIsPrime_allFalse() {
+        val nums = listOf(1, 4, 9, 14)
+        for (num in nums) {
+            assertFalse(isPrime(num))
+        }
     }
 }

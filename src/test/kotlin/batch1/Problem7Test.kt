@@ -1,28 +1,11 @@
 package batch1
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 internal class The10001stPrimeTest {
     val tool = The10001stPrime()
-
-    @Test
-    fun testIsPrime_allTrue() {
-        val nums = listOf(2, 5, 11, 17, 29)
-        for (num in nums) {
-            kotlin.test.assertTrue(tool.isPrime(num))
-        }
-    }
-
-    @Test
-    fun testIsPrime_allFalse() {
-        val nums = listOf(1, 4, 9, 14)
-        for (num in nums) {
-            kotlin.test.assertFalse(tool.isPrime(num))
-        }
-    }
 
     @ParameterizedTest(name="{0}th prime is {1}")
     @CsvSource(

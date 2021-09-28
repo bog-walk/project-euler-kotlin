@@ -13,8 +13,6 @@ import java.math.BigInteger
  *
  * Constraints: 4 <= N <= 1e4
  *
- * Unit Fraction: A fraction with 1 as the numerator.
- *
  * e.g.: N = 10
  *       1/2 = 0.5
  *       1/3 = 0.(3) -> 1-digit recurring cycle
