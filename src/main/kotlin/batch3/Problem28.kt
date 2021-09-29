@@ -1,5 +1,7 @@
 package batch3
 
+import java.math.BigInteger
+
 /**
  * Problem 28: Number Spiral Diagonals
  *
@@ -19,16 +21,53 @@ package batch3
  *              19  6   1   2   11
  *              18  5   4   3   12
  *              17  16  15  14  13
- *       diagonals = {21,7,1,3,13,17,5,9,25}
+ *       diagonals = {1,3,5,7,9,13,17,21,25}
  *       sum = 101
  */
 
 class NumberSpiralDiagonals {
-    fun getSpiralDiagonals(n: Int): List<Int> {
-        TODO()
+    fun spiralDiagSumBrute(n: BigInteger): BigInteger {
+        var sum = BigInteger.ONE
+        var num = BigInteger.ONE
+        var step = BigInteger.TWO
+        while (step < n) {
+            repeat(4) {
+                num += step
+                sum += num
+            }
+            step += BigInteger.TWO
+        }
+        return sum
     }
 
-    fun spiralDiagSum(n: Int): Int {
-        TODO()
+    /**
+     * Works well up to N = 7001, then stack overflow error.
+     */
+    fun spiralDiagSumRecursive(n: BigInteger): BigInteger {
+        return when(n) {
+            BigInteger.ONE -> n
+            else -> {
+                var sum = BigInteger.ZERO
+                var diag = n * n
+                repeat(4) {
+                    sum += diag
+                    diag -= n - BigInteger.ONE
+                }
+                spiralDiagSumRecursive(n - BigInteger.TWO) + sum
+            }
+        }
+    }
+
+    fun spiralDiagSumFormula(n: BigInteger): BigInteger {
+        var sum = BigInteger.ONE
+        var i = BigInteger.ONE
+        val maxI = n.divide(BigInteger.TWO).add(BigInteger.ONE)
+        while (i < maxI) {
+            val even = BigInteger.TWO * i
+            val odd =  even + BigInteger.ONE
+            sum += 4.toBigInteger() * odd.pow(2) - 6.toBigInteger() * even
+            i = i.inc()
+        }
+        return sum
     }
 }

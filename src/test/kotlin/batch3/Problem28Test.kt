@@ -2,30 +2,44 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.math.BigInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NumberSpiralDiagonalsTest {
     private val tool = NumberSpiralDiagonals()
 
-    @Test
-    fun testGetSprialDiagonals() {
-        val rows = listOf(1, 3, 5, 7)
-        val diagonals = listOf(
-            listOf(1), listOf(1, 3, 5, 7, 9),
-            listOf(1, 3, 5, 7, 9, 13, 17, 21, 25),
-            listOf(1, 3, 5, 7, 9, 13, 17, 21, 25, 31, 37, 43, 49)
+    @ParameterizedTest(name="{0}x{0} sum = {1}")
+    @CsvSource(
+        // lower constraints
+        "1, 1", "3, 25", "5, 101", "7, 261",
+        // large values
+        "1001, 669171001", "7001, 789195405"
+    )
+    fun testSpiralDiagSum(n: Int, expected: Int) {
+        val modulus = 1000000000.toBigInteger() + BigInteger.valueOf(7)
+        val solutions = listOf(
+            tool::spiralDiagSumBrute,
+            tool::spiralDiagSumRecursive,
+            tool::spiralDiagSumFormula
         )
-        rows.forEachIndexed { index, n ->
-            assertEquals(diagonals[index], tool.getSpiralDiagonals(n))
+        solutions.forEach { solution ->
+            val actual = solution(n.toBigInteger()).mod(modulus).toInt()
+            assertEquals(expected, actual)
         }
     }
 
-    @ParameterizedTest(name="{0}x{0} sum = {1}")
-    @CsvSource(
-        "1, 1", "3, 25", "5, 101", "7, 261"
-    )
-    fun testSpiralDiagSum(n: Int, expected: Int) {
-        assertEquals(expected, tool.spiralDiagSum(n))
+    @Test
+    fun testSpiralDiagSum_huge() {
+        val n = 1_000_000_000.toBigInteger()
+        val startBrute = System.currentTimeMillis()
+        val ansBrute = tool.spiralDiagSumBrute(n)
+        val stopBrute = System.currentTimeMillis()
+        val startFormula = System.currentTimeMillis()
+        val ansFormula = tool.spiralDiagSumFormula(n)
+        val stopFormula = System.currentTimeMillis()
+        println("Brute took: ${stopBrute - startBrute}ms" +
+                "\nFormula took: ${stopFormula - startFormula}ms")
+        assertEquals(ansBrute, ansFormula)
     }
 }
