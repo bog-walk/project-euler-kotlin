@@ -22,6 +22,32 @@ import util.product
  */
 
 class LargestProductInGrid {
+
+    /**
+     * Solution using custom class IntMatrix2D.
+     */
+    fun maxProductSmallest(grid: IntMatrix2D): Int {
+        return maxOf(
+            getMaxProduct(grid.getDiagonals()),
+            getMaxProduct(grid),
+            getMaxProduct(grid.transpose())
+        )
+    }
+
+    private fun getMaxProduct(iterable: Iterable<IntArray>): Int {
+        var maxProd = 0
+        for (intArray in iterable) {
+            val prod = intArray.product()
+            if (prod > maxProd) {
+                maxProd = prod
+            }
+        }
+        return maxProd
+    }
+
+    /**
+     * Solution using Array<IntArray>
+     */
     fun maxFromGrid(grid: Array<IntArray>): Int {
         return maxOf(
             assessRows(grid),
@@ -98,24 +124,5 @@ class LargestProductInGrid {
             IntArray(grid.size) { c ->
             grid[c][grid.size - r - 1]
         } }
-    }
-
-    fun maxProductSmallest(grid: IntMatrix2D): Int {
-        return maxOf(
-            getMaxProduct(grid.getDiagonals()),
-            getMaxProduct(grid),
-            getMaxProduct(grid.transpose())
-        )
-    }
-
-    private fun getMaxProduct(iterable: Iterable<IntArray>): Int {
-        var maxProd = 0
-        for (intArray in iterable) {
-            val prod = intArray.product()
-            if (prod > maxProd) {
-                maxProd = prod
-            }
-        }
-        return maxProd
     }
 }

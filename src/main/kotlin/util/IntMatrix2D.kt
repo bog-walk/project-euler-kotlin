@@ -1,9 +1,9 @@
 package util
 
 class IntMatrix2D(
-    val rows: Int,
-    val cols: Int,
-    val op: (() -> Int)? = null
+    private val rows: Int,
+    private val cols: Int,
+    private val op: (() -> Int)? = null
 ) : Iterable<IntArray> {
     private val matrix = Array(rows) { IntArray(cols) { op?.invoke() ?: 0 } }
 
