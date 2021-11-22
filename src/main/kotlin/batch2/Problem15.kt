@@ -1,33 +1,36 @@
 package batch2
 
 import util.factorial
-import java.math.BigInteger
 
 /**
  * Problem 15: Lattice Paths
- * Goal: Find how many routes there are through a NxM grid, such that
- * 1 <= N <= 500 & 1 <= M <= 500, from (0,0) to (n,m) & only being
- * able to move right or down.
- * e.g. For a 2x2 grid, & only being able to move right & down,
- * there are 6 routes to get from the top left corner to the
- * bottom right corner {RRDD, RDRD, RDDR, DRRD, DRDR, DDRR}.
+ *
+ * https://projecteuler.net/problem=15
+ *
+ * Goal: Find the number of routes through a N x M grid, starting at (0,0)
+ * & ending at (n,m), while only being able to move right or down.
+ *
+ * Constraints: 1 <= N <= 500, 1 <= M <= 500
+ *
+ * e.g.: N = 2, M = 2
+ *       routes = 6 -> {RRDD, RDRD, RDDR, DRRD, DRDR, DDRR}
  */
 
 class LatticePaths {
 
     /**
-     * Example of permutations with identical items & uses the formula:
-     * n! / Pi(i!), where n is the number of items to be combined & i is the
-     * groups of indistinguishable items that must be multiplied.
-     * e.g. 2x2 grid has 4 steps {R:2 , D: 2}. So, # of routes =
-     * 4! / (2! * 2!) = 24 / 4 = 6
-     * Identical to formula: n! / k! * (n-k)!, where k is the number of R, as once
-     * all the Rs ar chosen the Ds can only be placed in a deterministic way.
-     * As number of routes may be very large, the amount returned is the total
-     * routes % (10^9 + 7).
+     * Calculates permutations with identical items, based on the formula:
+     * x! / Pi(i!); where x is the number of items to be combined
+     * & i represents the groups of indistinguishable items to undergo
+     * product notation.
+     * The new formula becomes:
+     * (n + m)! / n! * m!; since grid dimensions determine the number of
+     * steps taken & a deterministic proportion of R vs D steps.
+     * @return  Number of routes scaled down to modulo (1e9 + 7).
      */
-    fun latticePathsReduced(n: Int, m: Int): BigInteger {
+    fun latticePathsReduced(n: Int, m: Int): Int {
+        val mod = 1_000_000_007.toBigInteger()
         val routes = (n + m).factorial() / (n.factorial() * m.factorial())
-        return routes % (7 + 1_000_000_000).toBigInteger()
+        return (routes % mod).intValueExact()
     }
 }
