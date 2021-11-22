@@ -2,13 +2,13 @@ package batch2
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import util.PyramidTree
 
 internal class MaximumPathSum1Test {
+    private val tool = MaximumPathSum1()
+
     @Test
     fun testTree_multipleLevels() {
         val elements = intArrayOf(3, 7, 4, 2, 4, 6, 8, 5, 9, 3)
-        val tool = MaximumPathSum1()
         assertEquals(23, tool.maxPathSum(4, *elements))
     }
 
