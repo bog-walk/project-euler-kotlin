@@ -4,17 +4,36 @@ import kotlin.math.log2
 
 /**
  * Problem 14: Longest Collatz Sequence
- * Goal: Find the largest starting number <= N, such that
- * 1 <= N <= 5 x 10^6, the produces the longest Collatz chain.
- * Collatz sequences, thought to all finish at 1, are defined
- * for positive integer starting numbers as:
- * n -> n / 2 (if n is even) & n -> 3n + 1 (if n is odd).
+ *
+ * https://projecteuler.net/problem=14
+ *
+ * Goal: Find the largest starting number <= N that produces the
+ * longest Collatz sequence.
+ *
+ * Constraints: 1 <= N <= 5e6
+ *
+ * Collatz Sequence: thought to all finish at 1, a sequence of
+ * positive integer, such that:
+ * (even n) n -> n / 2
+ * (odd n)  n -> 3*n + 1
+ *
+ * e.g.: N = 5
+ *       1
+ *       2 -> 1
+ *       3 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1
+ *       4 -> 2 -> 1
+ *       5 -> 16 -> 8 -> 4 -> 2 -> 1
+ *       longest chain when starting number = 3
  */
 
 class LongestCollatzSequence {
+    // Will store previously counted Collatz sequence lengths
     private val countedSeq = IntArray(5000001) { if (it == 0) 1 else 0 }
     private val longestCountedUnderN = IntArray(5000001) { if (it == 0) 1 else 0 }
 
+    /**
+     * Generate a Collatz Sequence from the provided start number.
+     */
     fun collatzSequence(start: Int): List<Int> {
         val sequence = mutableListOf(start)
         var prev = start
@@ -32,7 +51,7 @@ class LongestCollatzSequence {
         while (prev != 1) {
             prev = if (prev % 2 == 0) prev / 2 else prev * 3 + 1
             if (prev.isPowerOfTwo()) {
-                count += log2(1.0 * prev).toInt() - 1 + 2
+                count += log2(1.0 * prev).toInt() + 1
                 break
             } else {
                 count++
@@ -41,6 +60,10 @@ class LongestCollatzSequence {
         return count
     }
 
+    /**
+     * Recursive solution uses saved lengths of previously
+     * determined Collatz sequences to speed performance.
+     */
     private fun collatzLengthSaved(start: Long): Int {
         return if (start <= 5000000L && countedSeq[start.toInt() - 1] != 0) {
             countedSeq[start.toInt() - 1]
@@ -69,77 +92,6 @@ class LongestCollatzSequence {
     }
 
     fun longestCollatzMemo(max: Int): Int = longestCountedUnderN[max - 1]
-
-    fun longestCollatzImproved(max: Int): Int {
-        var longest = 1
-        var longestStarter = 1
-        val min = (max / 2).coerceAtLeast(1)
-        for (starter in min..max) {
-            val count = collatzLengthSaved(1L * starter)
-            if (count >= longest) {
-                longest = count
-                longestStarter = starter
-            }
-        }
-        return longestStarter
-    }
-
-    fun longestCollatz(max: Int): Int {
-        val overMax = mutableMapOf<Int, Int>()
-        val sizes = IntArray(max) { if (it == 0) 1 else 0 }
-        var longestStarter = 1
-        var longest = 1
-        for (starter in 2..max) {
-            if (sizes[starter - 1] > 0) continue
-            var count = 1
-            val sequence = mutableListOf(starter)
-            var prev = starter
-            seq@while (prev != 1) {
-                val next = if (prev % 2 == 0) prev / 2 else prev * 3 + 1
-                if (next > max) {
-                    if (overMax.containsKey(next)) {
-                        count += overMax.getValue(next)
-                        break@seq
-                    } else {
-                        count++
-                        sequence.add(next)
-                    }
-                } else {
-                    if (sizes[next - 1] == 0) {
-                        count++
-                        sequence.add(next)
-                    } else {
-                        count += sizes[next - 1]
-                        break@seq
-                    }
-                }
-                prev = next
-            }
-            if (count >= longest) {
-                longestStarter = starter
-                longest = count
-            }
-            for ((i, e)in sequence.withIndex()) {
-                if (e <= max) {
-                    sizes[e - 1] = count - i
-                } else {
-                    overMax[e] = count - i
-                }
-            }
-            var factor = sizes[starter - 1]
-            var multiple = starter * 2
-            while (multiple <= max) {
-                factor++
-                sizes[multiple - 1] = factor
-                if (factor >= longest) {
-                    longestStarter = multiple
-                    longest = factor
-                }
-                multiple *= 2
-            }
-        }
-        return longestStarter
-    }
 }
 
 // Bitwise AND operation between 2 values should be zero if a power of 2
