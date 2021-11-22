@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 internal class PowerDigitSumTest {
+    private val tool = PowerDigitSum()
+
     @ParameterizedTest(name="2^{0} -> {1}")
     @CsvSource(
         // lower constraint
@@ -14,7 +16,7 @@ internal class PowerDigitSumTest {
         "1000, 1366", "10000, 13561"
     )
     fun testExpDigSum(n: Int, expected: Int) {
-        val tool = PowerDigitSum()
-        assertEquals(expected, tool.expDigSum(n))
+        assertEquals(expected, tool.expDigSumUsingString(n))
+        assertEquals(expected, tool.expDigSumUsingMath(n))
     }
 }
