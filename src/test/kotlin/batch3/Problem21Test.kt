@@ -4,7 +4,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 
-class AmicableNumbersTest {
+internal class AmicableNumbersTest {
     private val tool = AmicableNumbers()
 
     @ParameterizedTest(name="d({0}) = {1}")

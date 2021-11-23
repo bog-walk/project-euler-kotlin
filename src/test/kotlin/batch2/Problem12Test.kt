@@ -3,6 +3,7 @@ package batch2
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 
 internal class HighlyDivisibleTriangularNumberTest {
@@ -49,27 +50,31 @@ internal class HighlyDivisibleTriangularNumberTest {
 
     @Test
     fun testSpeedDiff() {
-        val draftBefore = System.currentTimeMillis()
-        val draftOutput = tool.firstTrianglesBounded(1000)
-        val draftAfter = System.currentTimeMillis()
-        val improvedBefore = System.currentTimeMillis()
-        val improvedOutput = tool.firstTrianglesImproved(1000)
-        val improvedAfter = System.currentTimeMillis()
-        println("Basic solution took ${draftAfter - draftBefore}ms\n" +
-                "Improved solution took ${improvedAfter - improvedBefore}ms")
+        var draftOutput: IntArray
+        var improvedOutput: IntArray
+        val draftTime = measureNanoTime {
+            draftOutput = tool.firstTrianglesBounded(1000)
+        }
+        val improvedTime = measureNanoTime {
+            improvedOutput = tool.firstTrianglesImproved(1000)
+        }
+        println("Basic solution took ${draftTime / 1_000_000}ms\n" +
+                "Improved solution took ${improvedTime  / 1_000_000}ms")
         assertTrue(improvedOutput.contentEquals(draftOutput))
     }
 
     @Test
     fun testSpeedDiff_pickSingle() {
-        val basicBefore = System.currentTimeMillis()
-        val basicPick = tool.firstTriangleOverN(1000)
-        val basicAfter = System.currentTimeMillis()
-        val improvedBefore = System.currentTimeMillis()
-        val improvedPick = tool.firstTriangleOverNImproved(1000)
-        val improvedAfter = System.currentTimeMillis()
-        println("Basic solution took ${basicAfter - basicBefore}ms\n" +
-                "Improved solution took ${improvedAfter - improvedBefore}ms")
+        var basicPick: Int
+        var improvedPick: Int
+        val basicTime = measureNanoTime {
+            basicPick = tool.firstTriangleOverN(1000)
+        }
+        val improvedTime = measureNanoTime {
+            improvedPick = tool.firstTriangleOverNImproved(1000)
+        }
+        println("Basic solution took ${basicTime / 1_000_000}ms\n" +
+                "Improved solution took ${improvedTime / 1_000_000}ms")
         assertEquals(basicPick, improvedPick)
     }
 }

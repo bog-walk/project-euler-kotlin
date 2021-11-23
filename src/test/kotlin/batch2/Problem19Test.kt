@@ -6,10 +6,11 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 
 internal class CountingSundaysTest {
+    private val tool = CountingSundays()
+
     @Test
     fun testIsLeapYear_allLeapYears() {
         val years = listOf<Long>(2016, 2020, 2000, 1980, 2396, 1944)
-        val tool = CountingSundays()
         for (year in years) {
             assertTrue(tool.isLeapYear(year))
         }
@@ -18,7 +19,6 @@ internal class CountingSundaysTest {
     @Test
     fun testIsLeapYear_noneLeapYears() {
         val years = listOf<Long>(2100, 2200, 1900, 1986, 2379)
-        val tool = CountingSundays()
         for (year in years) {
             assertFalse(tool.isLeapYear(year))
         }
@@ -29,7 +29,6 @@ internal class CountingSundaysTest {
         "1900, 1", "1901, 2", "1920, 4", "1986, 3", "2000, 6", "2020, 3"
     )
     fun testGetJanFirstOfYear(year: Long, expected: Long) {
-        val tool = CountingSundays()
         assertEquals(expected, tool.getJanFirstOfYear(year))
     }
 
@@ -38,7 +37,6 @@ internal class CountingSundaysTest {
         "1, 1, 1900, 2", "17, 10, 2021, 1", "24, 8, 2000, 5", "25, 12, 1982, 0"
     )
     fun testGetWeekday(day: Long, month: Long, year: Long, expected: Long) {
-        val tool = CountingSundays()
         assertEquals(expected, tool.getWeekday(day, month, year))
     }
 
@@ -60,7 +58,6 @@ internal class CountingSundaysTest {
         "'1925 6 16', '1924 6 6', 0", "'1905 1 1', '1905 1 1', 1"
     )
     fun testCountSundayFirsts(start: String, end: String, expected: Int) {
-        val tool = CountingSundays()
         val (y1, m1, d1) = start.split(" ").map(String::toLong)
         val (y2, m2, d2) = end.split(" ").map(String::toLong)
         assertEquals(expected, tool.countSundayFirsts(y1, m1, d1, y2, m2, d2))
@@ -69,7 +66,6 @@ internal class CountingSundaysTest {
 
     @Test
     fun testUpperConstraint() {
-        val tool = CountingSundays()
         val (y1, m1, d1) = "1000000000000 2 2".split(" ").map(String::toLong)
         val (y2, m2) = "1000000001000 3 2".split(" ").map(String::toLong)
         assertEquals(1720, tool.countSundayFirstsZeller(y1, m1, d1, y2, m2))

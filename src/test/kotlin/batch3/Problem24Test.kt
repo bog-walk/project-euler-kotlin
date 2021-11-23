@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LexicographicPermutationsTest {
+internal class LexicographicPermutationsTest {
     private val tool = LexicographicPermutations()
 
     @ParameterizedTest(name="{0} p{1} = {2}")

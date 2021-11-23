@@ -4,7 +4,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 
-class QuadraticPrimesTest {
+internal class QuadraticPrimesTest {
     private val tool = QuadraticPrimes()
 
     @ParameterizedTest(name="N={0}: a={1} b={2}")

@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class NonAbundantSumsTest {
+internal class NonAbundantSumsTest {
     private val tool = NonAbundantSums()
 
     @Test

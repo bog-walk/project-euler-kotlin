@@ -43,7 +43,8 @@ class HighlyDivisibleTriangularNumber {
 
     /**
      * Returns IntArray of first triangle number to have more than index divisors.
-     * Took 2806ms for N = 1000.
+     *
+     * SPEED: 7246ms for N = 1000.
      */
     fun firstTrianglesBounded(n: Int): IntArray {
         val triangles = IntArray(n + 1).apply { this[0] = 1 }
@@ -77,7 +78,8 @@ class HighlyDivisibleTriangularNumber {
      * if n is even -> D(t) = D(n/2) * D(n+1) OR
      * if (n+1) is even -> D(t) = D(n) * D((n+1)/2)
      * The second part of the 1st equation will carry over to the next.
-     * Took 75ms for N = 1000.
+     *
+     * SPEED (BEST): 150ms for N = 1000.
      */
     fun firstTrianglesImproved(n: Int): IntArray {
         val triangles = IntArray(n + 1).apply {
@@ -115,7 +117,8 @@ class HighlyDivisibleTriangularNumber {
 
     /**
      * Returns first triangle number with divisors over N.
-     * Took 126ms for N = 1000.
+     *
+     * SPEED: 451ms for N = 1000.
      */
     fun firstTriangleOverN(n: Int): Int {
         if (n == 1) return 3
@@ -132,7 +135,7 @@ class HighlyDivisibleTriangularNumber {
     }
 
     /**
-     * Took 36ms for N = 1000.
+     * SPEED (BEST SINGLE-PICK): 46ms for N = 1000.
      */
     fun firstTriangleOverNImproved(n: Int): Int {
         if (n == 1) return 3

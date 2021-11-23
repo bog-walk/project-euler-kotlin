@@ -6,7 +6,9 @@ import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class NamesScoresTest {
+internal class NamesScoresTest {
+    private val tool = NamesScores()
+
     private val smallList = listOf("ALEX", "LUIS", "JAMES", "BRIAN", "PAMELA")
     private val mediumList = listOf(
         "OLIVIA", "ALEX", "MIA", "LUIS", "LEO", "JAMES", "BRIAN", "NOAH", "PAMELA",
@@ -14,7 +16,6 @@ class NamesScoresTest {
         "SEBASTIAN", "LILY", "ELI", "IVY", "STELLA", "HANNAH", "VIOLET"
     )
     private val longListLocation = "src/test/resources/NamesScores"
-    private val tool = NamesScores()
 
     @ParameterizedTest(name="{0} scores {1}")
     @CsvSource(

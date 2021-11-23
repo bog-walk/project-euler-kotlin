@@ -21,6 +21,8 @@ class EvenFibonacci {
     /**
      * Generates a list of all fibonacci numbers then sum all evens, based
      * on every third number in sequence being even.
+     *
+     * SPEED (WORST): 5.9e6ns for N = 4e16
      */
     fun sumOfFibonacciBrute(max: Long): Long {
         if (max < 3) return 0L
@@ -47,6 +49,8 @@ class EvenFibonacci {
     /**
      * Generates a list of only even fibonacci numbers based on the formula
      * F(n) = 4*F(n-3) + F(n-6), then sum resulting list.
+     *
+     * SPEED (SECOND BEST): 2.5e6ns for N = 4e16
      */
     fun sumOfEvenFibonacci(max: Long): Long {
         return evenFibonacci(max).sum()
@@ -67,6 +71,8 @@ class EvenFibonacci {
     /**
      * Uses custom class RollingQueue to reduce memory of stored fibonacci
      * numbers as only the 2 prior are needed to accumulate sum.
+     *
+     * SPEED (THIRD BEST): 5.1e6ns for N = 4e16
      */
     fun evenFibonacciRollingSum(max: Long): Long {
         var sumOfEvens = 0L
@@ -85,6 +91,8 @@ class EvenFibonacci {
      * Similar to RollingQueue implementation in that memory is reduced
      * by only using 4 variables, but also avoids the need to check
      * for even numbers by stepping forward to next predictable even in sequence.
+     *
+     * SPEED (BEST): 3.7e4ns for N = 4e16
      */
     fun evenFibonacciFourVariables(max: Long): Long {
         var sumOfEvens = 0L

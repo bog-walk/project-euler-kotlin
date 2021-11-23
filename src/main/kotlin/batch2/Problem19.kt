@@ -8,7 +8,9 @@ package batch2
  * Goal: Find the number of Sundays that fell on the 1st day of the month between
  * 2 dates YYYY MM DD inclusive.
  *
- * Constraints: 1900 <= Y1 <= 10^16, Y1 <= Y2 <= Y1 + 1000, 1 <= M1, M2 <= 12, 1 <= D1, D2 <= 31
+ * Constraints: 1900 <= Y1 <= 10^16, Y1 <= Y2 <= Y1 + 1000,
+ *              1 <= M1, M2 <= 12,
+ *              1 <= D1, D2 <= 31
  *
  * e.g.: Y1 M1 D1 = 1900 1 1, Y2 M2 D2 = 1910 1 1
  *       num of Sundays on the 1st = 18
@@ -22,7 +24,9 @@ class CountingSundays {
     }
 
     /**
-     * Returns day of week on January 1st as an integer, with Sunday = 0.
+     * Iterative search returns day of week on January 1st of
+     * provided year, based on the fact that Jan 1st, 1900 was
+     * a Monday. Sunday = 0.
      */
     fun getJanFirstOfYear(year: Long): Long {
         var start = 1900L
@@ -35,41 +39,38 @@ class CountingSundays {
     }
 
     /**
-     * 1. Adjust starting month (and year) based on starting day of month.
-     * e.g. Dec 20, 2020 would be moved forward to Jan 2021 as only the weekday on the
-     * first day of the month matters.
-     * 2. Get weekday that is the Jan 1st & use it to calculate the first Sunday that month.
-     * 3. Jump forward 7 days (as only interested in Sundays), repeatedly checking if the day
-     * of the month exceeds the num of days in that month. If so, increment month (+/- year) &
-     * adjust day of month to reflect increment.
-     * 4. Increment count if a 7 day jump falls on the first of the month.
-     * 5. End loop when end date exceeded.
+     * Consider using memoisation to improve performance when evaluating
+     * dates in the upper constraints. Or use Zeller's Congruence solution instead.
      */
     fun countSundayFirsts(
         startY: Long, startM: Long, startD: Long,
         endY: Long, endM: Long, endD: Long
     ): Int {
-        var count = 0
+        // Adjust starting month & year
         var currentYear = startY
-        var currentMonth = if (startD == 1L) startM else {
-            if (startM == 12L) {
-                currentYear++
-            }
-            (startM + 1) % 12
+        var currentMonth = startM
+        if (startD > 1L) {
+            currentMonth = startM % 12L + 1L
+            if (currentMonth == 1L) currentYear++
         }
+        var count = 0
+        // Get weekday that corresponds to Jan 1st of starting year
         val janFirst = getJanFirstOfYear(currentYear)
+        // Use above weekday to find first Sunday in January that year
         var sunday = if (janFirst == 0L) 1 else 8 - janFirst
-        if (currentYear == endY && currentMonth > endM) return 0
+        if (currentYear == endY && currentMonth > endM) return count
         if (sunday == 1L) count++
         while (currentYear <= endY) {
+            // Jump forward a week as only interested in checking every Sunday
             sunday += 7
-            val monthDays = when (currentMonth) {
-                2L -> if (isLeapYear(currentYear)) 29 else 28
-                else -> daysInMonth[currentMonth.toInt() - 1]
+            val monthDays = if (currentMonth == 2L && isLeapYear(currentYear)) {
+                29
+            } else {
+                daysInMonth[currentMonth.toInt() - 1]
             }
             if (sunday > monthDays) {
                 sunday -= monthDays
-                currentMonth++ // Move forward to next month
+                currentMonth++
             }
             if (currentYear == endY && currentMonth == endM && sunday > endD) break
             if (sunday == 1L) count++
@@ -84,10 +85,12 @@ class CountingSundays {
     /**
      * Zeller's Congruence algorithm returns the weekday for any date based
      * on the formula (note this applies to Gregorian not Julian calendars):
-     * h = (q + (13*(m+1)/5) + K + (K/4) + (J/4) + 5*J) % 7
-     * This algorithm considers January & February to be the 13th & 14th month
-     * of the preceding year.
-     * @return Int from 0 to 6 with 0 being Saturday, 1 Sunday, 2 Monday,...
+     * h = (day + (13*(month+1)/5) + K + (K/4) + (J/4) + 5*J) % 7;
+     * with month & year being adjusted to have January and February as
+     * the 13th & 14th months of the preceding year,
+     * and (K, J) = (year % 100, year / 100).
+     *
+     * @return Int from 0 to 6 with 0 = Saturday, 1 = Sunday, ..., 6 = Friday.
      */
     fun getWeekday(day: Long, month: Long, year: Long): Long {
         var m = month
@@ -101,38 +104,29 @@ class CountingSundays {
         return (day + 13 * (m + 1) / 5 + k + k / 4 + j / 4 + 5 * j) % 7
     }
 
-    /**
-     * 1. Adjust starting month (and year) based on starting day of month.
-     * e.g. Dec 20, 2020 would be moved forward to Jan 2021 as only the weekday on the
-     * first day of the month matters.
-     * 2. Get weekday of the 1st day of the month & increment count if a Sunday.
-     * 3. Move to next month & repeat.
-     * 4. End loop when end date exceeded. Note that end day not important in this
-     * solution, only end month.
-     */
     fun countSundayFirstsZeller(
         startY: Long, startM: Long, startD: Long,
         endY: Long, endM: Long
     ): Int {
-        var count = 0
+        // Adjust starting month based on starting day of month,
+        // as only the weekday on the first day of the month matters.
         var currentYear = startY
-        var currentMonth = if (startD == 1L) startM else {
-            if (startM == 12L) {
-                currentYear++
-                1L
-            } else {
-                startM + 1
-            }
+        var currentMonth = startM
+        if (startD > 1L) {
+            currentMonth = startM % 12L + 1L
+            // Adjust starting year forward if date has rolled over
+            // e.g. Dec 2, 2020 would become Jan 1, 2021
+            if (currentMonth == 1L) currentYear++
         }
+        var count = 0
+        // End loop when end month & year exceeded, as end day is not relevant
         while (currentYear <= endY) {
             if (currentYear == endY && currentMonth > endM) break
-            val weekdayOfMonthFirst = getWeekday(1, currentMonth, currentYear)
-            if (weekdayOfMonthFirst == 1L) count++ // 1 == Sunday using Zeller's Congruence
-            currentMonth++
-            if (currentMonth > 12) {
-                currentYear++
-                currentMonth = 1
-            }
+            // Use Zeller's congruence to check if first of month is Sunday
+            if (getWeekday(1, currentMonth, currentYear) == 1L) count++
+            // Move forward to next month
+            currentMonth = currentMonth % 12L + 1L
+            if (currentMonth == 1L) currentYear++
         }
         return count
     }

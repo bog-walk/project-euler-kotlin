@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ReciprocalCyclesTest {
+internal class ReciprocalCyclesTest {
     private val tool = ReciprocalCycles()
 
     @ParameterizedTest(name="Longest <{0} = {1}")

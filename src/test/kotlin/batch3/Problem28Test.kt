@@ -6,7 +6,7 @@ import java.math.BigInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class NumberSpiralDiagonalsTest {
+internal class NumberSpiralDiagonalsTest {
     private val tool = NumberSpiralDiagonals()
 
     @ParameterizedTest(name="{0}x{0} sum = {1}")

@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 internal class FactorialDigitSumTest {
+    private val tool = FactorialDigitSum()
+
     @ParameterizedTest(name="{0}! = {1}")
     @CsvSource(
         // lower constraints
@@ -17,7 +19,6 @@ internal class FactorialDigitSumTest {
         "946, 9675", "1000, 10539"
     )
     fun testFactorialDigitSum(n: Int, expected: Int) {
-        val tool = FactorialDigitSum()
         assertEquals(expected, tool.factorialDigitSum(n))
     }
 }

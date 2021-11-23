@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class NDigitFibonacciNumberTest {
+internal class NDigitFibonacciNumberTest {
     private val tool = NDigitFibonacciNumber()
 
     @ParameterizedTest(name="1st {0} digits = F({1})")
