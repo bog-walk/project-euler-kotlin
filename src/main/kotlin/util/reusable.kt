@@ -97,8 +97,10 @@ fun Int.gaussianSum(): Long  = 1L * this * (this + 1) / 2
  * - N == 1 has no proper divisor but 1 is a proper divisor of all other naturals;
  * - A perfect square would duplicate divisors if included in the loop range;
  * - Loop range differs for odd numbers as they cannot have even divisors.
+ *
+ * SPEED: 2.1e7ns for num = 999_999
  */
-fun sumProperDivisors(num: Int): Int {
+fun sumProperDivisorsOG(num: Int): Int {
     if (num < 2) return 0
     var sum = 1
     var maxDivisor = sqrt(1.0 * num).toInt()
@@ -113,6 +115,40 @@ fun sumProperDivisors(num: Int): Int {
         }
     }
     return sum
+}
+
+/**
+ * Further optimised function that uses prime factorisation to out-perform
+ * the original method above. Will be used in future solution sets.
+ *
+ * SPEED (BETTER): 7.1e3ns for num = 999_999
+ */
+fun sumProperDivisorsPF(num: Int): Int {
+    if (num < 2) return 0
+    var n = num
+    var sum = 1
+    var p = 2
+    while (p * p <= num && n > 1) {
+        if (n % p == 0) {
+            var j = p * p
+            n /= p
+            while (n % p == 0) {
+                j *= p
+                n /= p
+            }
+            sum *= (j - 1)
+            sum /= (p - 1)
+        }
+        if (p == 2) {
+            p++
+        } else {
+            p += 2
+        }
+    }
+    if (n > 1) {
+        sum *= (n + 1)
+    }
+    return sum - num
 }
 
 /**

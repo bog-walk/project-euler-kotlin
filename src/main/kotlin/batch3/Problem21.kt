@@ -1,6 +1,6 @@
 package batch3
 
-import util.sumProperDivisors
+import util.sumProperDivisorsOG
 
 /**
  * Problem 21: Amicable Numbers
@@ -24,51 +24,22 @@ import util.sumProperDivisors
  */
 
 class AmicableNumbers {
-
-    fun sumProperDivisorsPrimeFactors(num: Int): Int {
-        if (num < 2) return 0
-        var n = num
-        var sum = 1
-        var p = 2
-        while (p * p <= num && n > 1) {
-            if (n % p == 0) {
-                var j = p * p
-                n /= p
-                while (n % p == 0) {
-                    j *= p
-                    n /= p
-                }
-                sum *= (j - 1)
-                sum /= (p - 1)
-            }
-            if (p == 2) {
-                p++
-            } else {
-                p += 2
-            }
-        }
-        if (n > 1) {
-            sum *= (n + 1)
-        }
-        return sum - num
-    }
-
     fun sumAmicablePairs(num: Int): Int {
-        val amicables = mutableListOf<Int>()
+        val amicableNums = mutableListOf<Int>()
         for (x in 2 until num) {
-            val y = sumProperDivisors(x)
+            val y = sumProperDivisorsOG(x)
             // The partner of a newly explored amicable number must be larger
-            if (y > x && sumProperDivisors(y) == x) {
-                amicables.add(x)
+            if (y > x && sumProperDivisorsOG(y) == x) {
+                amicableNums.add(x)
                 // Account for possibility that only 1 of
                 // the amicable pair may be under N
                 if (y < num) {
-                    amicables.add(y)
+                    amicableNums.add(y)
                 } else {
                     break
                 }
             }
         }
-        return amicables.sum()
+        return amicableNums.sum()
     }
 }

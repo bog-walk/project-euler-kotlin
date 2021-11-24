@@ -1,6 +1,6 @@
 package batch3
 
-import util.sumProperDivisors
+import util.sumProperDivisorsOG
 
 /**
  * Problem 23: Non-Abundant Sums
@@ -32,7 +32,7 @@ import util.sumProperDivisors
  */
 
 class NonAbundantSums {
-    fun isAbundant(n: Int): Boolean = sumProperDivisors(n) > n
+    fun isAbundant(n: Int): Boolean = sumProperDivisorsOG(n) > n
 
     /**
      * This solution is optimised based on:

@@ -7,19 +7,6 @@ import kotlin.test.assertEquals
 internal class AmicableNumbersTest {
     private val tool = AmicableNumbers()
 
-    @ParameterizedTest(name="d({0}) = {1}")
-    @CsvSource(
-        // lower constraints
-        "1, 0", "2, 1", "3, 1",
-        // normal values
-        "36, 55", "220, 284", "284, 220", "999, 521",
-        // upper constraints
-        "5500, 7604", "100000, 146078"
-    )
-    fun testSumProperDivisors(n: Int, expected: Int) {
-        assertEquals(expected, tool.sumProperDivisorsPrimeFactors(n))
-    }
-
     @ParameterizedTest(name="Sum < {0} = {1}")
     @CsvSource(
         // lower constraints

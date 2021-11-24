@@ -104,7 +104,8 @@ internal class ReusableTest {
         "5500, 7604", "100000, 146078"
     )
     fun testSumProperDivisors(n: Int, expected: Int) {
-        assertEquals(expected, sumProperDivisors(n))
+        assertEquals(expected, sumProperDivisorsOG(n))
+        assertEquals(expected, sumProperDivisorsPF(n))
     }
 
     @Test
