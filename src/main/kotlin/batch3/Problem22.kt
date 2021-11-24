@@ -14,7 +14,7 @@ package batch3
  * e.g.: Input = [ALEX, LUIS, JAMES, BRIAN, PAMELA]
  *       Sorted = [ALEX, BRIAN, JAMES, LUIS, PAMELA]
  *       Name = PAMELA = 16 + 1 + 13 + 5 + 12 + 1 = 48
- *       Position = 1st
+ *       Position = 5th
  *       Result = 5 * 48 = 240
  */
 

@@ -1,6 +1,6 @@
 package batch3
 
-import util.sumProperDivisorsOG
+import util.sumProperDivisorsPF
 
 /**
  * Problem 23: Non-Abundant Sums
@@ -32,7 +32,7 @@ import util.sumProperDivisorsOG
  */
 
 class NonAbundantSums {
-    fun isAbundant(n: Int): Boolean = sumProperDivisorsOG(n) > n
+    fun isAbundant(n: Int): Boolean = sumProperDivisorsPF(n) > n
 
     /**
      * This solution is optimised based on:
@@ -46,8 +46,7 @@ class NonAbundantSums {
      * - xMax of x + y = N would be N / 2, to avoid duplicate checks.
      */
     fun isSumOfAbundants(n: Int): Boolean {
-        if (n < 24) return false
-        if (n < 957 && n % 2 != 0) return false
+        if (n < 24 || (n < 957 && n % 2 != 0)) return false
         if (n > 20161) return true
         val xMax = n / 2
         val range = if (xMax < 945) {
@@ -58,8 +57,7 @@ class NonAbundantSums {
             (12..944 step 2) + (945..xMax)
         }
         for (x in range) {
-            val y = n - x
-            if (isAbundant(x) && isAbundant(y)) {
+            if (isAbundant(x) && isAbundant(n - x)) {
                 return true
             }
         }

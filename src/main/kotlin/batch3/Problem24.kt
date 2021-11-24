@@ -35,18 +35,16 @@ class LexicographicPermutations {
         input: String,
         permutation: String = ""
     ): String {
-        val permutations = (input.length).factorial().toLong()
-        return when (n) {
-            0L -> permutation + input
-            else -> {
-                val batchSize = permutations / input.length
-                val i = (n / batchSize).toInt()
-                lexicographicPerm(
-                    n % batchSize,
-                    input.removeRange(i..i),
-                    permutation + input[i]
-                )
-            }
+        return if (n == 0L) {
+            permutation + input
+        } else {
+            val batchSize = (input.length).factorial().toLong() / input.length
+            val i = (n / batchSize).toInt()
+            lexicographicPerm(
+                n % batchSize,
+                input.removeRange(i..i),
+                permutation + input[i]
+            )
         }
     }
 }
