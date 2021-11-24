@@ -2,7 +2,7 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.math.BigInteger
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,29 +17,36 @@ internal class NumberSpiralDiagonalsTest {
         "1001, 669171001", "7001, 789195405"
     )
     fun testSpiralDiagSum(n: Int, expected: Int) {
-        val modulus = 1000000000.toBigInteger() + BigInteger.valueOf(7)
         val solutions = listOf(
             tool::spiralDiagSumBrute,
-            tool::spiralDiagSumRecursive,
-            tool::spiralDiagSumFormula
+            tool::spiralDiagSumFormula,
+            tool::spiralDiagSumFormulaDerived
         )
         solutions.forEach { solution ->
-            val actual = solution(n.toBigInteger()).mod(modulus).toInt()
-            assertEquals(expected, actual)
+            assertEquals(expected, solution(n.toBigInteger()))
         }
     }
 
     @Test
     fun testSpiralDiagSum_huge() {
         val n = 1_000_000_000.toBigInteger()
-        val startBrute = System.currentTimeMillis()
-        val ansBrute = tool.spiralDiagSumBrute(n)
-        val stopBrute = System.currentTimeMillis()
-        val startFormula = System.currentTimeMillis()
-        val ansFormula = tool.spiralDiagSumFormula(n)
-        val stopFormula = System.currentTimeMillis()
-        println("Brute took: ${stopBrute - startBrute}ms" +
-                "\nFormula took: ${stopFormula - startFormula}ms")
-        assertEquals(ansBrute, ansFormula)
+        val solutions = listOf(
+            tool::spiralDiagSumBrute,
+            tool::spiralDiagSumFormula,
+            tool::spiralDiagSumFormulaDerived
+        )
+        val times = mutableListOf<Long>()
+        val answers = mutableListOf<Int>()
+        solutions.forEachIndexed { i, solution ->
+            val time = measureNanoTime {
+                answers.add(i, solution(n))
+            }
+            times.add(i, time)
+        }
+        println("Brute took: ${times[0] / 1_000_000}ms\n" +
+                "Formula took: ${times[1] / 1_000_000}ms\n" +
+                "Derived formula took: ${times[2]}ns")
+        assertEquals(answers[0], answers[1])
+        assertEquals(answers[1], answers[2])
     }
 }
