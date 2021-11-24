@@ -19,7 +19,27 @@ import kotlin.math.*
 
 class NDigitFibonacciNumber {
     /**
-     * Returns the Nth Fibonacci sequence number.
+     * Iterative solution checks every Fibonacci term to see if it matches
+     * the amount of digits required.
+     *
+     * SPEED: 1.2e6ns for N = 10.
+     *        7053ms (compared to ns with inverted formula) for N = 5000.
+     */
+    fun nDigitFibTermBrute(n: Int): Int {
+        var term = 7
+        var fN = BigInteger.valueOf(13)
+        var fNMinus1 = BigInteger.valueOf(8)
+        while (fN.toString().length < n) {
+            term++
+            val fNMinus2 = fNMinus1
+            fNMinus1 = fN
+            fN = fNMinus1 + fNMinus2
+        }
+        return term
+    }
+
+    /**
+     * Returns the Nth Fibonacci sequence number, as an alternative to iteration.
      * Based on the closed-form formula:
      * Fn = (Phi^n - Psi^n) / sqrt(5),
      * with Phi = (1 + sqrt(5)) / 2 ~= 1.61803...
@@ -38,7 +58,9 @@ class NDigitFibonacciNumber {
      * Based on the above formula being inverted to calculate log10 of
      * each Fibonacci number, thereby returning the term that has the
      * required amount of digits, without need to iterate.
-     * N = 5000 executes in 1ms.
+     *
+     * SPEED: 3.5e5ns for N = 10.
+     * (BEST for N > 10)  5.0e5ns for N = 5000.
      */
     fun nDigitFibTermByDigitsGolden(n: Int): Int {
         val phi = (1 + sqrt(5.0)) / 2
@@ -46,30 +68,17 @@ class NDigitFibonacciNumber {
     }
 
     /**
-     * N = 5000 executes in 8118ms, significantly slower compared to above
-     * solution, but significantly faster than below solution.
-     */
-    fun nDigitFibTermBrute(n: Int): Int {
-        var term = 7
-        var fN = BigInteger.valueOf(13)
-        var fNMinus1 = BigInteger.valueOf(8)
-        while (fN.toString().length < n) {
-            term++
-            val fNMinus2 = fNMinus1
-            fNMinus1 = fN
-            fN = fNMinus1 + fNMinus2
-        }
-        return term
-    }
-
-    /**
      * Iterative solution uses Golden Ratio to calculate the Fibonacci
-     * sequence numbers, which slows execution even from N > 10
-     * (due to exponential need to calculate Phi^N).
+     * sequence numbers.
+     *
+     * SPEED (BEST for N <= 10): 8.2e4ns for N = 10.
+     * Significantly slower execution from N > 10,
+     * due to exponential need to calculate Phi^N.
      */
     fun nDigitFibTermUsingGoldenRatio(n: Int): Int {
         var term = 7
         var fN = 13
+        // Pattern shows the amount of digits increases every 4th-5th term
         val step = 4
         while (fN.toString().length < n) {
             term += step

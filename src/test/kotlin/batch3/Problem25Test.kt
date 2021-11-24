@@ -2,7 +2,9 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 internal class NDigitFibonacciNumberTest {
@@ -40,16 +42,41 @@ internal class NDigitFibonacciNumberTest {
     }
 
     @Test
-    fun testGetFibTermSpeedComparison() {
+    fun testGetFibTermSpeedComparison_lowN() {
+        val n = 10
+        val expected = listOf(45, 45, 45)
+        val solutions = listOf(
+            tool::nDigitFibTermBrute,
+            tool::nDigitFibTermByDigitsGolden,
+            tool::nDigitFibTermUsingGoldenRatio
+        )
+        val answers = mutableListOf<Int>()
+        val times = mutableListOf<Long>()
+        solutions.forEachIndexed { i, solution ->
+            val time = measureNanoTime {
+                answers.add(i, solution(n))
+            }
+            times.add(i, time)
+        }
+        println("Brute solution took: ${times[0]}ns\n" +
+                "Gold digits took: ${times[1]}ns\n" +
+                "Gold ratio took: ${times[2]}ns")
+        assertContentEquals(expected, answers)
+    }
+
+    @Test
+    fun testGetFibTermSpeedComparison_highN() {
         val n = 5000
-        val bruteStart = System.currentTimeMillis()
-        val ansBrute = tool.nDigitFibTermBrute(n)
-        val bruteStop = System.currentTimeMillis()
-        val goldSingleStart = System.currentTimeMillis()
-        val ansGoldSingle = tool.nDigitFibTermByDigitsGolden(n)
-        val goldSingleStop = System.currentTimeMillis()
-        println("Brute listing took: ${bruteStop - bruteStart}\n" +
-                "Gold single took: ${goldSingleStop - goldSingleStart}")
-        assertEquals(ansBrute, ansGoldSingle)
+        val ansBrute: Int
+        val ansGoldDigits: Int
+        val timeBrute = measureNanoTime {
+            ansBrute = tool.nDigitFibTermBrute(n)
+        }
+        val timeGoldDigits = measureNanoTime {
+            ansGoldDigits = tool.nDigitFibTermByDigitsGolden(n)
+        }
+        println("Brute solution took: ${timeBrute / 1_000_000}ms\n" +
+                "Gold digits took: ${timeGoldDigits}ns")
+        assertEquals(ansBrute, ansGoldDigits)
     }
 }
