@@ -32,11 +32,12 @@ class QuadraticPrimes {
      * For n = 0, formula -> 0^2 + 0 + b = b, which means that
      * b must be a prime number itself.
      * For n = 1, formula -> 1^2 + a + b, with b being a prime:
-     * if b = 2, then a must be even for result to be an odd prime;
-     * if b > 2, then a must be odd for result to be an odd prime.
+     *  - if b = 2, then a must be even for result to be an odd prime;
+     *  - if b > 2, then a must be odd for result to be an odd prime.
+     *
+     *  @return [Triple] -> (a, b, count_of_primes)
      */
     fun quadPrimeCoeff(maxN: Int): Triple<Int, Int, Int> {
-        // Triple(a, b, countOfPrimes)
         var maxCoeffs = Triple(0, 0, 0)
         val primes = primeNumbers(maxN)
         val lowestA = if (maxN % 2 == 0) -maxN - 1 else -maxN - 2

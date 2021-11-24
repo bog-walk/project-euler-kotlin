@@ -2,6 +2,7 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -25,14 +26,16 @@ internal class ReciprocalCyclesTest {
     @Test
     fun testLongestRepetend_speedComparison() {
         val n = 10000
-        val startNoPrime = System.currentTimeMillis()
-        val ansNoPrime = tool.longestRepetendDenominator(n)
-        val stopNoPrime = System.currentTimeMillis()
-        val startPrime = System.currentTimeMillis()
-        val ansPrime = tool.longestRepetendDenominatorUsingPrimes(n)
-        val stopPrime = System.currentTimeMillis()
-        println("Using primes took: ${stopPrime - startPrime}ms" +
-                "\nNot using primes took: ${stopNoPrime - startNoPrime}ms")
+        val ansNoPrime: Int
+        val ansPrime: Int
+        val timeNoPrime = measureNanoTime {
+            ansNoPrime = tool.longestRepetendDenominator(n)
+        }
+        val timePrime = measureNanoTime {
+            ansPrime = tool.longestRepetendDenominatorUsingPrimes(n)
+        }
+        println("Not using primes took: ${timeNoPrime / 1_000_000}ms\n" +
+                "Using primes took: ${timePrime / 1_000_000}ms")
         assertEquals(ansNoPrime, ansPrime)
     }
 }
