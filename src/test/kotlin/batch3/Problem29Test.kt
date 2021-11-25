@@ -16,7 +16,7 @@ internal class DistinctPowersTest {
         // normal values
         "10, 69", "20, 324", "50, 2184", "100, 9183"
     )
-    fun testDistinctPowers(n: Int, expected: Int) {
+    fun testDistinctPowers(n: Int, expected: Long) {
         assertEquals(expected, tool.distinctPowersBrute(n))
         assertEquals(expected, tool.distinctPowers(n))
     }
@@ -24,8 +24,8 @@ internal class DistinctPowersTest {
     @Test
     fun testDistinctPowers_speedComparison() {
         val n = 500
-        val ansBrute: Int
-        val ansImproved: Int
+        val ansBrute: Long
+        val ansImproved: Long
         val timeBrute = measureNanoTime {
             ansBrute = tool.distinctPowersBrute(n)
         }

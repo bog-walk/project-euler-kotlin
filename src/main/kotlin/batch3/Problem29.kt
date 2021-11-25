@@ -21,9 +21,12 @@ import kotlin.math.pow
 class DistinctPowers {
 
     /**
+     * Difficult to assess if this solution tolerates upper constraints due
+     * to slow performance.
+     *
      * SPEED: 1442ms for N = 500
      */
-    fun distinctPowersBrute(n: Int): Int {
+    fun distinctPowersBrute(n: Int): Long {
         val distinct = mutableSetOf<BigInteger>()
         for (a in 2..n) {
             for (b in 2..n) {
@@ -31,7 +34,7 @@ class DistinctPowers {
                 distinct.add(power)
             }
         }
-        return distinct.size
+        return distinct.size.toLong()
     }
 
     /**
@@ -40,7 +43,7 @@ class DistinctPowers {
      *
      * SPEED (BEST): 4.6e5ns for N = 500
      */
-    fun distinctPowers(n: Int): Int {
+    fun distinctPowers(n: Int): Long {
         val maxExp = minOf(16, n - 1)
         val minExponents = IntArray(n * maxExp - 1)
         for (i in 1..maxExp) {
@@ -52,14 +55,14 @@ class DistinctPowers {
             }
         }
         val bases = IntArray(n - 1)
-        var duplicates = 0
-        val exponentDuplicates = IntArray(maxExp - 1)
+        var duplicates = 0L
+        val exponentDuplicates = LongArray(maxExp - 1)
         for (num in 2..n) {
             val parent = bases[num - 2]
             if (parent == 0) {
-                var power = num * num
+                var power: Long = 1L * num * num
                 while (power <= n) {
-                    bases[power - 2] = num
+                    bases[power.toInt() - 2] = num
                     power *= num
                 }
             } else {
@@ -69,10 +72,10 @@ class DistinctPowers {
                     reduce /= parent
                     exponent++
                 }
-                if (exponentDuplicates[exponent - 2] != 0) {
+                if (exponentDuplicates[exponent - 2] != 0L) {
                     duplicates += exponentDuplicates[exponent - 2]
                 } else {
-                    var dupes = 0
+                    var dupes = 0L
                     for (y in 2..n) {
                         if (minExponents[y * exponent - 2] < exponent) {
                             dupes++
@@ -83,6 +86,6 @@ class DistinctPowers {
                 }
             }
         }
-        return (1.0 * n - 1).pow(2).toInt() - duplicates
+        return (1.0 * n - 1).pow(2).toLong() - duplicates
     }
 }
