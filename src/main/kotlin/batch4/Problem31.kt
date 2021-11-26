@@ -70,11 +70,7 @@ class CoinSums {
         // Base case for when 0p is needed
         combosByCoin[0] = BigInteger.ONE
         coins.forEach { coin ->
-            // Keep shifting forward as cannot give a higher value coin than needed
             for (i in coin..n) {
-                // Repeatedly adds previously counted ways to get remainder in coins
-                // when the coin value is already excluded.
-                // Target = 5p, using 2p coins -> 5-2 = index[3]
                 combosByCoin[i] += combosByCoin[i - coin]
             }
         }
