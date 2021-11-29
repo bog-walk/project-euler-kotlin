@@ -22,13 +22,27 @@ import kotlin.math.pow
 */
 
 class DigitCancellingFractions {
-    private fun reduceFraction(n: Int, d: Int): Double? {
-        val n2 = n.toString()
-        val d2 = d.toString()
-        return if (n2.first() == d2.last()) {
-            n2.drop(1).toDouble() / d2.take(d2.length - 1).toDouble()
-        } else null
-    }
+   fun isReducedEquivalent(
+        numerator: Int,
+        denominator: Int,
+        toCancel: Int
+    ): Boolean {
+        // Pair(digitsToCancel, digitsToKeep)
+        val nReduced: Pair<String, String>
+        val dReduced: Pair<String, String>
+        numerator.toString().run {
+            nReduced = this.takeLast(toCancel) to this.dropLast(toCancel)
+        }
+        denominator.toString().run {
+            dReduced = this.take(toCancel) to this.drop(toCancel)
+        }
+        if (nReduced.first == dReduced.first) {
+            val ogFraction = 1.0 * numerator / denominator
+            val reduced = nReduced.second.toDouble() / dReduced.second.toDouble()
+            return ogFraction == reduced
+        }
+       return false
+   }
 
     fun findNonTrivials(n: Int, k: Int = 1): List<Pair<Int, Int>> {
         val nonTrivials = mutableListOf<Pair<Int, Int>>()
@@ -37,19 +51,12 @@ class DigitCancellingFractions {
         // Denominator must always be larger than numerator
         val maxN = ((10.0).pow(n) - 2).toInt()
         for (num in minN..maxN) {
-            // Avoid trivial fractions with trailing zeroes
-            if (num % 10 == 0) continue
             for (denom in (num+1)..(maxN+1)) {
-                if (denom % 10 == 0) continue
-                val ogFraction = 1.0 * num / denom
-                reduceFraction(num, denom)?.let { reduced ->
-                    if (reduced == ogFraction) {
-                        nonTrivials.add(num to denom)
-                    }
+                if (isReducedEquivalent(num, denom, k)) {
+                    nonTrivials.add(num to denom)
                 }
             }
         }
-        println(nonTrivials)
         return nonTrivials
     }
 
@@ -62,7 +69,7 @@ class DigitCancellingFractions {
      * given in its lowest common terms.
      */
     fun productOfNonTrivials(): Int {
-        val nonTrivials = findNonTrivials(2, 1).unzip()
+        val nonTrivials = findNonTrivials(2, k=1).unzip()
         val numerators = nonTrivials.first.toMutableList()
         val denominators = nonTrivials.second.toMutableList()
 
@@ -89,5 +96,5 @@ class DigitCancellingFractions {
 
 fun main() {
     val tool = DigitCancellingFractions()
-    tool.findNonTrivials(2)
+   tool.findNonTrivials(3, 2)
 }
