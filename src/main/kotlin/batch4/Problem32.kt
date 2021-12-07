@@ -26,11 +26,11 @@ class PandigitalProducts {
         val products = mutableSetOf<Int>()
         // ('0' + n) if digitToChar() not supported by Kotlin version
         val digits = ('1'..n.digitToChar()).toList()
-        val aRange = if (n < 7) 2..9 else 2..99
+        val aRange = if (n < 7) 2..9 else 2..98
         val bMax = when (n) {
-            8 -> 999
-            9 -> 9999
-            else -> 99
+            8 -> 987
+            9 -> 9876
+            else -> 98
         }
         for (a in aRange) {
             for (b in (a+1)..bMax) {

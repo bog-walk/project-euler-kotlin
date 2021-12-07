@@ -44,24 +44,22 @@ internal class NDigitFibonacciNumberTest {
     @Test
     fun testGetFibTermSpeedComparison_lowN() {
         val n = 10
-        val expected = listOf(45, 45, 45)
+        val expected = 45
         val solutions = listOf(
             tool::nDigitFibTermBrute,
             tool::nDigitFibTermByDigitsGolden,
             tool::nDigitFibTermUsingGoldenRatio
         )
-        val answers = mutableListOf<Int>()
         val times = mutableListOf<Long>()
         solutions.forEachIndexed { i, solution ->
             val time = measureNanoTime {
-                answers.add(i, solution(n))
+                assertEquals(expected, solution(n))
             }
             times.add(i, time)
         }
         println("Brute solution took: ${times[0]}ns\n" +
                 "Gold digits took: ${times[1]}ns\n" +
                 "Gold ratio took: ${times[2]}ns")
-        assertContentEquals(expected, answers)
     }
 
     @Test

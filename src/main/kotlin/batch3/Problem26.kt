@@ -54,7 +54,7 @@ class ReciprocalCycles {
      * SPEED: 6.2e4ms for N = 10000
      */
     fun longestRepetendDenominatorUsingPrimes(n: Int): Int {
-        if (n <= 7) return 3
+        // if (n <= 7) return 3
         // Only primes considered as only smallest N required & anything
         // larger would be a multiple of a smaller prime with equivalent K.
         val primes = primeNumbers(n - 1) - listOf(2, 3, 5)
