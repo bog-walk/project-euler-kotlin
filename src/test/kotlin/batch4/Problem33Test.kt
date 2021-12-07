@@ -1,6 +1,5 @@
 package batch4
 
-import org.junit.jupiter.api.Assertions
 import kotlin.system.measureNanoTime
 import kotlin.test.*
 
@@ -111,5 +110,58 @@ internal class DigitCancellingFractionsTest {
         nums.forEachIndexed { i, n ->
             assertEquals(expected[i], tool.getCancelledCombos(n, toCancel[i]))
         }
+    }
+
+    @Test
+    fun testGetCombinations() {
+        val nums = listOf("12", "345", "6789")
+        val expected = listOf(
+            setOf(listOf('1'), listOf('2')),
+            setOf(listOf('3', '4'), listOf('3', '5'), listOf('4', '5')),
+            setOf(listOf('6', '7', '8'), listOf('6', '7', '9'), listOf('6', '8', '9'), listOf('7', '8', '9'))
+        )
+        for (k in 1..3) {
+            assertEquals(expected[k - 1], tool.getCombinations(nums[k - 1], k=k))
+        }
+    }
+
+    @Test
+    fun testFindSumOfNonTrivials_K1() {
+        val expected = listOf(110 to 322, 77262 to 163829)
+        for (n in 2..3) {
+            assertEquals(expected[n - 2], tool.sumOfNonTrivialsBrute(n, k=1))
+            assertEquals(expected[n - 2], tool.sumOfNonTrivialsGCD(n, k=1))
+        }
+    }
+
+    @Test
+    fun testFindSumOfNonTrivials_K2() {
+        val expected = listOf(7429 to 17305, 3571225 to 7153900)
+        for (n in 3..4) {
+            assertEquals(expected[n - 3], tool.sumOfNonTrivialsBrute(n, k=2))
+            assertEquals(expected[n - 3], tool.sumOfNonTrivialsGCD(n, k=2))
+        }
+    }
+
+    @Test
+    fun testFindSumOfNonTrivials_K3() {
+        val n = 4
+        val expected = 255983 to 467405
+        assertEquals(expected, tool.sumOfNonTrivialsBrute(n, k=3))
+        assertEquals(expected, tool.sumOfNonTrivialsGCD(n, k=3))
+    }
+
+    @Test
+    fun testFindSumOfNonTrivials_speedComparison() {
+        val n = 4
+        val expected = 12999936 to 28131911
+        val timeBrute = measureNanoTime {
+            assertEquals(expected, tool.sumOfNonTrivialsBrute(n, k=1))
+        }
+        val timeGCD = measureNanoTime {
+            assertEquals(expected, tool.sumOfNonTrivialsGCD(n, k=1))
+        }
+        println("Brute solution took: ${timeBrute / 1_000_000_000}s\n" +
+                "GCD solution took: ${timeGCD / 1_000_000_000}s")
     }
 }

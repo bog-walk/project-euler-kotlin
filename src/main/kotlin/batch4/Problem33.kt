@@ -159,23 +159,26 @@ class DigitCancellingFractions {
         return perms
     }
 
-    fun getCombinations(
-        num: String,
-        index: Int = 0,
-        k: Int = 1,
-        out: MutableList<Char> = mutableListOf(),
-        combos: MutableSet<List<Char>> = mutableSetOf()
-    ): Set<List<Char>> {
-        if (k == 0) {
-            combos.add(out)
-        } else {
-            for (j in index..num.lastIndex) {
-                out.add(num[j])
-                getCombinations(num, j + 1, k - 1, out, combos)
-                out.removeAt(out.lastIndex)
+    /**
+     * Recursive helper function for HackerRank specific implementation.
+     * Finds all combinations for digits that can be cancelled based on
+     * value of K. Ensures that no combinations are duplicated if K = 1,
+     * but does not differentiate between duplicate combos in different order.
+     * e.g. ['9', '1'] and ['1', '9'] will both occur.
+     *
+     * @param   [num] must have any 0s pre-removed so they are not cancelled.
+     * @return  Set of {digits to cancel}.
+     */
+    fun getCombinations(num: String, k: Int): MutableSet<List<Char>> {
+        if (k == 1) return num.map { listOf(it) }.toMutableSet()
+        val combinations = mutableSetOf<List<Char>>()
+        for (i in num.indices) {
+            val digit = mutableListOf(num[i])
+            for (c in getCombinations(num.slice((i+1)..num.lastIndex), k-1)) {
+                combinations.add(digit + c)
             }
         }
-        return combos
+        return combinations
     }
 
     /**
@@ -192,7 +195,7 @@ class DigitCancellingFractions {
      *
      * @return Pair of (sum of numerators, sum of denominators).
      *
-     * SPEED: s for N = 4, K = 1
+     * SPEED: 161.338s for N = 4, K = 1
      */
     fun sumOfNonTrivialsBrute(n: Int, k: Int): Pair<Int, Int> {
         var nSum = 0
@@ -201,13 +204,90 @@ class DigitCancellingFractions {
         val maxDenominator = (10.0).pow(n).toInt()
         for (numerator in minNumerator..(maxDenominator - 2)) {
             val nS = numerator.toString()
+            val cancelCombos = getCombinations(nS.replace("0", ""), k=k)
+            for (denominator in (numerator + 1) until maxDenominator) {
+                val ogFraction = 1.0 * numerator / denominator
+                for (combo in cancelCombos) {
+                    val nPost = getCancelledCombos(nS, combo)
+                    val dPost = getCancelledCombos(denominator.toString(), combo)
+                    // denominator did not contain all digits to cancel
+                    if (dPost.isEmpty()) continue
+                    var foundNonTrivial = false
+                    for (n2 in nPost) {
+                        if (n2 == 0) continue
+                        for (d2 in dPost) {
+                            // avoid division by zero error
+                            if (d2 == 0) continue
+                            if (ogFraction == 1.0 * n2 / d2) {
+                                nSum += numerator
+                                dSum += denominator
+                                foundNonTrivial = true
+                                break
+                            }
+                        }
+                        // avoid duplicating numerator with this denominator
+                        if (foundNonTrivial) break
+                    }
+                    if (foundNonTrivial) break
+                }
+            }
         }
         return nSum to dSum
     }
-}
 
-fun main() {
-    val tool = DigitCancellingFractions()
-    val combos = tool.getCombinations("123", k=2)
-    println(combos)
+    /**
+     * HackerRank specific implementation with extra restrictions, as detailed
+     * in above brute force solution. This solution has been optimised by only
+     * looping through possible numerators & the cancellation combos they allow.
+     * Rather than loop through denominators, gcd() is used to assess reductive
+     * equivalence based on the following:
+     * n_og / d_og = n_r / d_r, and
+     * n_r = n_og / gcd(n_og, d_og), d_r = d_og / gcd(n_og, d_og)
+     *
+     * @return Pair of (sum of numerators, sum of denominators).
+     *
+     * SPEED (BEST for HR problem): 0.245s for N = 4, K = 1
+     */
+    fun sumOfNonTrivialsGCD(n: Int, k: Int): Pair<Int, Int> {
+        var nSum = 0
+        var dSum = 0
+        val minNumerator = (10.0).pow(n - 1).toInt()
+        val maxDenominator = (10.0).pow(n).toInt()
+        val maxReduced = (10.0).pow(n - k).toInt()
+        for (numerator in minNumerator..(maxDenominator - 2)) {
+            val nS = numerator.toString()
+            val cancelCombos = getCombinations(nS.replace("0", ""), k=k)
+            // avoid denominator duplicates with same numerator
+            val denominatorsUsed = mutableListOf<Int>()
+            for (combo in cancelCombos) {
+                // get all integers possible post-cancellation of k digits
+                val nPost = getCancelledCombos(nS, combo)
+                for (n2 in nPost) {
+                    if (n2 == 0) continue
+                    var d = numerator
+                    var nr = n2
+                    var i = 1
+                    while (true) {
+                        i++
+                        val g = gcd(d.toLong(), nr.toLong()).toInt()
+                        d = d / g * i
+                        nr = nr / g * i
+                        if (d <= numerator) continue
+                        if (nr >= maxReduced || d >= maxDenominator) break
+                        val dPost = getCancelledCombos(d.toString(), combo)
+                        // denominator did not contain all digits to cancel
+                        if (dPost.isEmpty()) continue
+                        for (d2 in dPost) {
+                            if (nr == d2 && d !in denominatorsUsed) {
+                                nSum += numerator
+                                dSum += d
+                                denominatorsUsed.add(d)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nSum to dSum
+    }
 }
