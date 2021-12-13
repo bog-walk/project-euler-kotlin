@@ -69,8 +69,10 @@ fun lcm(n1: Long, n2: Long): Long {
 /**
  * Uses Sieve of Eratosthenes method to output all prime numbers
  * less than or equal to the upper bound provided.
+ *
+ * SPEED: 36.64ms for N = 1e5
  */
-fun primeNumbers(max: Int): List<Int> {
+fun primeNumbersOG(max: Int): List<Int> {
     if (max < 2) return emptyList()
     // Creates BooleanArray representing range of 2..max, with all even numbers
     // except 2 (index 0) marked False
@@ -87,6 +89,35 @@ fun primeNumbers(max: Int): List<Int> {
     }
     return primesBool.mapIndexed { i, isPrime ->
         if (isPrime) i + 2 else null
+    }.filterNotNull()
+}
+
+/**
+ * Still uses Sieve of Eratosthenes method to output all prime numbers
+ * less than or equal to the upper bound provided, but cuts processing
+ * time in half by only allocating mask memory to odd numbers and by only
+ * looping through multiples of odd numbers. Will be used in future solution sets.
+ *
+ * SPEED (BETTER): 23.11ms for N = 1e5
+ */
+fun primeNumbers(max: Int): List<Int> {
+    if (max < 2) return emptyList()
+    val oddSieve = (max - 1) / 2
+    // Creates BooleanArray representing range of 2,3..max step 2
+    val primesBool = BooleanArray(oddSieve + 1) { true }
+    // primesBool[0] corresponds to prime 2 and is skipped
+    for (i in 1..(sqrt(1.0 * max).toInt() / 2)) {
+        if (primesBool[i]) {
+            // j = next index at which multiple of odd prime exists
+            var j = i * 2 * (i + 1)
+            while (j <= oddSieve) {
+                primesBool[j] = false
+                j += 2 * i + 1
+            }
+        }
+    }
+    return primesBool.mapIndexed { i, isPrime ->
+        if (i == 0) 2 else if (isPrime) 2 * i + 1 else null
     }.filterNotNull()
 }
 
@@ -174,4 +205,19 @@ fun isPrime(n: Int): Boolean {
             true
         }
     }
+}
+
+/**
+ * Euclid's formula to generate all Pythagorean triplets from 2 numbers m and n.
+ * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
+ * Note the following assumptions:
+ * - m > n > 0.
+ * - m and n cannot both be odd.
+ * - m and n must be co-prime, i.e. gcd(m, n) == 1
+ */
+fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
+    val a = (m * m - n * n) * d
+    val b = 2 * m * n * d
+    val c = (m * m + n * n) * d
+    return Triple(minOf(a, b), maxOf(a, b), c)
 }

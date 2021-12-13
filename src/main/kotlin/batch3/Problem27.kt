@@ -1,7 +1,7 @@
 package batch3
 
 import util.isPrime
-import util.primeNumbers
+import util.primeNumbersOG
 
 /**
  * Problem 27: Quadratic Primes
@@ -39,7 +39,7 @@ class QuadraticPrimes {
      */
     fun quadPrimeCoeff(maxN: Int): Triple<Int, Int, Int> {
         var maxCoeffs = Triple(0, 0, 0)
-        val primes = primeNumbers(maxN)
+        val primes = primeNumbersOG(maxN)
         val lowestA = if (maxN % 2 == 0) -maxN - 1 else -maxN - 2
         // a will only be even if b == 2, so keep odd values only
         for (a in lowestA..maxN step 2) {

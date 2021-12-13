@@ -3,10 +3,8 @@ package util
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.system.measureNanoTime
+import kotlin.test.*
 
 internal class ReusableTest {
     @ParameterizedTest(name="gcd({0}, {1}) is {2}")
@@ -68,19 +66,23 @@ internal class ReusableTest {
     fun testPrimeNumbers_small() {
         val max = 30
         val expected = listOf(2, 3, 5, 7, 11, 13, 17, 19, 23, 29)
+        assertEquals(expected, primeNumbersOG(max))
         assertEquals(expected, primeNumbers(max))
     }
 
     @Test
     fun testPrimeNumbers_large() {
         val max = 10000
-        val actual = primeNumbers(max)
+        val actualOG = primeNumbersOG(max)
+        val actualNew = primeNumbers(max)
         val expectedSize = 1229
         val expectedTail = listOf(
             9887, 9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973
         )
-        assertEquals(expectedSize, actual.size)
-        assertEquals(expectedTail, actual.takeLast(10))
+        assertEquals(expectedSize, actualOG.size)
+        assertEquals(expectedSize, actualNew.size)
+        assertEquals(expectedTail, actualOG.takeLast(10))
+        assertEquals(expectedTail, actualNew.takeLast(10))
     }
 
     @ParameterizedTest(name="{0} = {1}")
@@ -122,5 +124,21 @@ internal class ReusableTest {
         for (num in nums) {
             assertFalse(isPrime(num))
         }
+    }
+
+    @Test
+    fun testPythagoreanTriplet() {
+        val expected = listOf(
+            Triple(3, 4, 5), Triple(6, 8,10),
+            Triple(5, 12, 13), Triple(8, 15, 17),
+            Triple(12, 16, 20), Triple(7, 24, 25),
+        )
+        val actual = mutableListOf<Triple<Int, Int, Int>>()
+        for (m in 2..4) {
+            for (n in 1 until m) {
+                actual.add(pythagoreanTriplet(m, n, d=1))
+            }
+        }
+        assertContentEquals(expected, actual)
     }
 }

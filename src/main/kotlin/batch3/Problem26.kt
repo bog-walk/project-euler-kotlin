@@ -1,6 +1,6 @@
 package batch3
 
-import util.primeNumbers
+import util.primeNumbersOG
 import java.math.BigInteger
 
 /**
@@ -57,7 +57,7 @@ class ReciprocalCycles {
         // if (n <= 7) return 3
         // Only primes considered as only smallest N required & anything
         // larger would be a multiple of a smaller prime with equivalent K.
-        val primes = primeNumbers(n - 1) - listOf(2, 3, 5)
+        val primes = primeNumbersOG(n - 1) - listOf(2, 3, 5)
         var denominator = 3
         var longestK = 1
         primes.forEach { p ->

@@ -2,7 +2,7 @@ package batch1
 
 import util.primeFactors
 import util.lcm
-import util.primeNumbers
+import util.primeNumbersOG
 import java.math.BigInteger
 import kotlin.math.floor
 import kotlin.math.log2
@@ -93,7 +93,7 @@ class SmallestMultiple {
     fun lcmUsingPrimes(rangeMax: Int): Long {
         var lcm = 1L
         val limit = sqrt(rangeMax.toDouble())
-        val primes = primeNumbers(rangeMax)
+        val primes = primeNumbersOG(rangeMax)
         for (prime in primes) {
             val power = if (prime <= limit) {
                 floor(log2(rangeMax.toDouble()) / log2(prime.toDouble()))

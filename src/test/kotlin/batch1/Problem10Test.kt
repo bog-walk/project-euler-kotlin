@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import util.primeNumbers
+import util.primeNumbersOG
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class SummationOfPrimesTest {
@@ -18,7 +18,7 @@ internal class SummationOfPrimesTest {
         "1000000, 37550402023"
     )
     fun testSumOfPrimes(n: Int, expected: Long) {
-        assertEquals(expected, tool.sumOfPrimes(n, ::primeNumbers))
+        assertEquals(expected, tool.sumOfPrimes(n, ::primeNumbersOG))
         assertEquals(expected, allPrimes[n])
     }
 }

@@ -3,6 +3,7 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 
 internal class SpecialPythagoreanTripletTest {
@@ -12,8 +13,7 @@ internal class SpecialPythagoreanTripletTest {
     fun testMaxTriplet_noneFound() {
         val nums = listOf(1, 4, 6, 31, 99, 100)
         val solutions = listOf(
-            tool::maxTripletBruteA, tool::maxTripletBruteB,
-            tool::maxTripletParametrisation
+            tool::maxTripletBrute, tool::maxTripletParametrisation
         )
         nums.forEach { n ->
             solutions.forEach { solution ->
@@ -32,8 +32,7 @@ internal class SpecialPythagoreanTripletTest {
     fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
         val expected = Triple(a, b, c)
         val solutions = listOf(
-            tool::maxTripletBruteA, tool::maxTripletBruteB,
-            tool::maxTripletParametrisation
+            tool::maxTripletBrute, tool::maxTripletParametrisation
         )
         solutions.forEach { solution ->
             assertEquals(expected, solution(n))
@@ -50,4 +49,26 @@ internal class SpecialPythagoreanTripletTest {
         assertEquals(expected, tool.maxTripletProduct(n))
     }
 
+    @Test
+    fun testMaxTriplet_speedComparison() {
+        val n = 3000
+        val expected = Triple(750, 1000, 1250)
+        val solutions = listOf(
+            tool::maxTripletBrute, tool::maxTripletParametrisation
+        )
+        val times = mutableListOf<Long>()
+        solutions.forEachIndexed { i, solution ->
+            val time = measureNanoTime {
+                repeat(10) {
+                    val ans = solution(n)
+                    if (it == 9) {
+                        assertEquals(expected, ans)
+                    }
+                }
+            }
+            times.add(i, time)
+        }
+        println("Brute solution took: ${1.0 * times[0] / 1_000_000}ms\n" +
+                "Optimised took: ${1.0 * times[1] / 1_000_000}ms\n")
+    }
 }
