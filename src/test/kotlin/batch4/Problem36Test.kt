@@ -19,24 +19,24 @@ internal class DoubleBasePalindromesTest {
         "1000000, 2, 872187", "1000000, 9, 782868"
     )
     fun testSumOfPalindromes(n: Int, k: Int, expected: Int) {
-        // assertEquals(expected, tool.sumOfPalindromes(n, k))
-        assertEquals(expected, tool.sumOfPalindromesImproved(n, k))
+        assertEquals(expected, tool.sumOfPalindromesBrute(n, k))
+        assertEquals(expected, tool.sumOfPalindromes(n, k))
     }
 
     @Test
     fun testSumOfPalindromes_speedComparison() {
         val n = 1_000_000_000
         val k = 2
-        val ansNormal: Int
+        val ansBrute: Int
         val ansImproved: Int
-        val timeNormal = measureNanoTime {
-            ansNormal = tool.sumOfPalindromes(n, k)
+        val timeBrute = measureNanoTime {
+            ansBrute = tool.sumOfPalindromesBrute(n, k)
         }
         val timeImproved = measureNanoTime {
-            ansImproved = tool.sumOfPalindromesImproved(n, k)
+            ansImproved = tool.sumOfPalindromes(n, k)
         }
-        println("Normal solution took: ${1.0 * timeNormal / 1_000_000_000}s\n" +
+        println("Normal solution took: ${1.0 * timeBrute / 1_000_000_000}s\n" +
                 "Improved solution took: ${1.0 * timeImproved / 1_000_000_000}s")
-        assertEquals(ansNormal, ansImproved)
+        assertEquals(ansBrute, ansImproved)
     }
 }

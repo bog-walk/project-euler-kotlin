@@ -127,6 +127,28 @@ internal class ReusableTest {
     }
 
     @Test
+    fun testIsPalindrome_allTrue() {
+        val nums = listOf("5", "22", "303", "9119")
+        nums.forEach { n ->
+            assertTrue { n.isPalindrome() }
+            assertTrue { n.isPalindromeInBuilt() }
+            assertTrue { n.isPalindromeManual() }
+            assertTrue { n.isPalindromeTailRec() }
+        }
+    }
+
+    @Test
+    fun testIsPalindrome_allFalse() {
+        val nums = listOf("10", "523", "8018", "124521")
+        nums.forEach { n ->
+            assertFalse { n.isPalindrome() }
+            assertFalse { n.isPalindromeInBuilt() }
+            assertFalse { n.isPalindromeManual() }
+            assertFalse { n.isPalindromeTailRec() }
+        }
+    }
+
+    @Test
     fun testPythagoreanTriplet() {
         val expected = listOf(
             Triple(3, 4, 5), Triple(6, 8,10),

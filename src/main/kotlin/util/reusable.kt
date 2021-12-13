@@ -208,6 +208,48 @@ fun isPrime(n: Int): Boolean {
 }
 
 /**
+ * This version, not the 3 alternatives below, will be used in future solutions.
+ *
+ * SPEED (BEST): 2.32ms for 18-digit N tested 1000 times
+ */
+fun String.isPalindrome(): Boolean {
+    return when {
+        length < 2 -> true
+        first() == last() -> substring(1, lastIndex).isPalindrome()
+        else -> false
+    }
+}
+
+/**
+ * SPEED: 41.24ms for 18-digit N tested 1000 times
+ */
+fun String.isPalindromeInBuilt() = this == this.reversed()
+
+/**
+ * SPEED: 6.02ms for 18-digit N tested 1000 times
+ */
+fun String.isPalindromeManual(): Boolean {
+    if (length == 1) return true
+    val mid = lastIndex / 2
+    val range = if (length % 2 == 1) (0 until mid) else (0..mid)
+    for (i in range) {
+        if (this[i] != this[lastIndex - i]) return false
+    }
+    return true
+}
+
+/**
+ * SPEED: 4.44ms for 18-digit N tested 1000 times
+ */
+tailrec fun String.isPalindromeTailRec(): Boolean {
+    return when {
+        length < 2 -> true
+        first() != last() -> false
+        else -> substring(1, lastIndex).isPalindromeTailRec()
+    }
+}
+
+/**
  * Euclid's formula to generate all Pythagorean triplets from 2 numbers m and n.
  * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
  * Note the following assumptions:

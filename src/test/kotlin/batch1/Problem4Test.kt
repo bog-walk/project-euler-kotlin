@@ -9,22 +9,6 @@ internal class LargestPalindromeProductTest {
     private val tool = LargestPalindromeProduct()
 
     @Test
-    fun testIsPalindrome_allPalindromes() {
-        val palindromes = listOf(5, 22, 303, 9119)
-        palindromes.forEach { palindrome ->
-            assertTrue(tool.isPalindrome(palindrome))
-        }
-    }
-
-    @Test
-    fun testIsPalindrome_nonePalindromes() {
-        val numbers = listOf(10, 523, 8018, 124521)
-        numbers.forEach { number ->
-            assertFalse(tool.isPalindrome(number))
-        }
-    }
-
-    @Test
     fun testGetPrevPalindrome() {
         val numbers = listOf(101110, 800000, 200003, 650001, 333333)
         val expected = listOf(101101, 799997, 200002, 649946, 332233)

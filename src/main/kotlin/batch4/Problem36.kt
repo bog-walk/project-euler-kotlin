@@ -1,5 +1,7 @@
 package batch4
 
+import util.isPalindrome
+
 /**
  * Problem 36: Double-Base Palindromes
  *
@@ -18,11 +20,6 @@ package batch4
 class DoubleBasePalindromes {
 
     /**
-     * In-built alternative to manual implementation in Problem 4.
-     */
-    private fun String.isPalindrome() = this == this.reversed()
-
-    /**
      * In-built function that returns base 10 to base x conversion as a String.
      */
     private fun Int.switchBase(base: Int) = this.toString(radix=base)
@@ -32,7 +29,7 @@ class DoubleBasePalindromes {
      *
      * SPEED: 69.6194s for N = 1e9, K = 2
      */
-    fun sumOfPalindromes(n: Int, k: Int): Int {
+    fun sumOfPalindromesBrute(n: Int, k: Int): Int {
         return (1 until n).sumOf { num ->
             if (num.toString().isPalindrome() && num.switchBase(k).isPalindrome()) {
                 num
@@ -41,9 +38,11 @@ class DoubleBasePalindromes {
     }
 
     /**
-     * Using this helper method avoids the need to iterate through every natural number
-     * less than N, and instead generates fewer palindromes in the given base that
-     * only need to be checked as a palindrome in the other given base.
+     * Generates the nth palindrome in the given base.
+     * e.g. The 2nd odd-length base 2 palindrome is 101 == 5.
+     *
+     * @return  Decimal representation of the nth odd-/even- length
+     * palindrome in the specified base.
      */
     private fun getPalindrome(num: Int, base: Int, oddLength: Boolean = true): Int {
         var palindrome = num
@@ -62,19 +61,23 @@ class DoubleBasePalindromes {
     }
 
     /**
-     * Improved solution increases performance by reducing loop elements
-     * to only palindromes generated less than N.
+     * Using the helper method above avoids the need to iterate through every
+     * natural number less than N. Instead, loop elements are reduced to only
+     * generated base-k palindromes less than N. This also means that only 1
+     * number needs to be checked as a palindrome (the base-10 result).
      *
      * SPEED (BEST): 0.0202s for N = 1e9, K = 2
      */
-    fun sumOfPalindromesImproved(n: Int, k: Int): Int {
+    fun sumOfPalindromes(n: Int, k: Int): Int {
         var sum = 0
         var oddTurn = true
-        // Perform for both even and odd length palindromes
+        // generate both odd & even length palindromes
         repeat(2) {
             var i = 1
             do {
+                // generate decimal repr of base-k palindrome
                 val palindrome = getPalindrome(i, k, oddTurn)
+                // check if decimal is also a palindrome
                 if (palindrome.toString().isPalindrome()) {
                     sum += palindrome
                 }

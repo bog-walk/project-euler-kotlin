@@ -1,6 +1,7 @@
 package batch1
 
 import util.primeFactors
+import util.isPalindrome
 
 /**
  * Problem 4: Largest Palindrome Product
@@ -18,17 +19,6 @@ import util.primeFactors
 
 class LargestPalindromeProduct {
 
-    fun isPalindrome(num: Int): Boolean {
-        val s = num.toString()
-        if (s.length == 1) return true
-        val mid = s.lastIndex / 2
-        val range = if (s.length % 2 == 1) (0 until mid) else (0..mid)
-        for (i in range) {
-            if (s[i] != s[s.lastIndex - i]) return false
-        }
-        return true
-    }
-
     /**
      * Returns first number less than given max that is a palindrome.
      * 101101 is the smallest 6-digit palindrome that is a product of two
@@ -37,7 +27,7 @@ class LargestPalindromeProduct {
      */
     fun getPrevPalindrome(max: Int): Int {
         for (i in max-1 downTo 101102) {
-            if (isPalindrome(i)) return i
+            if (i.toString().isPalindrome()) return i
         }
         return 101101
     }
@@ -108,7 +98,7 @@ class LargestPalindromeProduct {
                 val product = y * x
                 // Combo will be too small to pursue further
                 if (product <= largest) break@inner
-                if (product < max && isPalindrome(product)) {
+                if (product < max && product.toString().isPalindrome()) {
                     largest = product
                 }
                 y -= deltaY
