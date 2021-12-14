@@ -10,8 +10,12 @@ internal class ChampernownesConstantTest {
 
     @ParameterizedTest(name="Digit {0}")
     @CsvSource(
+        // lower indices
         "1, 1", "10, 1", "33, 1", "65, 7", "90, 5",
-        "145, 7", "200, 0", "298, 1"
+        // mid indices
+        "145, 7", "200, 0", "298, 1",
+        // higher indices
+        "1000000000000, 1", "999999999934999995, 7", "1000000000000000000, 3"
     )
     fun testGetConstant(index: Long, expected: Int) {
         assertEquals(expected, tool.getConstant(index))
@@ -45,8 +49,18 @@ internal class ChampernownesConstantTest {
 
     @Test
     fun testChampernownesProduct_high() {
-        val input = listOf<Long>(1, 10, 100, 1000, 10_000, 100_000, 1_000_000)
-        val expected = 210
-        assertEquals(expected, tool.champernownesProduct(input))
+        val inputs = listOf(
+            listOf<Long>(1, 10, 100, 1000, 10_000, 100_000, 1_000_000),
+            listOf(1000000000000, 10000000000000, 100000000000000, 1000000000000000,
+                10000000000000000, 100000000000000000, 1000000000000000000),
+            listOf(
+                9999999999999995, 999999999934999995, 999992599999999996,
+                999991999999998, 999999999999999999, 999123999999999999, 1000000000000000000
+            )
+        )
+        val expected = listOf(210, 5040, 370440)
+        inputs.forEachIndexed { i, input ->
+            assertEquals(expected[i], tool.champernownesProduct(input))
+        }
     }
 }

@@ -1,6 +1,5 @@
 package batch4
 
-import java.math.BigInteger
 import kotlin.math.pow
 
 /**
@@ -23,10 +22,9 @@ import kotlin.math.pow
  */
 
 class ChampernownesConstant {
-    // Increase efficiency by pre-computing amount of digits in all series
-    private val kDigits = Array(19) { k ->
-        BigInteger.TEN.pow(k) * (k + 1).toBigInteger() * 9.toBigInteger()
-    }
+    // Increase efficiency by pre-computing magnitudes & amount of digits in all series
+    private val magnitudes = List(17) { e -> (10.0).pow(e).toLong() }
+    private val kDigits = List(17) { k -> (k + 1) * 9 * magnitudes[k] }
 
     /**
      * Assuming that the positive integers of Champernowne's Constant are separated
@@ -47,21 +45,23 @@ class ChampernownesConstant {
      */
     fun getConstant(index: Long): Int {
         var k = 1
-        var i = index.toBigInteger()
+        var i = index
         while (i > kDigits[k - 1]) {
             // final reduced i represents the ith digit in the kth series
             i -= kDigits[k - 1]
             k++
         }
-        i -= BigInteger.ONE
+        i -= 1
         // kTerm represents the ordinal position in the series
         // termI represents the index of the digit within the term found below
-        val (kTerm, termI) = i.divideAndRemainder(k.toBigInteger())
-        val term = BigInteger.TEN.pow(k - 1) + kTerm
-        return term.toString()[termI.intValueExact()].digitToInt()
+        val kTerm = i / k
+        val termI = (i % (1L * k)).toInt()
+        val term = (magnitudes[k - 1] + kTerm).toString()
+        return term[termI].digitToInt()
     }
 
     fun champernownesProduct(digits: List<Long>): Int {
+        // Note that this may me slightly slower than simply using a for-loop
         return digits.map { i ->
             getConstant(i)
         }.fold(1) { acc, c ->
