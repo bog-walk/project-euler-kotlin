@@ -1,5 +1,6 @@
 package batch5
 
+import util.getPermutations
 import util.isPrime
 
 /**
@@ -28,12 +29,8 @@ class PandigitalPrime {
         val digits = ('9' downTo '1').toMutableList()
         var largest = 0
         outer@while (n > 3) {
-            if (n == 7) println("Now at 7 digits")
-            println("Digits=$digits")
             val perms = getPermutations(digits, digits.size).sortedDescending()
-            println("7652413 is a perm ${"7652413" in perms}")
             for (perm in perms) {
-                if (perm == "7652413") println("Found result")
                 if (isPrime(perm.toInt())) {
                     largest = perm.toInt()
                     break@outer
@@ -58,8 +55,6 @@ class PandigitalPrime {
      * will be a multiple of 3 & thereby not a prime. Only 4- & 7-digit pandigitals
      * have sums that are not divisible by 3 (10 & 28 respectively).
      *
-     * - Prime numbers (> 2) are all odd.
-     *
      * @return  List of all pandigital primes in descending order.
      */
     fun allPandigitalPrimes(): List<Int> {
@@ -82,28 +77,5 @@ class PandigitalPrime {
             .asSequence()
             .filter { it.toLong() <= n }
             .first()
-    }
-
-    fun getPermutations(
-        chars: MutableList<Char>,
-        size: Int,
-        perms: MutableList<String> = mutableListOf()
-    ): List<String> {
-        if (size == 1) {
-            perms.add(chars.joinToString(""))
-        }
-        repeat(size) { i ->
-            getPermutations(chars, size - 1, perms)
-            if (size % 2 == 1) {
-                val swap = chars.first()
-                chars[0] = chars[size - 1]
-                chars[size - 1] = swap
-            } else {
-                val swap = chars[i]
-                chars[i] = chars[size - 1]
-                chars[size - 1] = swap
-            }
-        }
-        return perms
     }
 }

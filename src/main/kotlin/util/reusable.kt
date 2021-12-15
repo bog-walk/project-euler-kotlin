@@ -263,3 +263,43 @@ fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     val c = (m * m + n * n) * d
     return Triple(minOf(a, b), maxOf(a, b), c)
 }
+
+/**
+ * Heap's Algorithm to generate all n! permutations of a list of
+ * n characters with minimal movement.
+ * Initially k = n, then recursively k-- and each step generates k!
+ * permutations that end with the same n - k elements. Each step modifies
+ * the initial k - 1 elements with a swap based on k's parity.
+ * N.B. Consider implementing iterative approach if N > 10, otherwise
+ * OutOfMemoryError will be thrown.
+ *
+ * @param [chars] MutableList<Char> of size <= 10
+ * @param [size] K -> initial size of [chars]
+ * @return List<String> of n! permutations.
+ */
+fun getPermutations(
+    chars: MutableList<Char>,
+    size: Int,
+    perms: MutableList<String> = mutableListOf()
+): List<String> {
+    if (size == 1) {
+        perms.add(chars.joinToString(""))
+    } else {
+        repeat(size) { i ->
+            getPermutations(chars, size - 1, perms)
+            // avoids unnecessary swaps of the kth & 0th element
+            if (i < size - 1) {
+                if (size % 2 == 0) {
+                    val swap = chars[i]
+                    chars[i] = chars[size - 1]
+                    chars[size - 1] = swap
+                } else {
+                    val swap = chars.first()
+                    chars[0] = chars[size - 1]
+                    chars[size - 1] = swap
+                }
+            }
+        }
+    }
+    return perms
+}

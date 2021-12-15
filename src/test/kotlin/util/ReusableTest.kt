@@ -3,7 +3,6 @@ package util
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
 import kotlin.test.*
 
 internal class ReusableTest {
@@ -162,5 +161,27 @@ internal class ReusableTest {
             }
         }
         assertContentEquals(expected, actual)
+    }
+
+    @Test
+    fun testGetPermutations_small() {
+        val chars = mutableListOf<Char>()
+        val expected = listOf(
+            listOf("0"), listOf("01", "10"),
+            listOf("012", "021", "102", "120", "201", "210")
+        )
+        for ((i, ch) in ('0'..'2').withIndex()) {
+            chars.add(ch)
+            assertEquals(expected[i], getPermutations(chars, chars.size).sorted())
+        }
+    }
+
+    @Test
+    fun testGetPermutations_large() {
+        val chars = ('0'..'9').toMutableList()
+        for (n in 4..10) {
+            val perms = getPermutations(chars.subList(0, n), n)
+            assertEquals(n.factorial(), perms.size.toBigInteger())
+        }
     }
 }
