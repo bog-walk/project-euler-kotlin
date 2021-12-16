@@ -1,5 +1,9 @@
 package batch5
 
+import util.lcm
+import kotlin.math.floor
+import kotlin.math.sqrt
+
 /**
  * Problem 42: Coded Triangle Numbers
  *
@@ -21,7 +25,54 @@ package batch5
  */
 
 class CodedTriangleNumbers {
-    fun triangleNumber(tN: Long): Long {
-        TODO()
+    /**
+     * Triangle Number Sequence has interesting properties, e.g. the
+     * sequence follows the pattern (odd, odd, even, even,...) & each
+     * t_n is the sum of (t_n - 1) & current n.
+     *
+     * Rather than brute iteration that pre-computes all triangle numbers
+     * below 1e18, this solution is based on the following:
+     * t_n = 0.5 * n * (n + 1) ->
+     * 2 * t_n = n * (n + 1), which means
+     * (2 * t_n) / n = n + 1 and (2 * t_n) / (n + 1) = n, therefore
+     * 2 * t_n == lcm(n, n+ 1) and
+     * n must at minimum be sqrt(2 * t_n)
+     */
+    private fun getTriangleTerm(tN: Long): Int? {
+        val tN2 = 2L * tN
+        val n = sqrt(1.0 * tN2).toInt()
+        return if (tN2 == lcm(n.toLong(), 1L + n)) n else null
+    }
+
+    /**
+     * Alternate derivation solution is based on the following:
+     * 0.5 * n * (n + 1) = t_n ->
+     * n^2 + n = 2 * t_n ->
+     * n^2 + n + 0.25 = (2 * t_n) + 0.25 ->
+     * (n + 0.5)^2 = (2 * t_n) + 0.25 ->
+     * n + 0.5 = sqrt((2 * t_n) + 0.25) ->
+     * n = sqrt((2 * t_n) + 0.25) - 0.5 ->
+     * n = 0.5 * (sqrt((8 * t_n) + 1) - 1)
+     */
+    private fun getTriangleTermAlt(tN: Long): Int? {
+        val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
+        return if (n == floor(n)) n.toInt() else null
+    }
+
+    fun triangleNumber(tN: Long): Int = getTriangleTerm(tN) ?: -1
+
+    fun triangleNumberAlt(tN: Long): Int = getTriangleTermAlt(tN) ?: -1
+
+    /**
+     * Project Euler specific implementation that returns the count, from an
+     * input of <2000 words, of words whose summed alphabetical character value
+     * corresponds to a triangle number. e.g. "SKY" = 19 + 11 + 25 = 55 = t_10.
+     */
+    fun countTriangleWords(input: List<String>): Int {
+        return input.mapNotNull { word ->
+            // get alphabetical position based on 'A' code = 65
+            val num = word.map { ch -> ch.code - 64L }.sum()
+            getTriangleTerm(num)
+        }.count()
     }
 }
