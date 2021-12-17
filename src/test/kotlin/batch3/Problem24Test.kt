@@ -2,6 +2,7 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,6 +17,7 @@ internal class LexicographicPermutationsTest {
     fun testLexicoPerms(input: String, permutation: Long, expected: String) {
         val permutationIndexed = permutation - 1
         assertEquals(expected, tool.lexicographicPerm(permutationIndexed, input))
+        assertEquals(expected, tool.lexicographicPermImproved(permutationIndexed, input))
     }
 
     @Test
@@ -28,6 +30,28 @@ internal class LexicographicPermutationsTest {
         )
         permutations.forEachIndexed { i, p ->
             assertEquals(expected[i], tool.lexicographicPerm(p, input))
+            assertEquals(expected[i], tool.lexicographicPermImproved(p, input))
         }
+    }
+
+    @Test
+    fun testLexicoPerms_speed() {
+        val input = "0123456789"
+        val permutation = 3628799L
+        var ogAns = ""
+        var altAns = ""
+        val ogTime = measureNanoTime {
+            repeat(100) {
+                ogAns = tool.lexicographicPerm(permutation, input)
+            }
+        }
+        val altTime = measureNanoTime {
+            repeat(100) {
+                altAns = tool.lexicographicPermImproved(permutation, input)
+            }
+        }
+        println("Improved solution took: ${1.0 * ogTime / 1_000_000}ms\n" +
+                "Alt solution took: ${1.0 * altTime / 1_000_000}ms")
+        assertEquals(ogAns, altAns)
     }
 }

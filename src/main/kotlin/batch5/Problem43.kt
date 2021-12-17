@@ -1,7 +1,6 @@
 package batch5
 
 import util.getPermutations
-import kotlin.system.measureNanoTime
 
 /**
  * Problem 43: SubstringDivisibility
@@ -29,7 +28,7 @@ import kotlin.system.measureNanoTime
 class SubstringDivisibility {
 
     /**
-     * SPEED: 3.5926s for N = 9
+     * SPEED: 4.4709s for N = 9
      */
     fun sumOfPandigitalSubstrings(n: Int): Long {
         val primes = listOf(2, 3, 5, 7, 11, 13, 17)
@@ -51,7 +50,16 @@ class SubstringDivisibility {
      * Filtering the generated permutations through a sequence allowed the
      * performance speed to be improved compared to the above solution.
      *
-     * SPEED (BETTER): 2.0863s for N = 9
+     * Filter predicates based on the following:
+     * - d_2..d_4 must be divisible by 2 so d_4 must be an even number.
+     * - d_4..d_6 mus be divisible by 5 so d_6 must be '0' or '5',
+     * which is narrowed down to '5' as d_6..d_8 must be divisible by 11
+     * and '0' would not allow pandigital options.
+     * - d_3..d_5 must be divisible by 3, so d_3 + d_4 + d_5 must be also so.
+     * - If eligible numbers are narrowed down manually, it is proven that
+     * the d_1 and d_2 are either '1' or '4' and d_10 is either '7' or '9'.
+     *
+     * SPEED (BETTER): 2.977s for N = 9
      */
     fun sumOf9PandigitalSubstrings(): Long {
         val digits = ('0'..'9').toMutableList()
@@ -59,8 +67,10 @@ class SubstringDivisibility {
         return getPermutations(digits, 10)
             .asSequence()
             .filter { perm ->
-                (perm.first() == '1' || perm.first() == '4') &&
-                        (perm.last() == '7' || perm.last() == '9')
+                perm.first() !in "14" || perm.last() !in "79" ||
+                        perm[3].digitToInt() % 2 != 0 ||
+                        perm[4] != '5' ||
+                        perm.slice(2..4).map { it.digitToInt() }.sum() % 3 != 0
             }
             .mapNotNull { perm ->
                 var mapping: Long? = perm.toLong()
