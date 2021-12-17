@@ -47,11 +47,7 @@ class CodedTriangleNumbers {
     /**
      * Alternate derivation solution is based on the following:
      * 0.5 * n * (n + 1) = t_n ->
-     * n^2 + n = 2 * t_n ->
-     * n^2 + n + 0.25 = (2 * t_n) + 0.25 ->
-     * (n + 0.5)^2 = (2 * t_n) + 0.25 ->
-     * n + 0.5 = sqrt((2 * t_n) + 0.25) ->
-     * n = sqrt((2 * t_n) + 0.25) - 0.5 ->
+     * inverse function, positive solution ->
      * n = 0.5 * (sqrt((8 * t_n) + 1) - 1)
      */
     private fun getTriangleTermAlt(tN: Long): Int? {

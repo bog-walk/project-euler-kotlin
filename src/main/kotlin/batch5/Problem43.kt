@@ -3,7 +3,7 @@ package batch5
 import util.getPermutations
 
 /**
- * Problem 43: SubstringDivisibility
+ * Problem 43: Substring Divisibility
  *
  * https://projecteuler.net/problem=43
  *
