@@ -18,7 +18,6 @@ import kotlin.math.sqrt
  * Triangle Number: T_n = n * (n + 1) / 2
  * Pentagonal Number: P_n = n * (3 * n - 1) / 2
  * Hexagonal Number: H_n = n * (2 * n - 1)
- * Note that all hexagonal numbers are also triangle numbers.
  * Some numbers can be all 3 type ->
  * e.g. T_1 = P_1 = H_1 = 1
  *      T_285 = P_165 = H_143 = 40755
@@ -30,9 +29,6 @@ import kotlin.math.sqrt
  */
 
 class TriPentHex {
-    private val formulae = mapOf(
-        3 to ::isTriangular, 5 to ::isPentagonal, 6 to ::isHexagonal
-    )
 
     private fun isTriangular(tN: Long): Boolean {
         val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
@@ -48,26 +44,51 @@ class TriPentHex {
      * Derivation solution is based on the following:
      * n * (2 * n - 1) = h_n ->
      * inverse function, positive solution ->
-     * n = (sqrt((8 * h_n) + 1) + 1) / 4
+     * n = 0.25 * (sqrt((8 * h_n) + 1) + 1)
      */
     private fun isHexagonal(hN: Long): Boolean {
         val n = 0.25 * (sqrt(8.0 * hN + 1) + 1)
         return n == floor(n)
     }
 
-    fun commonNumbers(n: Int, a: Int, b: Int): List<Int> {
-        require(listOf(a, b).all { it in listOf(3, 5, 6) }) { "Invalid types" }
-        val common = mutableListOf(1)
-        val predicates = if (a == 3 && b == 6) {
-            listOf(formulae.getValue(a))
-        } else {
-            listOf(formulae.getValue(a), formulae.getValue(b))
-        }
-        for (num in 2 until n) {
-            if (predicates.all { isType -> isType(num.toLong()) }) {
-                common.add(num)
-            }
+    /**
+     * HackerRank specific implementation will never request numbers
+     * that are both triangular and hexagonal. The solution is optimised
+     * by generating the fastest growing number type first (e.g. hexagonal
+     * numbers jump to the limit faster than the other 2) & checking if
+     * it matches the other requested type.
+     */
+    fun commonNumbers(n: Long, a: Int, b: Int): List<Long> {
+        val common = mutableListOf(1L)
+        var i = 2L
+        while (true) {
+            val firstType = if (b == 6) i * (2 * i - 1) else i * (3 * i - 1) / 2
+            if (firstType >= n) break
+            val isSecondType = if (a == 3) isTriangular(firstType) else isPentagonal(firstType)
+            if (isSecondType) common.add(firstType)
+            i++
         }
         return common
+    }
+
+    /**
+     * Project Euler specific implementation that finds the next number,
+     * after {1, 40755} that is triangular, pentagonal, and hexagonal.
+     * All hexagonal numbers are a subset of triangular numbers made from
+     * odd n, as T_(2n - 1) == H_n, based on completing the squares below:
+     * (n * (n + 1)) / 2 = m * (2 * m - 1) ->
+     * n^2 + n = 4 * m^2 - 2 * m ->
+     * (n + 0.5)^2 = 4 * (m - 0.25)^2 ->
+     * n = 2 * m - 1
+     * So this solution only needs to check for hexagonal numbers that are
+     * also pentagonal.
+     */
+    fun nextTripleType(): Long {
+        var next: Long = 40755
+        while (true) {
+            next++
+            if (isHexagonal(next) && isPentagonal(next)) break
+        }
+        return next
     }
 }
