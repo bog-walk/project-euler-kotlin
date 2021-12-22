@@ -1,6 +1,5 @@
 package batch5
 
-import util.lcm
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -9,11 +8,12 @@ import kotlin.math.sqrt
  *
  * https://projecteuler.net/problem=45
  *
- * Goal: Given a & b, where a,b in {3, 5, 6} -> {triangle,
- * pentagonal, hexagonal}, find all numbers below N that are
- * both types of numbers queried.
+ * Goal: Given a & b, find all numbers below N that are
+ * both types of numbers queried (as below).
  *
  * Constraints: 2 <= N <= 2e14
+ *              a < b
+ *              a,b in {3, 5, 6} -> {triangle, pentagonal, hexagonal}
  *
  * Triangle Number: T_n = n * (n + 1) / 2
  * Pentagonal Number: P_n = n * (3 * n - 1) / 2
@@ -30,6 +30,9 @@ import kotlin.math.sqrt
  */
 
 class TriPentHex {
+    private val formulae = mapOf(
+        3 to ::isTriangular, 5 to ::isPentagonal, 6 to ::isHexagonal
+    )
 
     private fun isTriangular(tN: Long): Boolean {
         val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
@@ -50,5 +53,21 @@ class TriPentHex {
     private fun isHexagonal(hN: Long): Boolean {
         val n = 0.25 * (sqrt(8.0 * hN + 1) + 1)
         return n == floor(n)
+    }
+
+    fun commonNumbers(n: Int, a: Int, b: Int): List<Int> {
+        require(listOf(a, b).all { it in listOf(3, 5, 6) }) { "Invalid types" }
+        val common = mutableListOf(1)
+        val predicates = if (a == 3 && b == 6) {
+            listOf(formulae.getValue(a))
+        } else {
+            listOf(formulae.getValue(a), formulae.getValue(b))
+        }
+        for (num in 2 until n) {
+            if (predicates.all { isType -> isType(num.toLong()) }) {
+                common.add(num)
+            }
+        }
+        return common
     }
 }
