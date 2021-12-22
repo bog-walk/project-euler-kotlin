@@ -1,7 +1,8 @@
 package batch5
 
-import kotlin.math.floor
-import kotlin.math.sqrt
+import util.isHexagonalNumber
+import util.isPentagonalNumber
+import util.isTriangularNumber
 
 /**
  * Problem 45: Triangular, Pentagonal, & Hexagonal
@@ -30,27 +31,6 @@ import kotlin.math.sqrt
 
 class TriPentHex {
 
-    private fun isTriangular(tN: Long): Boolean {
-        val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
-        return n == floor(n)
-    }
-
-    private fun isPentagonal(pN: Long): Boolean {
-        val n = (sqrt(24.0 * pN + 1) + 1) / 6.0
-        return n == floor(n)
-    }
-
-    /**
-     * Derivation solution is based on the following:
-     * n * (2 * n - 1) = h_n ->
-     * inverse function, positive solution ->
-     * n = 0.25 * (sqrt((8 * h_n) + 1) + 1)
-     */
-    private fun isHexagonal(hN: Long): Boolean {
-        val n = 0.25 * (sqrt(8.0 * hN + 1) + 1)
-        return n == floor(n)
-    }
-
     /**
      * HackerRank specific implementation will never request numbers
      * that are both triangular and hexagonal. The solution is optimised
@@ -64,7 +44,11 @@ class TriPentHex {
         while (true) {
             val firstType = if (b == 6) i * (2 * i - 1) else i * (3 * i - 1) / 2
             if (firstType >= n) break
-            val isSecondType = if (a == 3) isTriangular(firstType) else isPentagonal(firstType)
+            val isSecondType = if (a == 3) {
+                isTriangularNumber(firstType) != null
+            } else {
+                isPentagonalNumber(firstType) != null
+            }
             if (isSecondType) common.add(firstType)
             i++
         }
@@ -87,7 +71,8 @@ class TriPentHex {
         var next: Long = 40755
         while (true) {
             next++
-            if (isHexagonal(next) && isPentagonal(next)) break
+            if (isHexagonalNumber(next) != null &&
+                isPentagonalNumber(next) != null) break
         }
         return next
     }

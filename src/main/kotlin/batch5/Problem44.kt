@@ -1,7 +1,6 @@
 package batch5
 
-import kotlin.math.floor
-import kotlin.math.sqrt
+import util.isPentagonalNumber
 
 /**
  * Problem 44: Pentagon Numbers
@@ -25,24 +24,15 @@ import kotlin.math.sqrt
 
 class PentagonNumbers {
 
-    /**
-     * Derivation solution is based on the following:
-     * 0.5 * n * (3 * n - 1) = p_n ->
-     * inverse function, positive solution ->
-     * n = (sqrt((24 * p_n) + 1) + 1) / 6
-     */
-    private fun isPentagonal(pN: Long): Boolean {
-        val n = (sqrt(24.0 * pN + 1) + 1) / 6.0
-        return n == floor(n)
-    }
-
     fun pentagonNumbersHR(n: Int, k: Int): Set<Long> {
         val pNs = List(n - 1) { 1L * (it + 1) * (3 * (it + 1) - 1) / 2 }
         val results = mutableSetOf<Long>()
         for (i in k until n - 1) {
             val pN = pNs[i]
             val pNMinusK = pNs[i - k]
-            if (isPentagonal(pN - pNMinusK) || isPentagonal(pN + pNMinusK)) {
+            if (isPentagonalNumber(pN - pNMinusK) != null ||
+                isPentagonalNumber(pN + pNMinusK) != null
+            ) {
                 results.add(pN)
                 continue
             }
@@ -67,7 +57,8 @@ class PentagonNumbers {
             for (y in x - 1 downTo 1) {
                 val pY = pentagonals[y]
                 val minus = pX - pY
-                if (!isPentagonal(pX + pY) || !isPentagonal(minus)) continue
+                if (isPentagonalNumber(pX + pY) == null ||
+                    isPentagonalNumber(minus) == null) continue
                 if (minus < diff) {
                     diff = minus
                 }

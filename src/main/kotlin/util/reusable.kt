@@ -303,3 +303,42 @@ fun getPermutations(
     }
     return perms
 }
+
+/**
+ * Derivation solution is based on the following:
+ * 0.5 * n * (n + 1) = t_n ->
+ * inverse function, positive solution ->
+ * n = 0.5 * (sqrt((8 * t_n) + 1) - 1)
+ *
+ * @return  If tN is the nth triangular, or null
+ */
+fun isTriangularNumber(tN: Long): Int? {
+    val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
+    return if (n == floor(n)) n.toInt() else null
+}
+
+/**
+ * Derivation solution is based on the following:
+ * 0.5 * n * (3 * n - 1) = p_n ->
+ * inverse function, positive solution ->
+ * n = (sqrt((24 * p_n) + 1) + 1) / 6
+ *
+ * @return  If pN is the nth pentagonal, or null
+ */
+fun isPentagonalNumber(pN: Long): Int? {
+    val n = (sqrt(24.0 * pN + 1) + 1) / 6.0
+    return if (n == floor(n)) n.toInt() else null
+}
+
+/**
+ * Derivation solution is based on the following:
+ * n * (2 * n - 1) = h_n ->
+ * inverse function, positive solution ->
+ * n = 0.25 * (sqrt((8 * h_n) + 1) + 1)
+ *
+ * @return  If hN is the nth hexagonal, or null
+ */
+fun isHexagonalNumber(hN: Long): Int? {
+    val n = 0.25 * (sqrt(8.0 * hN + 1) + 1)
+    return if (n == floor(n)) n.toInt() else null
+}

@@ -1,7 +1,7 @@
 package batch5
 
+import util.isTriangularNumber
 import util.lcm
-import kotlin.math.floor
 import kotlin.math.sqrt
 
 /**
@@ -44,20 +44,9 @@ class CodedTriangleNumbers {
         return if (tN2 == lcm(n.toLong(), 1L + n)) n else null
     }
 
-    /**
-     * Alternate derivation solution is based on the following:
-     * 0.5 * n * (n + 1) = t_n ->
-     * inverse function, positive solution ->
-     * n = 0.5 * (sqrt((8 * t_n) + 1) - 1)
-     */
-    private fun getTriangleTermAlt(tN: Long): Int? {
-        val n = 0.5 * (sqrt(8.0 * tN + 1) - 1)
-        return if (n == floor(n)) n.toInt() else null
-    }
-
     fun triangleNumber(tN: Long): Int = getTriangleTerm(tN) ?: -1
 
-    fun triangleNumberAlt(tN: Long): Int = getTriangleTermAlt(tN) ?: -1
+    fun triangleNumberAlt(tN: Long): Int = isTriangularNumber(tN) ?: -1
 
     /**
      * Project Euler specific implementation that returns the count, from an
