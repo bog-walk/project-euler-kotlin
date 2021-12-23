@@ -184,4 +184,38 @@ internal class ReusableTest {
             assertEquals(n.factorial(), perms.size.toBigInteger())
         }
     }
+
+    @Test
+    fun testIsTriangular_allTrue() {
+        val nums = listOf<Long>(1, 3, 6, 10, 190, 325, 496, 595)
+        val expected = listOf(1, 2, 3, 4, 19, 25, 31, 34)
+        for ((i, n) in nums.withIndex()) {
+            assertEquals(expected[i], isTriangularNumber(n))
+        }
+    }
+
+    @Test
+    fun testIsTriangular_allFalse() {
+        val nums = listOf<Long>(2, 8, 46, 121, 173, 299, 403)
+        nums.forEach { n ->
+            assertNull(isTriangularNumber(n))
+        }
+    }
+
+    @Test
+    fun testIsPentagonal_allTrue() {
+        val nums = listOf<Long>(1, 5, 12, 22, 35, 247, 532, 1001)
+        val expected = listOf(1, 2, 3, 4, 5, 13, 19, 26)
+        for ((i, n) in nums.withIndex()) {
+            assertEquals(expected[i], isPentagonalNumber(n))
+        }
+    }
+
+    @Test
+    fun testIsPentagonal_allFalse() {
+        val nums = listOf<Long>(2, 23, 100, 313, 691, 1111)
+        nums.forEach { n ->
+            assertNull(isPentagonalNumber(n))
+        }
+    }
 }
