@@ -25,7 +25,7 @@ class SelfPowers {
      * Solution uses BigInteger, due to exponential growth of
      * sum, and its built-in modPow(exp, mod).
      *
-     * SPEED (BETTER): 0.7089s for N = 1e4
+     * SPEED (BETTER): 0.7089s for N = 1e5
      */
     fun selfPowersSum(n: Int): Long  {
         val bigMod = this.modulo.toBigInteger()
