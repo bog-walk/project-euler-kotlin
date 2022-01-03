@@ -1,5 +1,6 @@
 package batch5
 
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -41,5 +42,23 @@ internal class PrimePermutationsTest {
         val expected = listOf("83987889379388798837")
         assertContentEquals(expected, tool.primePermSequence(n, k=4))
         assertContentEquals(expected, tool.primePermSequenceImproved(n, k=4))
+    }
+
+    @Test
+    fun testPrimePermSequenceSpeed() {
+        val n = 1_000_000
+        val k = 3
+        val expectedSize = 883
+        val solutions = listOf(
+            tool::primePermSequence, tool::primePermSequenceImproved
+        )
+        val times = LongArray(solutions.size)
+        solutions.forEachIndexed { i, solution ->
+            times[i] = measureNanoTime {
+                assertEquals(expectedSize, solution(n, k).size)
+            }
+        }
+        print("Original solution took: ${1.0 * times[0] / 1_000_000_000}s\n" +
+                "Improved solution took: ${1.0 * times[1] / 1_000_000_000}s\n")
     }
 }

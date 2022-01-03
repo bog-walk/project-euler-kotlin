@@ -28,7 +28,7 @@ class PrimePermutations {
      * candidates for a sequence. Will be slower due to permutations being
      * (re-)generated unnecessarily.
      *
-     * SPEED: s for N = 1e6, K = 3
+     * SPEED: 18.7028s for N = 1e6, K = 3
      */
     fun primePermSequence(n: Int, k: Int): List<String> {
         val primes = primeNumbers(n - 1)
@@ -83,7 +83,7 @@ class PrimePermutations {
      * eliminates need to check for primality by pre- generating all primes
      * with same number of digits.
      *
-     * SPEED: s for N = 1e6, K = 3
+     * SPEED: 0.7789s for N = 1e6, K = 3
      */
     fun primePermSequenceImproved(n: Int, k: Int): List<String> {
         val limit = (10.0).pow(n.toString().length).toInt() - 1
