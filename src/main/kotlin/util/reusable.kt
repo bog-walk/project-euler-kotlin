@@ -3,6 +3,7 @@ package util
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.floor
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -227,6 +228,48 @@ fun isPrimeLong(n: Long): Boolean {
             true
         }
     }
+}
+
+fun isLargePrime(
+    n: Long,
+    kRounds: List<BigInteger> = listOf(
+        2.toBigInteger(), 3.toBigInteger(), 5.toBigInteger(),
+        7.toBigInteger(), 11.toBigInteger()
+    )
+): Boolean {
+    if (n in 2L..3L) return true
+    if (n < 2L || n % 2L == 0L) return false
+    // write n as (2^s * d) + 1 by factoring
+    // out powers of 2 from n - 1 until d is odd
+    var s = 0
+    var d = n - 1
+    while (d % 2L == 0L) {
+        s++
+        d /= 2L
+    }
+    val num = n.toBigInteger()
+    rounds@for (a in kRounds) {
+        if (a > num - BigInteger.TWO) break
+        // calculate a^d % n (pow will not suffice)
+        var x = BigInteger.ONE
+        var base = a
+        var exp = d
+        while (exp > 0) {
+            //if (exp % 2L != 0L) x = (x * base) % n
+            if (exp and 1L == 1L) x = (x * base) % num
+            //exp /= 2L
+            exp = exp shr 1
+            base = (base * base) % num
+        }
+        if (x == BigInteger.ONE || x == num - BigInteger.ONE) continue@rounds
+        for (i in 0 until s) {
+            x = (x * x) % num
+            if (x == BigInteger.ONE) break
+            if (x == num - BigInteger.ONE) continue@rounds
+        }
+        return false
+    }
+    return true
 }
 
 /**

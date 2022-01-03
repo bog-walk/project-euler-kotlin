@@ -114,6 +114,7 @@ internal class ReusableTest {
         val nums = listOf(2, 5, 11, 17, 29)
         for (num in nums) {
             assertTrue(isPrime(num))
+            assertTrue(isLargePrime(num.toLong()))
         }
     }
 
@@ -122,6 +123,28 @@ internal class ReusableTest {
         val nums = listOf(1, 4, 9, 14)
         for (num in nums) {
             assertFalse(isPrime(num))
+            assertFalse(isLargePrime(num.toLong()))
+        }
+    }
+
+    @Test
+    fun testIsLargePrime_allTrue() {
+        val nums = listOf(
+            7919, 514229, 2147483647, 9369319,
+            999973156643, 99987684473
+        )
+        for (num in nums) {
+            assertTrue(isLargePrime(num))
+        }
+    }
+
+    @Test
+    fun testIsLargePrime_allFalse() {
+        val nums = listOf(
+            221, 9523, 22041, 997653, 999715709, 99987684471
+        )
+        for (num in nums) {
+            assertFalse(isLargePrime(num))
         }
     }
 
