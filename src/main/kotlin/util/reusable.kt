@@ -207,6 +207,28 @@ fun isPrime(n: Int): Boolean {
     }
 }
 
+fun isPrimeLong(n: Long): Boolean {
+    return when {
+        n < 2L -> false
+        n < 4L -> true // 2 & 3
+        n % 2L == 0L -> false // 2 is only even prime
+        n < 9L -> true // 4, 6, & 8 already excluded
+        n % 3L == 0L -> false // primes > (k=3) are of form 6k(+/-1) (i.e. never multiples of 3)
+        else -> {
+            // N can only have 1 prime factor > sqrt(N): N itself!
+            val max = floor(sqrt(1.0 * n))
+            var step = 5L // as multiples of prime 5 have not been assessed yet
+            // 11, 13, 17, 19, & 23 will all bypass n loop
+            while (step <= max) {
+                if (n % step == 0L) return false
+                if (n % (step + 2) == 0L) return false
+                step += 6L
+            }
+            true
+        }
+    }
+}
+
 /**
  * This version, not the 3 alternatives below, will be used in future solutions.
  *
