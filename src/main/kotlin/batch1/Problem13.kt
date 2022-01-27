@@ -1,6 +1,6 @@
 package batch1
 
-import util.RollingQueue
+import util.custom.RollingQueue
 
 /**
  * Problem 13: Large Sum

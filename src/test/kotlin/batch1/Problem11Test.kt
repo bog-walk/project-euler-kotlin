@@ -2,7 +2,7 @@ package batch1
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
-import util.intMatrixOf
+import util.custom.intMatrixOf
 import java.io.File
 import kotlin.test.Test
 

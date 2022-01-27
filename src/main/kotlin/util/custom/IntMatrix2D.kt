@@ -1,4 +1,4 @@
-package util
+package util.custom
 
 class IntMatrix2D(
     private val rows: Int,

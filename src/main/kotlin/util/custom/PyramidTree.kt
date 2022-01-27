@@ -1,4 +1,4 @@
-package util
+package util.custom
 
 class PyramidNode(
     val value: Int,

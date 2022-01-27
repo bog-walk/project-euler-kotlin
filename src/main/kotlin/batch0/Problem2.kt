@@ -1,6 +1,6 @@
 package batch0
 
-import util.RollingQueue
+import util.custom.RollingQueue
 
 /**
  * Problem 2: Even Fibonacci Numbers
@@ -22,7 +22,8 @@ class EvenFibonacci {
      * Generates a list of all fibonacci numbers then sum all evens, based
      * on every third number in sequence being even.
      *
-     * SPEED (WORST): 5.9e6ns for N = 4e16
+     * SPEED (WORST)
+     *      5.9e6ns for N = 4e16
      */
     fun sumOfFibonacciBrute(max: Long): Long {
         if (max < 3) return 0L
@@ -88,11 +89,21 @@ class EvenFibonacci {
     }
 
     /**
+     * This is a fake summary line to see what happens.
+     *
      * Similar to RollingQueue implementation in that memory is reduced
      * by only using 4 variables, but also avoids the need to check
      * for even numbers by stepping forward to next predictable even in sequence.
      *
+     * This is an example of a list:
+     * - Item 1.
+     *
+     * - Item 2 is a much much longer multi-lined example that runs for an indeterminable amount
+     * of time but here we are.
+     *
      * SPEED (BEST): 3.7e4ns for N = 4e16
+     *
+     * @param [max] the max number to check for.
      */
     fun evenFibonacciFourVariables(max: Long): Long {
         var sumOfEvens = 0L

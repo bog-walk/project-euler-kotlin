@@ -1,6 +1,6 @@
 package batch1
 
-import util.PyramidTree
+import util.custom.PyramidTree
 
 /**
  * Problem 18: Maximum Path Sum 1

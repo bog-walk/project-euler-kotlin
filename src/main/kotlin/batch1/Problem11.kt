@@ -1,8 +1,8 @@
 package batch1
 
-import util.IntMatrix2D
-import util.RollingQueue
-import util.product
+import util.custom.IntMatrix2D
+import util.custom.RollingQueue
+import util.custom.product
 
 /**
  * Problem 11: Largest Product in a Grid

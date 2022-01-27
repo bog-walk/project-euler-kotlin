@@ -1,6 +1,7 @@
-package util
+package util.custom
 
 import org.junit.jupiter.api.Assertions.*
+import util.custom.PyramidTree
 import kotlin.test.Test
 
 internal class PyramidTreeTest {
