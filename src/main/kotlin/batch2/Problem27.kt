@@ -1,7 +1,7 @@
 package batch2
 
-import util.isPrime
-import util.primeNumbersOG
+import util.maths.isPrime
+import util.maths.primeNumbersOG
 
 /**
  * Problem 27: Quadratic Primes
@@ -46,7 +46,7 @@ class QuadraticPrimes {
             for (b in primes) {
                 var n = 0
                 val adjustedA = if (b != 2) a else a - 1
-                while (isPrime(n * n + adjustedA * n + b)) {
+                while ((n * n + adjustedA * n + b).isPrime()) {
                     n++
                 }
                 if (n > maxCoeffs.third) {

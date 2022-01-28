@@ -1,6 +1,6 @@
 package batch4
 
-import util.primeNumbers
+import util.maths.primeNumbers
 import kotlin.math.floor
 import kotlin.math.sqrt
 

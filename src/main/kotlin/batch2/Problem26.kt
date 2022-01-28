@@ -1,6 +1,6 @@
 package batch2
 
-import util.primeNumbersOG
+import util.maths.primeNumbersOG
 import java.math.BigInteger
 
 /**

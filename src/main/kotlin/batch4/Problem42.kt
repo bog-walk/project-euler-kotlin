@@ -1,7 +1,7 @@
 package batch4
 
-import util.isTriangularNumber
-import util.lcm
+import util.maths.isTriangularNumber
+import util.maths.lcm
 import kotlin.math.sqrt
 
 /**
@@ -46,7 +46,7 @@ class CodedTriangleNumbers {
 
     fun triangleNumber(tN: Long): Int = getTriangleTerm(tN) ?: -1
 
-    fun triangleNumberAlt(tN: Long): Int = isTriangularNumber(tN) ?: -1
+    fun triangleNumberAlt(tN: Long): Int = tN.isTriangularNumber() ?: -1
 
     /**
      * Project Euler specific implementation that returns the count, from an

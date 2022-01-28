@@ -1,7 +1,7 @@
 package batch3
 
 import kotlin.math.pow
-import util.gcd
+import util.maths.gcd
 
 /**
  * Problem 33: Digit Cancelling Fractions

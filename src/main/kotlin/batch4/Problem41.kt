@@ -1,7 +1,7 @@
 package batch4
 
-import util.getPermutations
-import util.isPrime
+import util.strings.getPermutations
+import util.maths.isPrime
 
 /**
  * Problem 41: Pandigital Prime
@@ -31,7 +31,7 @@ class PandigitalPrime {
         outer@while (n > 3) {
             val perms = getPermutations(digits, digits.size).sortedDescending()
             for (perm in perms) {
-                if (isPrime(perm.toInt())) {
+                if (perm.toInt().isPrime()) {
                     largest = perm.toInt()
                     break@outer
                 }
@@ -62,7 +62,7 @@ class PandigitalPrime {
         val digits = ('7' downTo '1').toMutableList()
         repeat(2) {
             for (perm in getPermutations(digits, digits.size)) {
-                if (isPrime(perm.toInt())) {
+                if (perm.toInt().isPrime()) {
                     pandigitalPrimes.add(perm.toInt())
                 }
             }

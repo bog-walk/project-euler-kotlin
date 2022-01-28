@@ -1,6 +1,6 @@
 package batch0
 
-import util.gaussianSum
+import util.maths.gaussianSum
 import kotlin.math.pow
 
 /**

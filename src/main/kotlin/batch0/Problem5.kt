@@ -1,8 +1,8 @@
 package batch0
 
-import util.primeFactors
-import util.lcm
-import util.primeNumbersOG
+import util.maths.primeFactors
+import util.maths.lcm
+import util.maths.primeNumbersOG
 import java.math.BigInteger
 import kotlin.math.floor
 import kotlin.math.log2

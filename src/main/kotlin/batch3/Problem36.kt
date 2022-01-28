@@ -1,6 +1,6 @@
 package batch3
 
-import util.isPalindrome
+import util.strings.isPalindrome
 
 /**
  * Problem 36: Double-Base Palindromes

@@ -1,6 +1,6 @@
 package batch4
 
-import util.isPentagonalNumber
+import util.maths.isPentagonalNumber
 
 /**
  * Problem 44: Pentagon Numbers
@@ -30,8 +30,8 @@ class PentagonNumbers {
         for (i in k until n - 1) {
             val pN = pNs[i]
             val pNMinusK = pNs[i - k]
-            if (isPentagonalNumber(pN - pNMinusK) != null ||
-                isPentagonalNumber(pN + pNMinusK) != null
+            if ((pN - pNMinusK).isPentagonalNumber() != null ||
+                (pN + pNMinusK).isPentagonalNumber() != null
             ) {
                 results.add(pN)
                 continue
@@ -57,8 +57,8 @@ class PentagonNumbers {
             for (y in x - 1 downTo 1) {
                 val pY = pentagonals[y]
                 val minus = pX - pY
-                if (isPentagonalNumber(pX + pY) == null ||
-                    isPentagonalNumber(minus) == null) continue
+                if ((pX + pY).isPentagonalNumber() == null ||
+                    (minus).isPentagonalNumber() == null) continue
                 if (minus < diff) {
                     diff = minus
                 }

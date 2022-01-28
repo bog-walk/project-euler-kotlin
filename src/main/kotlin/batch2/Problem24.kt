@@ -1,6 +1,6 @@
 package batch2
 
-import util.factorial
+import util.maths.factorial
 
 /**
  * Problem 24: Lexicographic Permutations

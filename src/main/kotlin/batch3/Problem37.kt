@@ -1,6 +1,6 @@
 package batch3
 
-import util.primeNumbers
+import util.maths.primeNumbers
 
 /**
  * Problem 37: Truncatable Primes

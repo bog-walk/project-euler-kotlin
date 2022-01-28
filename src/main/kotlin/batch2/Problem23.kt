@@ -1,6 +1,6 @@
 package batch2
 
-import util.sumProperDivisorsPF
+import util.maths.sumProperDivisors
 
 /**
  * Problem 23: Non-Abundant Sums
@@ -32,7 +32,7 @@ import util.sumProperDivisorsPF
  */
 
 class NonAbundantSums {
-    fun isAbundant(n: Int): Boolean = sumProperDivisorsPF(n) > n
+    fun isAbundant(n: Int): Boolean = sumProperDivisors(n) > n
 
     /**
      * This solution is optimised based on:

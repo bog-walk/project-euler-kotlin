@@ -1,6 +1,6 @@
 package batch1
 
-import util.factorial
+import util.maths.factorial
 
 /**
  * Problem 15: Lattice Paths

@@ -1,7 +1,7 @@
 package batch4
 
-import util.isPrimeLong
-import util.primeNumbers
+import util.maths.isPrimeMR
+import util.maths.primeNumbers
 
 /**
  * Problem 50: Consecutive Prime Sum
@@ -42,7 +42,7 @@ class ConsecutivePrimeSum {
                     maxJ = j + 1
                     break
                 }
-                if (seqSum <= limit && seqSum.toInt() in primes || isPrimeLong(seqSum)) {
+                if (seqSum <= limit && seqSum.toInt() in primes || seqSum.isPrimeMR()) {
                     val length = j - i
                     if (length > smallest.second) {
                         smallest = seqSum to length
@@ -79,7 +79,7 @@ class ConsecutivePrimeSum {
                 val length = j - i
                 if (length > smallest.second &&
                     (seqSum <= limit && seqSum.toInt() in primes ||
-                            isPrimeLong(seqSum))) {
+                            seqSum.isPrimeMR())) {
                     smallest = seqSum to length
                     break
                 }

@@ -1,6 +1,6 @@
 package batch2
 
-import util.sumProperDivisorsOG
+import util.maths.sumProperDivisorsOG
 
 /**
  * Problem 21: Amicable Numbers

@@ -1,8 +1,8 @@
 package batch1
 
-import util.gaussianSum
-import util.primeFactors
-import util.primeNumbersOG
+import util.maths.gaussianSum
+import util.maths.primeFactors
+import util.maths.primeNumbersOG
 
 /**
  * Problem 12: Highly Divisible Triangular Number

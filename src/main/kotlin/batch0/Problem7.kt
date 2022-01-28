@@ -1,6 +1,6 @@
 package batch0
 
-import util.isPrime
+import util.maths.isPrime
 
 /**
  * Problem 7: The 10001st Prime
@@ -24,7 +24,7 @@ class The10001stPrime {
         var number = 1
         while (count > 0) {
             number += 2
-            if (isPrime(number)) count--
+            if (number.isPrime()) count--
         }
         return number
     }

@@ -1,6 +1,6 @@
 package batch3
 
-import util.factorial
+import util.maths.factorial
 
 /**
  * Problem 34: Digit Factorials

@@ -1,7 +1,7 @@
 package batch4
 
-import util.isPentagonalNumber
-import util.isTriangularNumber
+import util.maths.isPentagonalNumber
+import util.maths.isTriangularNumber
 import kotlin.math.floor
 import kotlin.math.sqrt
 
@@ -58,9 +58,9 @@ class TriPentHex {
             val firstType = if (b == 6) i * (2 * i - 1) else i * (3 * i - 1) / 2
             if (firstType >= n) break
             val isSecondType = if (a == 3) {
-                isTriangularNumber(firstType) != null
+                firstType.isTriangularNumber() != null
             } else {
-                isPentagonalNumber(firstType) != null
+                firstType.isPentagonalNumber() != null
             }
             if (isSecondType) common.add(firstType)
             i++
@@ -85,7 +85,7 @@ class TriPentHex {
         while (true) {
             next++
             if (isHexagonalNumber(next) != null &&
-                isPentagonalNumber(next) != null) break
+                next.isPentagonalNumber() != null) break
         }
         return next
     }

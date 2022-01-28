@@ -1,7 +1,7 @@
 package batch0
 
-import util.gcd
-import util.pythagoreanTriplet
+import util.maths.gcd
+import util.maths.pythagoreanTriplet
 import kotlin.math.ceil
 import kotlin.math.sqrt
 

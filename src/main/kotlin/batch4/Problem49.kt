@@ -1,8 +1,8 @@
 package batch4
 
-import util.getPermutations
-import util.isPrime
-import util.primeNumbers
+import util.strings.getPermutations
+import util.maths.isPrime
+import util.maths.primeNumbers
 import kotlin.math.pow
 
 /**
@@ -41,7 +41,7 @@ class PrimePermutations {
             val perms = getPermutations(firstChars, firstChars.size)
                 .map{ it.toInt() }
                 .toSet()
-                .filter { it > first && isPrime(it) }
+                .filter { it > first && it.isPrime() }
                 .sorted()
             for (i in 0 until perms.size - k + 2) {
                 val next = perms[i]

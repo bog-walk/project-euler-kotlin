@@ -1,7 +1,7 @@
 package batch0
 
-import util.primeFactors
-import util.isPalindrome
+import util.maths.primeFactors
+import util.strings.isPalindrome
 
 /**
  * Problem 4: Largest Palindrome Product

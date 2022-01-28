@@ -1,7 +1,7 @@
 package batch3
 
-import util.isPrime
-import util.primeNumbers
+import util.maths.isPrime
+import util.maths.primeNumbers
 
 /**
  * Problem 35: Circular Primes
@@ -49,7 +49,7 @@ class CircularPrimes {
         for (prime in primes.subList(4, primes.size)) {
             val pRotated = getRotations(prime)
             val invalid = pRotated.any {
-                it in rotations || it < n && it !in primes || !isPrime(it)
+                it in rotations || it < n && it !in primes || !it.isPrime()
             }
             if (invalid) continue
             rotations += pRotated.filter { it < n }

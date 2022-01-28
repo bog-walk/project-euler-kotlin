@@ -1,6 +1,6 @@
 package batch4
 
-import util.primeFactors
+import util.maths.primeFactors
 
 /**
  * Problem 47: Distinct Primes Factors

@@ -1,6 +1,6 @@
 package batch0
 
-import util.lcm
+import util.maths.lcm
 import java.math.BigInteger
 
 /**

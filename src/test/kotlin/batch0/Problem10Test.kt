@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import util.primeNumbersOG
+import util.maths.primeNumbersOG
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class SummationOfPrimesTest {
