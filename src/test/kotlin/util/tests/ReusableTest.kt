@@ -4,6 +4,7 @@ import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 internal class ReusableTest {
     @Test
@@ -13,8 +14,9 @@ internal class ReusableTest {
         )
         val speeds = mutableListOf<Pair<String, Long>>()
         for ((name, solution) in solutions.entries) {
-            val (_, time) = getSpeed(solution)
-            speeds.add(name to time)
+            getSpeed(solution).run {
+                speeds.add(name to this.second)
+            }
             assertEquals(1, 1)
         }
         compareSpeed(speeds)
@@ -45,12 +47,15 @@ internal class ReusableTest {
             "Medium" to (::mediumFake to n),
             "Slow" to (::slowFake to n)
         )
+        val results = mutableListOf<Int>()
         val speeds = mutableListOf<Pair<String, Long>>()
         for ((name, solution) in solutions.entries) {
-            val (actual, time) = getSpeed(solution.first, solution.second)
-            speeds.add(name to time)
-            assertEquals(expected, actual)
+            getSpeed(solution.first, solution.second).run {
+                results.add(this.first)
+                speeds.add(name to this.second)
+            }
         }
+        assertTrue { results.all { expected == it } }
         compareSpeed(speeds)
     }
 
@@ -80,16 +85,21 @@ internal class ReusableTest {
     fun `compareSpeed correct with variable argument functions`() {
         val n = 3
         val expected = 900
+        val results = mutableListOf<Int>()
         val speeds = mutableListOf<Pair<String, Long>>()
-        var result: Pair<Int, Long> = getSpeed(::fakeA, n, repeat=10)
-        speeds.add("FakeA" to result.second)
-        assertEquals(expected, result.first)
-        result = getSpeed(::fakeB, n, 2, repeat=10)
-        speeds.add("FakeB" to result.second)
-        assertEquals(expected, result.first)
-        result = getSpeed(::fakeC, n, 2, repeat=10)
-        speeds.add("FakeC" to result.second)
-        assertEquals(expected, result.first)
+        getSpeed(::fakeA, n).run {
+            results.add(this.first)
+            speeds.add("FakeA" to this.second)
+        }
+        getSpeed(::fakeB, n, 2).run {
+            results.add(this.first)
+            speeds.add("FakeB" to this.second)
+        }
+        getSpeed(::fakeC, n, 2).run {
+            results.add(this.first)
+            speeds.add("FakeC" to this.second)
+        }
+        assertTrue { results.all { expected == it } }
         compareSpeed(speeds)
     }
 
@@ -98,31 +108,53 @@ internal class ReusableTest {
         val n = 3
         val expected = 900
         val speeds = mutableListOf<Pair<String, Long>>()
-        var actual: Int
+        val results = mutableListOf<Int>()
         val aTime = measureNanoTime {
-            for (i in 0 until 9) {
-                fakeA(n)
-            }
-            actual = fakeA(n)
+            results.add(fakeA(n))
         }
         speeds.add("FakeA" to aTime)
-        assertEquals(expected, actual)
         val bTime = measureNanoTime {
-            for (i in 0 until 9) {
-                fakeB(n, 2)
-            }
-            actual = fakeB(n, 2)
+            results.add(fakeB(n, 2))
         }
         speeds.add("FakeB" to bTime)
-        assertEquals(expected, actual)
         val cTime = measureNanoTime {
-            for (i in 0 until 9) {
-                fakeC(n, 2)
-            }
-            actual = fakeC(n, 2)
+            results.add(fakeC(n, 2))
         }
         speeds.add("FakeC" to cTime)
-        assertEquals(expected, actual)
+        assertTrue { results.all { expected == it } }
+        compareSpeed(speeds)
+    }
+
+    @Test
+    fun `compareSpeed correct with multiple repetitions`() {
+        val solutions = mapOf(
+            "SleepB" to ::sleepB, "SleepC" to ::sleepC, "SleepD" to ::sleepD
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions.entries) {
+            getSpeed(solution, repeat = 10).run {
+                speeds.add(name to this.second)
+            }
+            assertEquals(1, 1)
+        }
+        compareSpeed(speeds)
+    }
+
+    @Test
+    fun `compareSpeed normal multiple repetitions`() {
+        val solutions = mapOf(
+            "SleepB" to ::sleepB, "SleepC" to ::sleepC, "SleepD" to ::sleepD
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions.entries) {
+            val time = measureNanoTime {
+                for (i in 0 until 10) {
+                    solution()
+                }
+            }
+            speeds.add(name to time)
+            assertEquals(1, 1)
+        }
         compareSpeed(speeds)
     }
 

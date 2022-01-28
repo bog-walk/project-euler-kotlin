@@ -46,10 +46,10 @@ fun <T : Any, R : Any> getSpeed(
  * or if used with solutions that have different argument amounts. It works as expected if each
  * solution is manually called, rather than looped over.
  */
-fun <T : Any, R : Any> getSpeed(
-    solution: (T, T) -> R,
+fun <T : Any, Q: Any, R : Any> getSpeed(
+    solution: (T, Q) -> R,
     arg1: T,
-    arg2: T,
+    arg2: Q,
     repeat: Int = 1
 ): Pair<R, Long> {
     val result: R

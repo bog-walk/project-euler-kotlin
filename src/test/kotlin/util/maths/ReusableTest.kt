@@ -3,6 +3,8 @@ package util.maths
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.*
 
 internal class ReusableTest {
@@ -84,16 +86,34 @@ internal class ReusableTest {
     }
 
     @Test
-    fun `isPrimeMR returns true with large primes`() {
-        val nums = listOf(2_147_483_647, 9_369_319, 999_973_156_643, 99_987_684_473)
+    fun `isPrime both return true with big primes`() {
+        val nums = listOf(9_369_319, 2_147_483_647, 99_987_684_473, 999_973_156_643)
+        nums.forEach { n ->
+            assertTrue(n.isPrime())
+            assertTrue(n.isPrimeMR())
+        }
+    }
+
+    @Test
+    fun `isPrime both return false with big composites`() {
+        val nums = listOf(999_715_709, 99_987_684_471)
+        nums.forEach { n ->
+            assertFalse(n.isPrime())
+            assertFalse(n.isPrimeMR())
+        }
+    }
+
+    @Test
+    fun `isPrimeMR returns true with huge primes`() {
+        val nums = listOf(888_888_877_777_777, 999_998_727_899_999)
         nums.forEach { n ->
             assertTrue(n.isPrimeMR())
         }
     }
 
     @Test
-    fun `isPrimeMR returns false with large composites`() {
-        val nums = listOf(999_715_709, 99_987_684_471)
+    fun `isPrimeMR returns false with huge composites`() {
+        val nums = listOf(3_889_108_085_625, 809_709_509_409_105)
         nums.forEach { n ->
             assertFalse(n.isPrimeMR())
         }
@@ -129,17 +149,15 @@ internal class ReusableTest {
         assertEquals(expected, lcm(x, y))
     }
 
-    @ParameterizedTest(name="lcm(multiple) = {0}")
-    @CsvSource(
-        // 3 numbers
-        "12, 2, 6, 12",
-        // 4 numbers
-        "2170, 31, 5, 7, 14",
-        // 7 numbers
-        "9240, 8, 11, 3, 5, 2, 7, 6"
-    )
-    fun `least common multiple correct with multiple arguments`(expected: Long, vararg nums: Long) {
-        assertEquals(expected, lcm(*nums))
+    @Test
+    fun `least common multiple correct with multiple arguments`() {
+        val arguments = listOf(
+            longArrayOf(2, 6, 12), longArrayOf(31, 5, 7, 14), longArrayOf(8, 11, 3, 5, 2, 7, 6)
+        )
+        val expected = listOf<Long>(12, 2170, 9240)
+        for ((i, args) in arguments.withIndex()) {
+            assertEquals(expected[i], lcm(*args))
+        }
     }
 
     @Test
@@ -149,13 +167,13 @@ internal class ReusableTest {
         assertThrows<IllegalArgumentException> { lcm(0, 0) }
     }
 
-    @ParameterizedTest(name="sum({0}^{1}) = {2}")
+    @ParameterizedTest(name="sum({1}^{2}) = {0}")
     @CsvSource(
         // lower constraints
         "1, 0, 0", "0, 0, 1", "1, 1, 0", "1, 1, 10", "1, 2, 0", "4, 2, 2", "8, 2, 9",
         "47, 2, 31", "7, 4, 5", "43, 7, 10", "1, 10, 100", "7, 20, 10"
     )
-    fun `powerDigitSum correct`(base: Int, exp: Int, expected: Int) {
+    fun `powerDigitSum correct`(expected: Int, base: Int, exp: Int) {
         assertEquals(expected, powerDigitSum(base, exp))
     }
 
@@ -171,6 +189,12 @@ internal class ReusableTest {
             }
             assertEquals(expected[i], primeFactors)
         }
+    }
+
+    @Test
+    fun `primeFactors throws exception with invalid input`() {
+        assertThrows<IllegalArgumentException> { primeFactors(1L) }
+        assertThrows<IllegalArgumentException> { primeFactors(-2L) }
     }
 
     @Test

@@ -3,8 +3,8 @@ package util.maths
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.floor
+import kotlin.math.log10
 import kotlin.math.sqrt
-import kotlin.math.pow
 
 /**
  * Calculates the sum of the first [this] natural numbers.
@@ -71,32 +71,36 @@ fun Long.isPentagonalNumber(): Int? {
     return if (n == floor(n)) n.toInt() else null
 }
 
+fun Int.isPrime() = this.toLong().isPrime()
+
 /**
  * Checks if [this] is prime.
  *
  * This version will be used preferentially, unless the argument is expected to frequently
- * exceed 1e6.
+ * exceed 1e13.
  *
- * SPEED (WORSE for N > 1e7) 1.96s for a 15-digit prime
- * SPEED (EQUAL for N == 1e6 || N == 1e7) 20000ns for 7-digit prime
- * SPEED (BETTER for N < 1e6) 11200ns for 3-digit prime
+ * SPEED (WORSE for N > 1e13) 42.98ms for 14-digit prime
+ * SPEED (EQUAL for N ~ 1e13) 17.21ms for 13-digit prime
+ * SPEED (BETTER for N ~ 1e12) 11.27ms for 12-digit prime
+ * SPEED (BETTER for N < 1e6) 5.9e5ns for 3-digit prime
  */
-fun Int.isPrime(): Boolean {
+fun Long.isPrime(): Boolean {
+    if (log10(this.toDouble()).toInt() + 1 > 13) return this.isPrimeMR()
     return when {
-        this < 2 -> false
-        this < 4 -> true // 2 & 3 are primes
-        this % 2 == 0 -> false // 2 is the only even prime
-        this < 9 -> true // 4, 6, & 8 already excluded
-        this % 3 == 0 -> false
+        this < 2L -> false
+        this < 4L -> true // 2 & 3 are primes
+        this % 2L == 0L -> false // 2 is the only even prime
+        this < 9L -> true // 4, 6, & 8 already excluded
+        this % 3L == 0L -> false
         // primes > (k=3) are of the form 6k(+/-1) (i.e. they are never multiples of 3)
         else -> {
             // n can only have 1 prime factor > sqrt(n): n itself!
             val max = floor(sqrt(1.0 * this))
-            var step = 5 // as multiples of prime 5 have not been assessed yet
+            var step = 5L // as multiples of prime 5 have not been assessed yet
             // 11, 13, 17, 19, & 23 will all bypass n loop
             while (step <= max) {
-                if (this % step == 0 || this % (step + 2) == 0) return false
-                step += 6
+                if (this % step == 0L || this % (step + 2L) == 0L) return false
+                step += 6L
             }
             true
         }
@@ -117,13 +121,16 @@ fun Int.isPrime(): Boolean {
  * been proven valid for numbers up to 2.1e12. Providing a list of the first 7 primes gives test
  * validity for numbers up to 3.4e14.
  *
- * SPEED (BETTER for N > 1e7) 1.4e5ns for a 15-digit prime
- * SPEED (EQUAL for N == 1e6 || N == 1e7) 23700ns for 7-digit prime
- * SPEED (WORSE for N < 1e6) 28100ns for 3-digit prime
+ * SPEED (BETTER for N > 1e13) 26.93ms for 14-digit prime
+ * SPEED (EQUAL for N ~ 1e13) 21.19ms for 13-digit prime
+ * SPEED (WORSE for N ~ 1e12) 20.98ms for 12-digit prime
+ * SPEED (WORSE for N < 1e6) 16.77ms for 3-digit prime
  */
 fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
     if (this in 2L..3L) return true
     if (this < 2L || this % 2L == 0L) return false
+    val n = this.toBigInteger()
+    val one = BigInteger.ONE
     // write n as 2^r * s + 1 by factoring out powers of 2 from n - 1 (even) until s is odd
     var s = this - 1L
     while (s % 2L == 0L) {
@@ -132,20 +139,20 @@ fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
     rounds@for (a in kRounds) {
         if (a > this - 2L) break
         // calculate a^s % n (pow will not suffice)
-        var x = 1L
-        var base = a
-        var exp = s
-        while (exp > 0) {
-            if (exp and 1L == 1L) x = x * base % this
+        var x = BigInteger.ONE
+        var base = a.toBigInteger()
+        var exp = s.toBigInteger()
+        while (exp > BigInteger.ZERO) {
+            if (exp and one == one) x = (x * base) % n
             exp = exp shr 1
-            base = base * base % this
+            base = base * base % n
         }
-        if (x == 1L || x == this - 1L) continue@rounds
+        if (x == one || x == n - one) continue@rounds
         while (s != this - 1L) {
-            x = (x * x) % this
+            x = (x * x) % n
             s *= 2L
-            if (x == 1L) break
-            if (x == this - 1L) continue@rounds
+            if (x == one) break
+            if (x == n - one) continue@rounds
         }
         return false
     }
@@ -192,7 +199,7 @@ fun lcm(vararg n: Long): Long {
  * Calculates the sum of the digits of the number produced by [base]^[exp].
  */
 fun powerDigitSum(base: Int, exp: Int): Int {
-    val num = base.toDouble().pow(exp).toString()
+    val num = base.toBigInteger().pow(exp).toString()
     return num.sumOf { it.digitToInt() }
 }
 
@@ -226,7 +233,7 @@ fun primeFactors(n: Long): Map<Long, Int> {
 /**
  * Sieve of Eratosthenes algorithm outputs all prime numbers less than or equal to [n].
  *
- * SPEED (WORSE) 36.64ms for N = 1e5
+ * SPEED (WORSE) 28.75ms for N = 1e5
  */
 fun primeNumbersOG(n: Int): List<Int> {
     if (n < 2) return emptyList()
@@ -253,7 +260,7 @@ fun primeNumbersOG(n: Int): List<Int> {
  *
  * This version will be used in future solutions.
  *
- * SPEED (BETTER) 23.11ms for N = 1e5
+ * SPEED (BETTER) 7.46ms for N = 1e5
  */
 fun primeNumbers(n: Int): List<Int> {
     if (n < 2) return emptyList()
@@ -282,7 +289,7 @@ fun primeNumbers(n: Int): List<Int> {
  * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
  *
  * @throws IllegalArgumentException If arguments do not follow [m] > [n] > 0, or if both are odd,
- * ornif they are not co-prime, i.e. gcd(m, n) != 1.
+ * or if they are not co-prime, i.e. gcd(m, n) != 1.
  */
 fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     require(n in 1 until m) { "Positive integers assumed to be m > n > 0" }
@@ -295,7 +302,7 @@ fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
 }
 
 /**
- * Calculates the sum of all divisors of [num].
+ * Calculates the sum of all divisors of [num], not inclusive of [num].
  *
  * Solution optimised based on the following:
  *
@@ -305,7 +312,7 @@ fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
  *
  * -    Loop range differs for odd numbers as they cannot have even divisors.
  *
- * SPEED (WORSE) 2.1e7ns for N = 1e6 - 1
+ * SPEED (WORSE) 6.91ms for N = 1e6 - 1
  */
 fun sumProperDivisorsOG(num: Int): Int {
     if (num < 2) return 0
@@ -325,14 +332,14 @@ fun sumProperDivisorsOG(num: Int): Int {
 }
 
 /**
- * Calculates the sum of all divisors of [num].
+ * Calculates the sum of all divisors of [num], not inclusive of [num].
  *
  * Solution above is further optimised by using prime factorisation to out-perform the original
  * method.
  *
  * This version will be used in future solutions.
  *
- * SPEED (BETTER) 7.1e3ns for N = 1e6 - 1
+ * SPEED (BETTER) 10000ns for N = 1e6 - 1
  */
 fun sumProperDivisors(num: Int): Int {
     if (num < 2) return 0
@@ -360,4 +367,9 @@ fun sumProperDivisors(num: Int): Int {
         sum *= (n + 1)
     }
     return sum - num
+}
+
+fun main() {
+    val n = 999_973_156_643
+    println(n.isPrimeMR())
 }

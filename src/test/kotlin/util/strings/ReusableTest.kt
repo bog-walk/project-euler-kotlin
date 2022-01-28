@@ -64,7 +64,7 @@ internal class ReusableTest {
         val nums = listOf("", "1", "85018", "810")
         val digits = listOf(10, 4, 5, 3)
         nums.forEachIndexed { i, num ->
-            assertTrue { num.isPandigital(digits[i]) }
+            assertFalse { num.isPandigital(digits[i]) }
         }
     }
 }

@@ -1,13 +1,12 @@
 package util.strings
 
-
 /**
- * SPEED (WORST) 41.24ms for 18-digit N over 1000 iterations
+ * SPEED (WORST) 11.62ms for 18-digit N
  */
 fun String.isPalindromeBuiltIn() = this == this.reversed()
 
 /**
- * SPEED (BETTER) 6.02ms for 18-digit N over 1000 iterations
+ * SPEED (BETTER) 3.16ms for 18-digit N
  */
 fun String.isPalindromeManual(): Boolean {
     if (length == 1) return true
@@ -20,23 +19,23 @@ fun String.isPalindromeManual(): Boolean {
 }
 
 /**
- * SPEED (BETTER) ???? for 18-digit N over 1000 iterations
+ * SPEED (BETTER) 49900ns for 18-digit N
  */
 fun String.isPalindromeNumber(): Boolean {
     if (length == 1) return true
-    var num = this.toInt()
-    var rev = 0
-    while (num > 0) {
-        rev = rev * 10 + num % 10
-        num /= 10
+    var num = this.toLong()
+    var rev = 0L
+    while (num > 0L) {
+        rev = rev * 10L + num % 10L
+        num /= 10L
     }
     return this == rev.toString()
 }
 
 /**
- * This version will be used in future solutions.
+ * This recursive version will be used in future solutions.
  *
- * SPEED (BEST) 2.32ms for 18-digit N over 1000 iterations
+ * SPEED (BEST) 46000ns for 18-digit N
  */
 fun String.isPalindrome(): Boolean {
     return when {
