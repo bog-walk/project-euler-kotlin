@@ -3,7 +3,6 @@ package util.maths
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.floor
-import kotlin.math.log10
 import kotlin.math.sqrt
 
 /**
@@ -71,40 +70,75 @@ fun Long.isPentagonalNumber(): Int? {
     return if (n == floor(n)) n.toInt() else null
 }
 
-fun Int.isPrime() = this.toLong().isPrime()
-
 /**
  * Checks if [this] is prime.
  *
  * This version will be used preferentially, unless the argument is expected to frequently
- * exceed 1e13.
+ * exceed Integer.MAX_VALUE (10-digits).
  *
- * SPEED (WORSE for N > 1e13) 42.98ms for 14-digit prime
- * SPEED (EQUAL for N ~ 1e13) 17.21ms for 13-digit prime
- * SPEED (BETTER for N ~ 1e12) 11.27ms for 12-digit prime
- * SPEED (BETTER for N < 1e6) 5.9e5ns for 3-digit prime
+ * SPEED (WORST for N > 1e13) 43.62ms for 14-digit prime
+ *
+ * SPEED (EQUAL for N > 1e12) 17.21ms for 13-digit prime
+ *
+ * SPEED (WORST for N > 1e11) 8.68ms for 12-digit prime
+ *
+ * SPEED (BETTER for N < 1e10) 1.65ms for 10-digit prime
+ *
+ * SPEED (BEST for N < 1e6) 6.4e5ns for 6-digit prime
+ *
+ * SPEED (EQUAL for N < 1e3) 6.2e5ns for 3-digit prime
  */
-fun Long.isPrime(): Boolean {
-    if (log10(this.toDouble()).toInt() + 1 > 13) return this.isPrimeMR()
+fun Int.isPrime(): Boolean {
     return when {
-        this < 2L -> false
-        this < 4L -> true // 2 & 3 are primes
-        this % 2L == 0L -> false // 2 is the only even prime
-        this < 9L -> true // 4, 6, & 8 already excluded
-        this % 3L == 0L -> false
+        this < 2 -> false
+        this < 4 -> true // 2 & 3 are primes
+        this % 2 == 0 -> false // 2 is the only even prime
+        this < 9 -> true // 4, 6, & 8 already excluded
+        this % 3 == 0 -> false
         // primes > (k=3) are of the form 6k(+/-1) (i.e. they are never multiples of 3)
         else -> {
             // n can only have 1 prime factor > sqrt(n): n itself!
             val max = floor(sqrt(1.0 * this))
-            var step = 5L // as multiples of prime 5 have not been assessed yet
+            var step = 5 // as multiples of prime 5 have not been assessed yet
             // 11, 13, 17, 19, & 23 will all bypass n loop
             while (step <= max) {
-                if (this % step == 0L || this % (step + 2L) == 0L) return false
-                step += 6L
+                if (this % step == 0 || this % (step + 2) == 0) return false
+                step += 6
             }
             true
         }
     }
+}
+
+/**
+ * BigInteger built-in isProbablePrime() uses Miller-Rabin algorithm.
+ *
+ * Overall, this solution returns the most consistent performance for numbers of all sizes, at a
+ * default certainty of 5. It is expected that performance will slow as the number of digits and
+ * certainty tolerance increase.
+ *
+ * This version will be used for all numbers above Integer.MAX_VALUE (11-digits and up).
+ *
+ * SPEED (BEST for N > 1e14) 1.12ms for 15-digit prime
+ *
+ * SPEED (BEST for N > 1e13) 1.11ms for 14-digit prime
+ *
+ * SPEED (BEST for N > 1e12) 1.26ms for 13-digit prime
+ *
+ * SPEED (BETTER for N > 1e11) 1.56ms for 12-digit prime
+ *
+ * SPEED (BEST for N < 1e10) 1.46ms for 10-digit prime
+ *
+ * SPEED (BETTER for N < 1e6) 9.4e5ns for 6-digit prime
+ *
+ * SPEED (EQUAL for N < 1e3) 7.2e5ns for 3-digit prime
+ *
+ * @see <a href="https://developer.classpath.org/doc/java/math/BigInteger-source.html">Source
+ * code line 1279</a>
+ */
+fun Long.isPrimeMRBI(certainty: Int = 5): Boolean {
+    val n = BigInteger.valueOf(this)
+    return n.isProbablePrime(certainty)
 }
 
 /**
@@ -117,42 +151,44 @@ fun Long.isPrime(): Boolean {
  *      previously factored out returned, then [this] passes as a strong probable prime.
  * -   [this] should pass for all generated a.
  *
- * This algorithm uses a list of the first 5 primes instead of randomly generated a, as this has
- * been proven valid for numbers up to 2.1e12. Providing a list of the first 7 primes gives test
- * validity for numbers up to 3.4e14.
+ * The algorithm's complexity is O(k*log^3*n). This algorithm uses a list of the first 5 primes
+ * instead of randomly generated a, as this has been proven valid for numbers up to 2.1e12.
+ * Providing a list of the first 7 primes gives test validity for numbers up to 3.4e14.
  *
- * SPEED (BETTER for N > 1e13) 26.93ms for 14-digit prime
- * SPEED (EQUAL for N ~ 1e13) 21.19ms for 13-digit prime
- * SPEED (WORSE for N ~ 1e12) 20.98ms for 12-digit prime
- * SPEED (WORSE for N < 1e6) 16.77ms for 3-digit prime
+ * SPEED (BETTER for N > 1e14) 28.86ms for 15-digit prime
+ *
+ * SPEED (BETTER for N > 1e13) 17.88ms for 14-digit prime
+ *
+ * SPEED (EQUAL for N > 1e12) 17.62ms for 13-digit prime
+ *
+ * SPEED (BEST for N > 1e11) 1.24ms for 12-digit prime
+ *
+ * SPEED (WORST for N < 1e10) 1.81ms for 10-digit prime
+ *
+ * SPEED (WORST for N < 1e6) 1.02ms for 6-digit prime
+ *
+ * SPEED (EQUAL for N < 1e3) 6.4e5ns for 3-digit prime
  */
 fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
     if (this in 2L..3L) return true
     if (this < 2L || this % 2L == 0L) return false
-    val n = this.toBigInteger()
     val one = BigInteger.ONE
-    // write n as 2^r * s + 1 by factoring out powers of 2 from n - 1 (even) until s is odd
-    var s = this - 1L
-    while (s % 2L == 0L) {
-        s /= 2L
-    }
+    val n = BigInteger.valueOf(this)
+    val nMinus1 = n - one
+    // write n as 2^r * s + 1 by first getting r, the largest power of 2 that divides (this - 1)
+    // by getting the index of the right-most one bit
+    val r: Int = nMinus1.lowestSetBit
+    // x * 2^y == x << y
+    val s = nMinus1 / BigInteger.valueOf(2L shl r - 1)
     rounds@for (a in kRounds) {
         if (a > this - 2L) break
-        // calculate a^s % n (pow will not suffice)
-        var x = BigInteger.ONE
-        var base = a.toBigInteger()
-        var exp = s.toBigInteger()
-        while (exp > BigInteger.ZERO) {
-            if (exp and one == one) x = (x * base) % n
-            exp = exp shr 1
-            base = base * base % n
-        }
-        if (x == one || x == n - one) continue@rounds
-        while (s != this - 1L) {
-            x = (x * x) % n
-            s *= 2L
+        // calculate a^s % n
+        var x = BigInteger.valueOf(a).modPow(s, n)
+        if (x == one || x == nMinus1) continue@rounds
+        for (i in 0 until r) {
+            x = x.modPow(BigInteger.TWO, n)
             if (x == one) break
-            if (x == n - one) continue@rounds
+            if (x == nMinus1) continue@rounds
         }
         return false
     }
@@ -367,9 +403,4 @@ fun sumProperDivisors(num: Int): Int {
         sum *= (n + 1)
     }
     return sum - num
-}
-
-fun main() {
-    val n = 999_973_156_643
-    println(n.isPrimeMR())
 }
