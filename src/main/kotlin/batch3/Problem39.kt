@@ -73,7 +73,7 @@ class IntegerRightTriangles {
                     val kMax = p / (2 * m)
                     var k = if (m % 2 == 1) m + 2 else m + 1
                     while (k < 2 * m && k <= kMax) {
-                        if (kMax % k == 0 && gcd(k, m) == 1) {
+                        if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
                             pSols++
                         }
                         k += 2
@@ -107,7 +107,7 @@ class IntegerRightTriangles {
             for (n in 1 until m) {
                 // ensure that both m and n are not odd
                 // and that m and n are co-prime (gcd == 1)
-                if (m % 2 == 1 && n % 2 == 1 || gcd(m, n) > 1) {
+                if (m % 2 == 1 && n % 2 == 1 || gcd(m.toLong(), n.toLong()) > 1L) {
                     continue
                 }
                 var d = 1

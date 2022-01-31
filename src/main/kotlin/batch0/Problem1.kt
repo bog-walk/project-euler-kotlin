@@ -32,6 +32,25 @@ class MultiplesOf3Or5 {
     }
 
     /**
+     * Calculates the sum of multiples of both factors minus the sum of duplicates found via the
+     * least common multiple of the given factors.
+     */
+    fun sumOfMultiples(n: Int, factor1: Int, factor2: Int): Long {
+        val maxTerm = n - 1 // n not inclusive
+        return if (factor1 == factor2) {
+            sumOfArithProgression(maxTerm, factor1)
+        } else {
+            val duplicateSum = sumOfArithProgression(
+                maxTerm,
+                lcm(factor1.toLong(), factor2.toLong()).toInt()
+            )
+            sumOfArithProgression(maxTerm, factor1)
+                .plus(sumOfArithProgression(maxTerm, factor2))
+                .minus(duplicateSum)
+        }
+    }
+
+    /**
      * Calculates the sum of an arithmetic progression sequence.
      *
      * Solution based on the formula:
@@ -50,21 +69,5 @@ class MultiplesOf3Or5 {
     private fun sumOfArithProgression(maxTerm: Int, delta: Int): Long {
         val terms = maxTerm / delta
         return terms.gaussianSum() * delta.toLong()
-    }
-
-    /**
-     * Calculates the sum of multiples of both factors minus the sum of duplicates found via the
-     * least common multiple of the given factors.
-     */
-    fun sumOfMultiples(n: Int, factor1: Int, factor2: Int): Long {
-        val maxTerm = n - 1 // n not inclusive
-        return if (factor1 == factor2) {
-            sumOfArithProgression(maxTerm, factor1)
-        } else {
-            val duplicateSum = sumOfArithProgression(maxTerm, lcm(factor1, factor2))
-            sumOfArithProgression(maxTerm, factor1)
-                .plus(sumOfArithProgression(maxTerm, factor2))
-                .minus(duplicateSum)
-        }
     }
 }

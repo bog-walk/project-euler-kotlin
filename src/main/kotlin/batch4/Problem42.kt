@@ -41,7 +41,7 @@ class CodedTriangleNumbers {
     private fun getTriangleTerm(tN: Long): Int? {
         val tN2 = 2L * tN
         val n = sqrt(1.0 * tN2).toInt()
-        return if (tN2.toInt() == lcm(n, 1 + n)) n else null
+        return if (tN2 == lcm(n.toLong(), 1L + n)) n else null
     }
 
     fun triangleNumber(tN: Long): Int = getTriangleTerm(tN) ?: -1

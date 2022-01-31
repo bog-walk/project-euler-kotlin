@@ -21,10 +21,10 @@ fun Int.gaussianSum(): Long  = 1L * this * (this + 1) shr 1
  *
  * gcd(x, 0) = gcd(0, x) = |x|
  */
-fun gcd(n1: Int, n2: Int): Int {
+fun gcd(n1: Long, n2: Long): Long {
     val x = abs(n1)
     val y = abs(n2)
-    if (x == 0 || y == 0) return x + y
+    if (x == 0L || y == 0L) return x + y
     val bigger = maxOf(x, y)
     val smaller = minOf(x, y)
     return gcd(bigger % smaller, smaller)
@@ -224,8 +224,8 @@ fun Long.isTriangularNumber(): Int? {
  *
  * @throws IllegalArgumentException if any [n] = 0.
  */
-fun lcm(vararg n: Int): Int {
-    require(n.all { it != 0 }) { "Parameter cannot be 0" }
+fun lcm(vararg n: Long): Long {
+    require(n.all { it != 0L }) { "Parameter cannot be 0" }
     return n.reduce { acc, num ->
         abs(acc * num) / gcd(acc, num)
     }
@@ -330,7 +330,7 @@ fun primeNumbers(n: Int): List<Int> {
 fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     require(n in 1 until m) { "Positive integers assumed to be m > n > 0" }
     require(!(m % 2 != 0 && n % 2 != 0)) { "Both integers cannot be odd" }
-    require(gcd(m, n) == 1) { "Positive integers must be co-prime" }
+    require(gcd(m.toLong(), n.toLong()) == 1L) { "Positive integers must be co-prime" }
     val a = (m * m - n * n) * d
     val b = 2 * m * n * d
     val c = (m * m + n * n) * d

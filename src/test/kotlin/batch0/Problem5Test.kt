@@ -3,6 +3,9 @@ package batch0
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
+import kotlin.test.Test
 
 internal class SmallestMultipleTest {
     private val tool = SmallestMultiple()
@@ -12,23 +15,32 @@ internal class SmallestMultipleTest {
        // lower constraints
         "1, 1", "2, 2", "3, 6",
         // normal values
-        "6, 60", "10, 2520", "20, 232792560",
+        "6, 60", "10, 2520", "20, 232_792_560",
         // higher constraints
-        "30, 2329089562800", "40, 5342931457063200"
+        "30, 2_329_089_562_800"
     )
-    fun testSmallestMultiple(n: Int, expected: Long) {
-        val solutions = listOf(
-            tool::lcmBrute, tool::lcmUsingGCD, tool::lcmUsingGCDAndReduce,
-            tool::lcmUsingPrimeFactors, tool::lcmUsingPrimes,
-            tool::lcmUsingBigInteger
+    fun `lcmOfRange correct`(n: Int, expected: Long) {
+        assertEquals(expected, tool.lcmOfRange(n))
+        assertEquals(expected, tool.lcmOfRangeBI(n))
+        assertEquals(expected, tool.lcmOfRangeUsingPrimes(n))
+    }
+
+    @Test
+    fun `lcmOfRange speed`() {
+        val n = 40
+        val expected = 5_342_931_457_063_200
+        val solutions = mapOf(
+            "Original" to tool::lcmOfRange,
+            "BigInteger" to tool::lcmOfRangeBI,
+            "Primes" to tool::lcmOfRangeUsingPrimes
         )
-        for (solution in solutions) {
-          val result = if (solution.name == "lcmUsingBigInteger") {
-              expected.toBigInteger()
-          } else {
-              expected
-          }
-          assertEquals(result, solution(n))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to this.second)
+                assertEquals(expected, this.first)
+            }
         }
+        compareSpeed(speeds)
     }
 }

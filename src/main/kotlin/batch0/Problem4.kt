@@ -8,97 +8,87 @@ import util.strings.isPalindrome
  *
  * https://projecteuler.net/problem=4
  *
- * Goal: Find the largest palindrome less than N that is made from the
- * product of two 3-digit numbers.
+ * Goal: Find the largest palindrome less than N that is made from the product of two 3-digit
+ * numbers.
  *
- * Constraints: 101101 < N < 1000000
+ * Constraints: 101_101 < N < 1e6
  *
- * e.g.: N = 800000
- *       869 * 913 = 793397
+ * e.g.: N = 800_000
+ *       869 * 913 = 793_397
  */
 
 class LargestPalindromeProduct {
-
     /**
-     * Returns first number less than given max that is a palindrome.
-     * 101101 is the smallest 6-digit palindrome that is a product of two
-     * 3-digit numbers. The next palindrome would be 100001 (not a product
-     * of two 3-digit numbers).
+     * Brute iteration through all palindromes less than [n] checks if each palindrome found could
+     * be a valid product of two 3-digit numbers.
+     *
+     * SPEED (WORSE) 102.00ms for N = 1e6
      */
-    fun getPrevPalindrome(max: Int): Int {
-        for (i in max-1 downTo 101102) {
-            if (i.toString().isPalindrome()) return i
+    fun largestPalindromeProductBrute(n: Int): Int {
+        var largest = 101_101
+        for (num in n - 1 downTo 101_102) {
+            if (num.toString().isPalindrome() && num.is3DigProduct()) {
+                largest = num
+                break
+            }
         }
-        return 101101
+        return largest
     }
 
     /**
-     * Determines if palindrome can be a product of two 3-digit numbers by
-     * finding all 3-digit multiples of the palindrome's prime factors.
+     * Determines if [this], an Int palindrome, can be a product of two 3-digit numbers by finding
+     * all 3-digit multiples of [this]'s prime factors.
      */
-    fun is3DigProduct(palindrome: Int): Boolean {
+    private fun Int.is3DigProduct(): Boolean {
         val range = 101..999
         var distinctPrimes: Set<Long>
-        val primeFactors: List<Long> = primeFactors(palindrome.toLong()).also{
+        val primeFactors: List<Long> = primeFactors(this.toLong()).also{
             distinctPrimes = it.keys
         }.flatMap { (k, v) ->
             List(v) { k }
         }
         val validFactors = distinctPrimes.filter { it in range }
-        distinctPrimes.forEach { p1 ->
-            primeFactors.forEach { p2 ->
-                if (p1 != p2) {
-                    val multiple = p1 * p2
-                    if (multiple in range) {
-                        if (palindrome / multiple in range) {
-                            return true
-                        }
+        for (p1 in distinctPrimes) {
+            inner@for (p2 in primeFactors) {
+                if (p2 <= p1) continue@inner
+                val multiple = p1 * p2
+                if (multiple in range) {
+                    if (this / multiple in range) {
+                        return true
                     }
                 }
             }
         }
         return validFactors.any {
-            palindrome / it in range
+            this / it in range
         }
     }
 
     /**
-     * Find successive palindromes less than provided max & check if
-     * it could be a valid product of two 3-digit numbers.
+     * A palindrome of the product of two 3-digit integers must be 6-digits long & one of the
+     * integers must have a factor of 11, based on the following algebra:
+     *
+     * P = 100_000x + 10_000y + 1000z + 100z + 100y + x
+     *
+     * P = 100_001x + 10_010y + 1100z
+     *
+     * P = 11*(9091x + 910y + 100z)
+     *
+     * Rather than stepping down to each palindrome & searching for a valid product, this
+     * solution tries all product combos that involve one of the integers being a multiple of 11.
+     *
+     * SPEED (BETTER) 1.46ms for N = 1e6
      */
-    fun largestPalindromeProduct(max: Int): Int {
-        var target = max
-        while (target > 101101) {
-            val prevPalindrome = getPrevPalindrome(target)
-            if (is3DigProduct(prevPalindrome)) {
-                return prevPalindrome
-            } else {
-                target = prevPalindrome
-            }
-        }
-        return 101101
-    }
-
-    /**
-     * A palindrome of the product of two 3-digit integers must be 6-digits long &
-     * one of the integers must have a factor of 11, based on the following algebra:
-     * Palindrome = 100000x + 10000y + 1000z + 100z + 100y + x;
-     * Palindrome = 11 * (9091x + 910y + 100z).
-     * Rather than stepping down to each palindrome & searching for a valid product,
-     * this solution tries all product combos that involve one of the integers
-     * being a multiple of 11.
-     */
-    fun largestPalindromeProductCountingDown(max: Int): Int {
+    fun largestPalindromeProduct(n: Int): Int {
         var largest = 0
         var x = 999
         while (x > 100) {
-            var y = if (x % 11 == 0) 999 else 990
-            val deltaY = if (x % 11 == 0) 1 else 11
+            var (y, deltaY) = if (x % 11 == 0) 999 to 1 else 990 to 11
             inner@while (y >= x) {
                 val product = y * x
-                // Combo will be too small to pursue further
+                // combo will be too small to pursue further
                 if (product <= largest) break@inner
-                if (product < max && product.toString().isPalindrome()) {
+                if (product < n && product.toString().isPalindrome()) {
                     largest = product
                 }
                 y -= deltaY

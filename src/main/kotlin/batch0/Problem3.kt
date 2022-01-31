@@ -1,5 +1,7 @@
 package batch0
 
+import util.maths.primeFactors
+import kotlin.math.max
 import kotlin.math.sqrt
 
 /**
@@ -11,94 +13,38 @@ import kotlin.math.sqrt
  *
  * Constraints: 10 <= N <= 1e12
  *
- * Fundamental Theorem of Arithmetic: There will only ever be a
- * unique set of prime factors for any number.
+ * Fundamental Theorem of Arithmetic: There will only ever be a unique set of prime factors for
+ * any number.
  *
  * e.g.: N = 10
- *      prime factors = {2, 5}
- *      largest = 5
+ *       prime factors = {2, 5}
+ *       largest = 5
  */
 
 class LargestPrimeFactor {
-    fun largestPrime(primes: List<Long>): Long = primes.maxOrNull()!!
-
     /**
-     * Start from the smallest prime & repeatedly divide until
-     * dividend cannot be divided exactly, then increase factor
-     * and repeat.
-     * Very slow &/or TimeOut for N >= 1e8.
+     * Uses prime decomposition via the Sieve of Eratosthenes algorithm to return the largest
+     * prime factor.
+     *
+     * SPEED (BETTER for N with small factors) 51.83ms for N = 1e12
+     * SPEED (WORSE for N with large factors) 33.34ms for N = 600_851_475_143
      */
-    fun getPrimeFactorsBrute(n: Long): List<Long> {
-        var factor = 1L
-        var dividend = n
-        val factors = mutableListOf<Long>()
-        while (factor <= n) {
-            factor++
-            if (isComposite(factor)) continue
-            var division = divide(dividend, factor)
-            while (division.first) {
-                factors.add(factor)
-                dividend = division.second
-                division = divide(dividend, factor)
-            }
-        }
-        return factors
+    fun largestPrimeFactor(n: Long): Long {
+        return primeFactors(n).keys.maxOrNull()!!
     }
 
     /**
-     * Determines if number has at least 1 divisor other than 1 and
-     * itself. This is the opposite of a prime number.
+     * SPEED (WORSE for N with small factors) 256.15ms for N = 1e12
+     * SPEED (BETTER for N with large factors) 24.54ms for N = 600_851_475_143
      */
-    private fun isComposite(n: Long): Boolean {
-        val max = sqrt(n.toFloat()).toLong()
-        return (2L..max).any {
-            n % it == 0L
-        }
-    }
-
-    private fun divide(n: Long, factor: Long): Pair<Boolean, Long> {
-        return Pair(n % factor == 0L, n / factor)
-    }
-
-    /**
-     * Stores prime factors as keys in a map with their exponent values.
-     * Only tests odd factors as 2 is the only even prime number.
-     * Limits factors as the largest prime factor will not be > sqrt(N).
-     * Map could be converted to a list to return all prime factors.
-     */
-    fun getLargestPrimeExponent(n: Long): Long {
-        var num = n
-        val primes = mutableMapOf<Long, Int>()
-        val maxFactor = sqrt(num.toDouble()).toLong()
-        val factors = listOf(2L) + (3L..maxFactor step 2L)
-        for (factor in factors) {
-            while (num % factor == 0L) {
-                primes[factor] = primes.getOrDefault(factor, 0) + 1
-                num /= factor
-            }
-        }
-        if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
-        return primes.keys.maxOrNull()!!
-    }
-
-    /**
-     * Recursive implementation that also limits factors to 2, then steps
-     * through only odd factors (as 2 is the only even prime), & stops once
-     * the sqrt(N) is reached.
-     */
-    fun getPrimeFactorsRecursive(
-        n: Long,
-        primes: MutableList<Long> = mutableListOf()
-    ): List<Long> {
+    fun largestPrimeFactorRecursive(n: Long, largest: Long = 2L): Long {
         val maxFactor = sqrt(n.toDouble()).toLong()
         val factors = listOf(2L) + (3L..maxFactor step 2L)
         for (factor in factors) {
             if (n % factor == 0L) {
-                primes.add(factor)
-                return getPrimeFactorsRecursive(n / factor, primes)
+                return largestPrimeFactorRecursive(n / factor, factor)
             }
         }
-        if (n > 2) primes.add(n)
-        return primes
+        return if (n > 2) max(largest, n) else largest
     }
 }
