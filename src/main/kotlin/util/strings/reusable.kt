@@ -53,7 +53,7 @@ fun String.isPalindrome(): Boolean {
  * end with the same [size] - k elements. Each step modifies the initial k - 1 elements with a
  * swap based on k's parity.
  *
- * @throws OutOfMemoryError If [size] > 10, consider using an iterative approach instead.
+ * @throws OutOfMemoryError if [size] > 10, consider using an iterative approach instead.
  */
 fun getPermutations(
     chars: MutableList<Char>,

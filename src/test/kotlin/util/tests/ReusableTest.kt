@@ -21,8 +21,8 @@ internal class ReusableTest {
             for ((name, solution) in solutions.entries) {
                 getSpeed(solution).run {
                     speeds.add(name to this.second)
+                    assertIs<Unit>(this.first)
                 }
-                assertEquals(1, 1)
             }
             compareSpeed(speeds)
         }
@@ -34,11 +34,12 @@ internal class ReusableTest {
             )
             val speeds = mutableListOf<Pair<String, Long>>()
             for ((name, solution) in solutions.entries) {
+                val actual: Unit
                 val time = measureNanoTime {
-                    solution()
+                    actual = solution()
                 }
                 speeds.add(name to time)
-                assertEquals(1, 1)
+                assertIs<Unit>(actual)
             }
             compareSpeed(speeds)
         }
@@ -48,19 +49,15 @@ internal class ReusableTest {
             val n = 3
             val expected = 900
             val solutions = mapOf(
-                "Fast" to (::fastFake to n),
-                "Medium" to (::mediumFake to n),
-                "Slow" to (::slowFake to n)
+                "Fast" to ::fastFake, "Medium" to ::mediumFake, "Slow" to ::slowFake
             )
-            val results = mutableListOf<Int>()
             val speeds = mutableListOf<Pair<String, Long>>()
             for ((name, solution) in solutions.entries) {
-                getSpeed(solution.first, solution.second).run {
-                    results.add(this.first)
+                getSpeed(solution, n).run {
                     speeds.add(name to this.second)
+                    assertEquals(expected, this.first)
                 }
             }
-            assertTrue { results.all { expected == it } }
             compareSpeed(speeds)
         }
 
@@ -69,16 +66,13 @@ internal class ReusableTest {
             val n = 3
             val expected = 900
             val solutions = mapOf(
-                "Fast" to (::fastFake to n),
-                "Medium" to (::mediumFake to n),
-                "Slow" to (::slowFake to n)
+                "Fast" to ::fastFake, "Medium" to ::mediumFake, "Slow" to ::slowFake
             )
             val speeds = mutableListOf<Pair<String, Long>>()
             for ((name, solution) in solutions.entries) {
-                val (function, arg) = solution
                 val actual: Int
                 val time = measureNanoTime {
-                    actual = function(arg)
+                    actual = solution(n)
                 }
                 speeds.add(name to time)
                 assertEquals(expected, actual)

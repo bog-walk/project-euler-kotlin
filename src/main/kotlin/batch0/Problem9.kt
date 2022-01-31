@@ -97,7 +97,7 @@ class SpecialPythagoreanTriplet {
                 }
                 var k = if (m % 2 == 1) m + 2 else m + 1
                 while (k < 2 * m && k <= kMax) {
-                    if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
+                    if (kMax % k == 0 && gcd(k, m) == 1) {
                         val triplet = pythagoreanTriplet(m, k - m, limit / (k * m))
                         val product = triplet.product()
                         if (product >= maxProduct) {

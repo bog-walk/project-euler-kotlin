@@ -3,9 +3,8 @@ package util.custom
 import java.util.concurrent.ArrayBlockingQueue
 
 /**
- * This bounded blocking queue backed by a fixed-sized array is a
- * classic circular buffer implementation of a queue for FIFO.
- * Both enqueue and dequeue are O(1).
+ * A classic circular buffer implementation of a queue for FIFO management, which uses a bounded
+ * blocking queue that is backed by a fixed-sized array.
  */
 class RollingQueue<E>(
     capacity: Int
@@ -14,10 +13,13 @@ class RollingQueue<E>(
     private var tail: E? = null
 
     /**
-     * Inserts specified element at tail of queue without exceeding capacity,
-     * by removing head if full. Returns true upon success. Original method
-     * would block if queue was full prior to adding new element by throwing
-     * IllegalStateException. Always returns true.
+     * Inserts element at the tail of this queue without exceeding capacity, by auto-removing
+     * the head if full.
+     *
+     * The original method would block this action if the queue was full by throwing an
+     * IllegalStateException.
+     *
+     * @return true, always.
      */
     override fun add(element: E): Boolean {
         return if (offer(element)) {
@@ -31,10 +33,8 @@ class RollingQueue<E>(
     }
 
     /**
-     * Retrieves, but does not remove tail of queue,
-     * or returns null if queue is empty. Tail in this case
-     * will also be null if queue is not full.
+     * Retrieves, but does not remove, the tail of this queue, or returns null if the queue is
+     * either empty or not full.
      */
     fun peekTail(): E? = tail
-
 }

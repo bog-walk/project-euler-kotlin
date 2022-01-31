@@ -10,27 +10,26 @@ internal class MultiplesOf3Or5Test {
 
     @ParameterizedTest(name="N={0}, K1={1}, K2={2}, Sum={3}")
     @CsvSource(
-            // lower limits for N
-            "2, 1, 1, 1", "3, 1, 2, 3", "4, 2, 3, 5",
-            // lower limits for factors
+            // lower constraints for N
+            "1, 1, 1, 0", "2, 1, 2, 1", "2, 1, 1, 1", "3, 1, 2, 3", "4, 2, 3, 5",
+            // lower constraints for K
             "20, 1, 2, 190",
-            // equivalent factors
+            // K1 == K2
             "10, 3, 3, 18",
-            // normal limits
-            "10, 3, 5, 23", "100, 3, 5, 2318", "1000, 3, 5, 233168",
-            // large limits
-            "23000, 8, 21, 44087172", "10000000, 20, 32, 3749995000000"
+            // normal values
+            "10, 3, 5, 23", "100, 3, 5, 2318", "1000, 3, 5, 233_168",
+            // upper constraints
+            "23000, 8, 21, 44_087_172", "10_000_000, 20, 32, 3_749_995_000_000"
     )
-    fun testAllVersions(number: Int, factor1: Int, factor2: Int, expected: Long) {
-        assertEquals(expected, tool.sumOfMultiplesBruteA(number, factor1, factor2))
-        assertEquals(expected, tool.sumOfMultiplesBruteB(number, factor1, factor2))
-        assertEquals(expected.toBigInteger(), tool.sumOfMultiples(number, factor1, factor2))
+    fun `sumOfMultiples correct`(n: Int, factor1: Int, factor2: Int, expected: Long) {
+        assertEquals(expected, tool.sumOfMultiplesBrute(n, factor1, factor2))
+        assertEquals(expected, tool.sumOfMultiples(n, factor1, factor2))
     }
 
     @Test
-    fun testUpperLimits() {
-        val number = 1_000_000_000
-        val expected = 233333333166666668.toBigInteger()
-        assertEquals(expected, tool.sumOfMultiples(number, 3, 5))
+    fun `sumOfMultiples correct at upper constraint of N`() {
+        val n = 1e9.toInt()
+        val expected = 233_333_333_166_666_668
+        assertEquals(expected, tool.sumOfMultiples(n, 3, 5))
     }
 }

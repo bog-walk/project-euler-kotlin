@@ -7,8 +7,7 @@ import util.custom.RollingQueue
  *
  * https://projecteuler.net/problem=2
  *
- * Goal: Find the sum of all even numbers in the Fibonacci sequence
- * less than N.
+ * Goal: Find the sum of all even numbers in the Fibonacci sequence less than N.
  *
  * Constraints: 10 <= N <= 4e16
  *
@@ -19,103 +18,63 @@ import util.custom.RollingQueue
 
 class EvenFibonacci {
     /**
-     * Generates a list of all fibonacci numbers then sum all evens, based
-     * on every third number in sequence being even.
+     * Uses custom class RollingQueue to reduce memory of stored fibonacci numbers as only the 2
+     * prior are needed to accumulate sum. Provides an easier alternative to using an array or
+     * multiple variables as it handles value reassignment & swapping within the class.
      *
-     * SPEED (WORST)
-     *      5.9e6ns for N = 4e16
+     * SPEED (WORST): 32.16ms for N = 4e16
      */
-    fun sumOfFibonacciBrute(max: Long): Long {
-        if (max < 3) return 0L
-        val allFibonacci = allFibonacci(max)
+    fun sumOfEvenFibsRolling(n: Long): Long {
         var sum = 0L
-        for (i in 3..allFibonacci.lastIndex step 3) {
-            sum += allFibonacci[i]
+        val fibonacci = RollingQueue<Long>(2).apply { addAll(listOf(1L, 1L)) }
+        while (true) {
+            val nextFib = fibonacci.peek() + fibonacci.peekTail()!!
+            if (nextFib >= n) break
+            fibonacci.add(nextFib)
+            if (nextFib % 2 == 0L) sum += nextFib
         }
         return sum
     }
 
-    private fun allFibonacci(max: Long): List<Long> {
-        var index = 2
-        val fibonacci = mutableListOf(0L, 1L)
-        while (true) {
-            val nextFib = fibonacci[index - 1] + fibonacci[index - 2]
-            if (nextFib < max) {
-                fibonacci.add(index++, nextFib)
-            } else break
-        }
-        return fibonacci
-    }
-
     /**
-     * Generates a list of only even fibonacci numbers based on the formula
-     * F(n) = 4*F(n-3) + F(n-6), then sum resulting list.
+     * Sums every 3rd term in the sequence starting with 2, based on the observed pattern that
+     * every 3rd Fibonacci number after 2 is even. This occurs because the sequence begins with 2
+     * odd numbers, the sum of which must be even, then the sum of an odd and even number, twice,
+     * will produce 2 odd numbers, etc...
      *
-     * SPEED (SECOND BEST): 2.5e6ns for N = 4e16
+     * SPEED (BETTER) 82700ns for N = 4e16
      */
-    fun sumOfEvenFibonacci(max: Long): Long {
-        return evenFibonacci(max).sum()
-    }
-
-    private fun evenFibonacci(max: Long): List<Long> {
-        var index = 2
-        val fibonacci = mutableListOf(2L, 8L) // F(3), F(6)
-        while (true) {
-            val nextFib = 4 * fibonacci[index - 1] + fibonacci[index - 2]
-            if (nextFib < max) {
-                fibonacci.add(index++, nextFib)
-            } else break
-        }
-        return fibonacci
-    }
-
-    /**
-     * Uses custom class RollingQueue to reduce memory of stored fibonacci
-     * numbers as only the 2 prior are needed to accumulate sum.
-     *
-     * SPEED (THIRD BEST): 5.1e6ns for N = 4e16
-     */
-    fun evenFibonacciRollingSum(max: Long): Long {
-        var sumOfEvens = 0L
-        val fibonacci = RollingQueue<Long>(2).apply { addAll(listOf(1L, 1L)) }
-        while (true) {
-            val nextFib = fibonacci.peek() + fibonacci.peekTail()!!
-            if (nextFib < max) {
-                fibonacci.add(nextFib)
-                if (nextFib % 2 == 0L) sumOfEvens += nextFib
-            } else break
-        }
-        return sumOfEvens
-    }
-
-    /**
-     * This is a fake summary line to see what happens.
-     *
-     * Similar to RollingQueue implementation in that memory is reduced
-     * by only using 4 variables, but also avoids the need to check
-     * for even numbers by stepping forward to next predictable even in sequence.
-     *
-     * This is an example of a list:
-     * - Item 1.
-     *
-     * - Item 2 is a much much longer multi-lined example that runs for an indeterminable amount
-     * of time but here we are.
-     *
-     * SPEED (BEST): 3.7e4ns for N = 4e16
-     *
-     * @param [max] the max number to check for.
-     */
-    fun evenFibonacciFourVariables(max: Long): Long {
-        var sumOfEvens = 0L
+    fun sumOfEvenFibsBrute(n: Long): Long {
+        var sum = 0L
         var prev1 = 1L
         var nextFib = 2L
-        while (nextFib < max) {
-            sumOfEvens += nextFib
+        while (nextFib < n) {
+            sum += nextFib
             val prev2 = prev1 + nextFib
             prev1 = prev2 + nextFib
             nextFib = prev2 + prev1
         }
-        return sumOfEvens
+        return sum
+    }
+
+    /**
+     * Sums every 3rd term in the sequence starting with 2, using the formula:
+     *
+     * F(n) = 4F(n - 3) + F(n - 6)
+     *
+     * SPEED (BEST) 25400ns for N = 4e16
+     */
+    fun sumOfEvenFibsFormula(n: Long): Long {
+        var sum = 10L
+        val evenFibs = longArrayOf(2, 8) // F(3), F(6)
+        while (true) {
+            val nextEvenFib = 4 * evenFibs[1] + evenFibs[0]
+            if (nextEvenFib >= n) break
+            sum += nextEvenFib
+            evenFibs[0] = evenFibs[1]
+            evenFibs[1] = nextEvenFib
+        }
+        return sum
     }
 }
 

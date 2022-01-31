@@ -3,9 +3,9 @@ package util.search
 /**
  * Binary search algorithm implementation.
  *
- * @param [collection] An ordered & subscriptable container assumed to be already
+ * @param [collection] an ordered & subscriptable container assumed to be already
  * sorted in ascending order. Currently only works with Lists.
- * @return False if collection is empty or element not present; otherwise, True.
+ * @return false if collection is empty or element not present; otherwise, true.
  */
 fun <E: Comparable<E>> binarySearch(target: E, collection: List<E>): Boolean {
     var low = 0

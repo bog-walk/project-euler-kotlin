@@ -1,17 +1,17 @@
 package batch0
 
+import util.maths.gaussianSum
 import util.maths.lcm
-import java.math.BigInteger
 
 /**
  * Problem 1: Multiples of 3 or 5
  *
  * https://projecteuler.net/problem=1
  *
- * Goal: Find the sum of all natural numbers less than N that are
- * multiples of either of the provided factors K1 or K2.
+ * Goal: Find the sum of all natural numbers less than N that are multiples of either of the
+ * provided factors K1 or K2.
  *
- * Constraints: 1 <= N <= 1e9, 1 <= K < N
+ * Constraints: 1 <= N <= 1e9, 1 <= K <= N
  *
  * e.g.: N = 10, K1 = 3, K2 = 5
  *       multiples of K1 || K2 < N = {3, 5, 6, 9}
@@ -20,58 +20,51 @@ import java.math.BigInteger
 
 class MultiplesOf3Or5 {
     /**
-     * Brute iteration through all possible values under N.
+     * Brute iteration through all numbers < [n] that checks for predicate.
      *
-     * OutOfMemoryError for N = 1e9.
+     * @throws OutOfMemoryError for upper test constraints > N = 1e7.
      */
-    fun sumOfMultiplesBruteA(number: Int, factor1: Int, factor2: Int): Long {
-        return (1L until number.toLong()).filter { num ->
+    fun sumOfMultiplesBrute(n: Int, factor1: Int, factor2: Int): Long {
+        val minNum = minOf(factor1, factor2).toLong()
+        return (minNum until n.toLong()).filter { num ->
             num % factor1 == 0L || num % factor2 == 0L
         }.sum()
     }
 
     /**
-     * Multiplies all factors in a loop until multiple exceeds N.
+     * Calculates the sum of an arithmetic progression sequence.
      *
-     * OutOfMemoryError for N = 1e9.
+     * Solution based on the formula:
+     *
+     * {n-1}Sigma{k=0} a + kd = n(2a + (n - 1)d)/2,
+     *
+     * where a is the 1st term, d is the delta, and n is the amount of terms to add.
+     *
+     * a and d are the same in this case, so the formula becomes:
+     *
+     * {n-1}Sigma{k=0} a + kd = (n(n + 1)d)/2
+     *
+     * Note that this is an adapted Gaussian sum formula, where n is replaced with the amount of
+     * terms that are evenly divisible by d, then the original formula is multiplied by d.
      */
-    fun sumOfMultiplesBruteB(number: Int, factor1: Int, factor2: Int): Long {
-        var count = 1
-        val multiples = mutableSetOf<Long>()
-        var factors = listOf(factor1, factor2)
-        while (factors.isNotEmpty()) {
-            factors = factors.filter {
-                it * count < number
-            }.also { filtered ->
-                multiples.addAll(filtered.map { it.toLong() * count })
-            }
-            count++
+    private fun sumOfArithProgression(maxTerm: Int, delta: Int): Long {
+        val terms = maxTerm / delta
+        return terms.gaussianSum() * delta.toLong()
+    }
+
+    /**
+     * Calculates the sum of multiples of both factors minus the sum of duplicates found via the
+     * least common multiple of the given factors.
+     */
+    fun sumOfMultiples(n: Int, factor1: Int, factor2: Int): Long {
+        val maxTerm = n - 1 // n not inclusive
+        return if (factor1 == factor2) {
+            sumOfArithProgression(maxTerm, factor1)
+        } else {
+            val duplicateSum = sumOfArithProgression(maxTerm, lcm(factor1, factor2))
+            sumOfArithProgression(maxTerm, factor1)
+                .plus(sumOfArithProgression(maxTerm, factor2))
+                .minus(duplicateSum)
         }
-        return multiples.sum()
-    }
-
-    /**
-     * As only 2 factors are provided, find the sum of the arithmetic progressions
-     * of each factor then subtract the sum of the arithmetic progression of the
-     * factors' lowest common multiple (to remove duplicates).
-     */
-    fun sumOfMultiples(number: Int, factor1: Int, factor2: Int): BigInteger {
-        val max = number - 1
-        val lcm = lcm(factor1.toLong(), factor2.toLong())
-        return sumOfArithProgression(max, factor1.toLong())
-            .plus(sumOfArithProgression(max, factor2.toLong()))
-            .minus(sumOfArithProgression(max, lcm))
-    }
-
-    /**
-     * Sum of arithmetic progression uses formula:
-     * 3+6+9+12+...999 = 3*(1+2+3+4+...333) = f*(0.5*d*(d+1)),
-     * with f being the factor (delta in sequence) & d being the number
-     * of terms in sequence (final sequence element / factor).
-     */
-    private fun sumOfArithProgression(number: Int, factor: Long): BigInteger {
-        val terms = (number / factor).toBigInteger()
-        val parentheses = terms * (terms + BigInteger.ONE) / BigInteger.TWO
-        return parentheses.times(factor.toBigInteger())
     }
 }

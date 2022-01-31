@@ -112,7 +112,7 @@ class DigitCancellingFractions {
         val (numerators, denominators) = findNonTrivials(2, k=1).unzip()
         val nProd = numerators.fold(1) { acc, n -> acc * n }
         val dProd= denominators.fold(1) { acc, n -> acc * n }
-        return dProd / gcd(nProd.toLong(), dProd.toLong()).toInt()
+        return dProd / gcd(nProd, dProd)
     }
 
     /**
@@ -269,7 +269,7 @@ class DigitCancellingFractions {
                     var i = 1
                     while (true) {
                         i++
-                        val g = gcd(d.toLong(), nr.toLong()).toInt()
+                        val g = gcd(d, nr)
                         d = d / g * i
                         nr = nr / g * i
                         if (d <= numerator) continue

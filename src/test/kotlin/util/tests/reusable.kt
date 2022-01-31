@@ -3,6 +3,10 @@ package util.tests
 import java.io.File
 import kotlin.system.measureNanoTime
 
+private typealias ZeroArgFunc<R> = () -> R
+private typealias SingleArgFunc<T, R> = (T) -> R
+private typealias DoubleArgFunc<T, Q, R> = (T, Q) -> R
+
 /**
  * Using KFunction.call() lead to erroneous speed differences, always shown in the first list
  * element's speed output (~600ms extra compared to normal test), regardless of order. Assumed this
@@ -13,7 +17,7 @@ import kotlin.system.measureNanoTime
  * hopefully one day you'll be smart enough to find a more elegant solution, like you did in PY.
  */
 fun <R : Any> getSpeed(
-    solution: () -> R,
+    solution: ZeroArgFunc<R>,
     repeat: Int = 1
 ): Pair<R, Long> {
     val result: R
@@ -27,7 +31,7 @@ fun <R : Any> getSpeed(
 }
 
 fun <T : Any, R : Any> getSpeed(
-    solution: (T) -> R,
+    solution: SingleArgFunc<T, R>,
     arg: T,
     repeat: Int = 1
 ): Pair<R, Long> {
@@ -47,7 +51,7 @@ fun <T : Any, R : Any> getSpeed(
  * solution is manually called, rather than looped over.
  */
 fun <T : Any, Q: Any, R : Any> getSpeed(
-    solution: (T, Q) -> R,
+    solution: DoubleArgFunc<T, Q, R>,
     arg1: T,
     arg2: Q,
     repeat: Int = 1

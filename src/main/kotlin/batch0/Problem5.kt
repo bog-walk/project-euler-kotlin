@@ -38,17 +38,17 @@ class SmallestMultiple {
         return lcm
     }
 
-    fun lcmUsingGCD(rangeMax: Int): Long {
-        var lcm = rangeMax.toLong()
+    fun lcmUsingGCD(rangeMax: Int): Int {
+        var lcm = rangeMax
         val range = (rangeMax - 1) downTo (rangeMax / 2 + 1)
         for (i in range) {
-            lcm = lcm(lcm, i.toLong())
+            lcm = lcm(lcm, i)
         }
         return lcm
     }
 
-    fun lcmUsingGCDAndReduce(rangeMax: Int): Long {
-        val range: LongProgression = rangeMax.toLong() downTo (rangeMax / 2 + 1)
+    fun lcmUsingGCDAndReduce(rangeMax: Int): Int {
+        val range = rangeMax downTo (rangeMax / 2 + 1)
         return range.reduce { acc, i ->
             lcm(acc, i)
         }

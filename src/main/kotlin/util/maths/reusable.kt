@@ -15,16 +15,16 @@ import kotlin.math.sqrt
 fun Int.gaussianSum(): Long  = 1L * this * (this + 1) shr 1
 
 /**
- * Recursive calculation of the greatest common divisor of 2 Longs.
+ * Recursive calculation of the greatest common divisor of [n1] and [n2].
  *
  * gcd(x, y) = gcd(|x*y|, |x|); where |x| >= |y|
  *
  * gcd(x, 0) = gcd(0, x) = |x|
  */
-fun gcd(n1: Long, n2: Long): Long {
+fun gcd(n1: Int, n2: Int): Int {
     val x = abs(n1)
     val y = abs(n2)
-    if (x == 0L || y == 0L) return x + y
+    if (x == 0 || y == 0) return x + y
     val bigger = maxOf(x, y)
     val smaller = minOf(x, y)
     return gcd(bigger % smaller, smaller)
@@ -37,7 +37,7 @@ fun gcd(n1: Long, n2: Long): Long {
  * 13! overflows 32 bits and 21! overflows 64 bits and 59! produces a result that is greater
  * than 1e80 (postulated to be the number of particles in the universe).
  *
- * @throws IllegalArgumentException If calling Int is negative.
+ * @throws IllegalArgumentException if calling Int is negative.
  */
 tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
     require(this >= 0) { "Integer must not be negative" }
@@ -222,10 +222,10 @@ fun Long.isTriangularNumber(): Int? {
  *
  * lcm(x, y) = |x * y| / gcd(x, y)
  *
- * @throws IllegalArgumentException If any [n] = 0.
+ * @throws IllegalArgumentException if any [n] = 0.
  */
-fun lcm(vararg n: Long): Long {
-    require(n.all { it != 0L }) { "Parameter cannot be 0" }
+fun lcm(vararg n: Int): Int {
+    require(n.all { it != 0 }) { "Parameter cannot be 0" }
     return n.reduce { acc, num ->
         abs(acc * num) / gcd(acc, num)
     }
@@ -247,8 +247,8 @@ fun powerDigitSum(base: Int, exp: Int): Int {
  *
  * e.g. N = 12 returns {2=2, 3=1} -> 2^2 * 3^1 = 12
  *
- * @throws IllegalArgumentException If [n] <= 1.
- * @return Map of prime factors (keys) and their exponents (values).
+ * @throws IllegalArgumentException if [n] <= 1.
+ * @return map of prime factors (keys) and their exponents (values).
  */
 fun primeFactors(n: Long): Map<Long, Int> {
     require(n > 1) { "Must provide a natural number greater than 1" }
@@ -324,13 +324,13 @@ fun primeNumbers(n: Int): List<Int> {
  *
  * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
  *
- * @throws IllegalArgumentException If arguments do not follow [m] > [n] > 0, or if both are odd,
+ * @throws IllegalArgumentException if arguments do not follow [m] > [n] > 0, or if both are odd,
  * or if they are not co-prime, i.e. gcd(m, n) != 1.
  */
 fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     require(n in 1 until m) { "Positive integers assumed to be m > n > 0" }
     require(!(m % 2 != 0 && n % 2 != 0)) { "Both integers cannot be odd" }
-    require(gcd(1L * m, 1L * n) == 1L) { "Positive integers must be co-prime" }
+    require(gcd(m, n) == 1) { "Positive integers must be co-prime" }
     val a = (m * m - n * n) * d
     val b = 2 * m * n * d
     val c = (m * m + n * n) * d

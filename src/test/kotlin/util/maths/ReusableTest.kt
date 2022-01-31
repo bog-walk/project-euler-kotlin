@@ -30,7 +30,7 @@ internal class ReusableTest {
         // negative values
         "-100, 10, 10", "-60, -366, 6"
     )
-    fun `greatest common divisor correct`(x: Long, y: Long, expected: Long) {
+    fun `greatest common divisor correct`(x: Int, y: Int, expected: Int) {
         assertEquals(expected, gcd(x, y))
     }
 
@@ -136,7 +136,7 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("istriangular test suite")
+    @DisplayName("isTriangular test suite")
     inner class IsTriangular {
         @Test
         fun `isTriangular correct with triangular numbers`() {
@@ -168,16 +168,16 @@ internal class ReusableTest {
             // upper constraints
             "101, 63, 6363"
         )
-        fun `least common multiple correct with 2 arguments`(x: Long, y: Long, expected: Long) {
+        fun `least common multiple correct with 2 arguments`(x: Int, y: Int, expected: Int) {
             assertEquals(expected, lcm(x, y))
         }
 
         @Test
         fun `least common multiple correct with multiple arguments`() {
             val arguments = listOf(
-                longArrayOf(2, 6, 12), longArrayOf(31, 5, 7, 14), longArrayOf(8, 11, 3, 5, 2, 7, 6)
+                intArrayOf(2, 6, 12), intArrayOf(31, 5, 7, 14), intArrayOf(8, 11, 3, 5, 2, 7, 6)
             )
-            val expected = listOf<Long>(12, 2170, 9240)
+            val expected = listOf(12, 2170, 9240)
             for ((i, args) in arguments.withIndex()) {
                 assertEquals(expected[i], lcm(*args))
             }
