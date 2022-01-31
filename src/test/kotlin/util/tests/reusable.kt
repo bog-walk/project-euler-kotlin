@@ -6,6 +6,7 @@ import kotlin.system.measureNanoTime
 private typealias ZeroArgFunc<R> = () -> R
 private typealias SingleArgFunc<T, R> = (T) -> R
 private typealias DoubleArgFunc<T, Q, R> = (T, Q) -> R
+private typealias TripleArgFunc<T, Q, R> = (T, Q, Q) -> R
 
 /**
  * Using KFunction.call() lead to erroneous speed differences, always shown in the first list
@@ -66,6 +67,23 @@ fun <T : Any, Q: Any, R : Any> getSpeed(
     return result to time
 }
 
+fun <T : Any, Q: Any, R : Any> getSpeed(
+    solution: TripleArgFunc<T, Q, R>,
+    arg1: T,
+    arg2: Q,
+    arg3: Q,
+    repeat: Int = 1
+): Pair<R, Long> {
+    val result: R
+    val time = measureNanoTime {
+        for (i in 0 until repeat - 1) {
+            solution(arg1, arg2, arg3)
+        }
+        result = solution(arg1, arg2, arg3)
+    }
+    return result to time
+}
+
 /**
  * Compares speed of multiple functions, sorts them from fastest to slowest, and prints each
  * speed in nanoseconds (scientific notation), milliseconds, or seconds (to the required
@@ -91,6 +109,11 @@ fun compareSpeed(speeds: List<Pair<String, Long>>, precision: Int = 4) {
         }
 }
 
+/**
+ * Retrieves content of a test resource file, with each line returned as an unaltered String.
+ *
+ * @param [lineTrim] characters to remove from the left and right of each file line.
+ */
 fun getTestResource(
     filePath: String,
     lineTrim: CharArray = charArrayOf(' ', '\n')
@@ -104,6 +127,14 @@ fun getTestResource(
     return resource
 }
 
+/**
+ * Retrieves content of a test resource file, with each line transformed into a nested list.
+ *
+ * @param [lineTrim] characters to remove from the left & right of each file line.
+ * @param [lineSplit] characters to use as the delimiter when splitting a line.
+ * @param [transformation] transformation function that takes either an entire line as an
+ * argument or, if split, individual elements in a line.
+ */
 fun <R : Any> getTestResource(
     filePath: String,
     lineTrim: CharArray = charArrayOf(' ', '\n'),

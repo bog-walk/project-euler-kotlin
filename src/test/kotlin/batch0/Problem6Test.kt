@@ -3,27 +3,42 @@ package batch0
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
+import kotlin.test.Test
 
 internal class SumSquareDifferenceTest {
     private val tool = SumSquareDifference()
 
-    @ParameterizedTest(name="N={0} gives {1}")
+    @ParameterizedTest(name="N={0} = {1}")
     @CsvSource(
         // lower constraints
         "1, 0", "2, 4", "3, 22",
         // normal values
-        "10, 2640", "51, 1712750", "100, 25164150",
+        "10, 2640", "51, 1_712_750", "100, 25_164_150",
         // large values
-        "2256, 6477756566600", "7000, 600307154415500",
-        // upper constraint
-        "10000, 2500166641665000"
+        "2256, 6_477_756_566_600", "7000, 600_307_154_415_500"
     )
-    fun testSumSquareDiff(max: Int, expected: Long) {
-        val solutions = listOf(
-            tool::sumSquareDiffBrute, tool::sumSquareDiffImproved
+    fun `sumSquareDiff correct`(n: Int, expected: Long) {
+        assertEquals(expected, tool.sumSquareDiffBrute(n))
+        assertEquals(expected, tool.sumSquareDiff(n))
+    }
+
+    @Test
+    fun `sumSquareDiff speed`() {
+        val n = 1e4.toInt()
+        val expected = 2_500_166_641_665_000
+        val solutions = mapOf(
+            "Brute" to tool::sumSquareDiffBrute,
+            "Improved" to tool::sumSquareDiff
         )
-        for (solution in solutions) {
-            assertEquals(expected, solution(max))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to this.second)
+                assertEquals(expected, this.first)
+            }
         }
+        compareSpeed(speeds)
     }
 }

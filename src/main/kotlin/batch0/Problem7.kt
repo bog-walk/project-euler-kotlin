@@ -9,7 +9,7 @@ import util.maths.isPrime
  *
  * Goal: Find the Nth prime number.
  *
- * Constraints: 1 <= N <= 10001
+ * Constraints: 1 <= N <= 10_001
  *
  * e.g.: N = 6
  *       primes = {2,3,5,7,11,13,...}
@@ -17,7 +17,11 @@ import util.maths.isPrime
  */
 
 class The10001stPrime {
-
+    /**
+     * After the number 2, every prime number is odd, so this solution iterates over all odd
+     * numbers & checks for primality using an optimised helper function, until the [n]th
+     * prime is found.
+     */
     fun getNthPrime(n: Int): Int {
         if (n == 1) return 2
         var count = n - 1
