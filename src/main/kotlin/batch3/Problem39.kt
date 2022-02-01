@@ -1,6 +1,5 @@
 package batch3
 
-import batch0.sum
 import util.maths.gcd
 import util.maths.pythagoreanTriplet
 import kotlin.math.ceil
@@ -23,6 +22,8 @@ import kotlin.math.sqrt
  */
 
 class IntegerRightTriangles {
+    private fun Triple<Int, Int, Int>.sum(): Int = first + second + third
+
     /**
      * Brute solution based on the following:
      * - Pythagorean Triplets must either be all evens OR 2 odds with 1 even.

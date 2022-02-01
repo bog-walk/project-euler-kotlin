@@ -3,17 +3,18 @@ package batch0
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 
 internal class SpecialPythagoreanTripletTest {
     private val tool = SpecialPythagoreanTriplet()
 
     @Test
-    fun testMaxTriplet_noneFound() {
-        val nums = listOf(1, 4, 6, 31, 99, 100)
+    fun `maxTriplet returns null when none found`() {
+        val nums = listOf(4, 6, 31, 99, 100)
         val solutions = listOf(
-            tool::maxTripletBrute, tool::maxTripletParametrisation
+            tool::maxTripletBruteBC, tool::maxTripletBruteA, tool::maxTripletOptimised
         )
         nums.forEach { n ->
             solutions.forEach { solution ->
@@ -22,53 +23,59 @@ internal class SpecialPythagoreanTripletTest {
         }
     }
 
-    @ParameterizedTest(name="{0} has ({1}, {2}, {3})")
+    @ParameterizedTest(name="{0} = ({1}, {2}, {3})")
     @CsvSource(
-        "12, 3, 4, 5", "24, 6, 8, 10",
-        "30, 5, 12, 13", "90, 15, 36, 39",
-        "650, 25, 312, 313", "1000, 200, 375, 425",
+        // lower constraints
+        "12, 3, 4, 5", "24, 6, 8, 10", "30, 5, 12, 13",
+        // normal values
+        "90, 15, 36, 39", "650, 25, 312, 313", "1000, 200, 375, 425",
+        // large values
         "2214, 533, 756, 925", "3000, 750, 1000, 1250"
     )
-    fun testFindTriplets_found(n: Int, a: Int, b: Int, c: Int) {
+    fun `maxTriplet returns triple when found`(n: Int, a: Int, b: Int, c: Int) {
         val expected = Triple(a, b, c)
         val solutions = listOf(
-            tool::maxTripletBrute, tool::maxTripletParametrisation
+            tool::maxTripletBruteBC, tool::maxTripletBruteA, tool::maxTripletOptimised
         )
         solutions.forEach { solution ->
             assertEquals(expected, solution(n))
         }
     }
 
-    @ParameterizedTest(name="N={0} gives {1}")
-    @CsvSource(
-        "1, -1", "10, -1", "1231, -1",
-        "12, 60", "90, 21060", "1000, 31875000",
-        "3000, 937500000"
-    )
-    fun testMaxTripletsProduct(n: Int, expected: Long) {
-        assertEquals(expected, tool.maxTripletProduct(n))
+    @Test
+    fun `maxTriplet speed`() {
+        val n = 3000
+        val expected = 937_500_000
+        val solutions = mapOf(
+            "BC Loop" to tool::maxTripletBruteBC,
+            "A Loop" to tool::maxTripletBruteA,
+            "Optimised" to tool::maxTripletOptimised
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(tool::maxTripletProduct, n, solution).run {
+                speeds.add(name to this.second)
+                assertEquals(expected, this.first)
+            }
+        }
+        compareSpeed(speeds)
     }
 
-    @Test
-    fun testMaxTriplet_speedComparison() {
-        val n = 3000
-        val expected = Triple(750, 1000, 1250)
+    @ParameterizedTest(name="N={0} returns {1}")
+    @CsvSource(
+        // none found
+        "1, -1", "10, -1", "1231, -1",
+        // lower constraints
+        "12, 60",
+        // normal values
+        "90, 21060", "1000, 31_875_000"
+    )
+    fun `maxTripletProduct correct`(n: Int, expected: Int) {
         val solutions = listOf(
-            tool::maxTripletBrute, tool::maxTripletParametrisation
+            tool::maxTripletBruteBC, tool::maxTripletBruteA, tool::maxTripletOptimised
         )
-        val times = mutableListOf<Long>()
-        solutions.forEachIndexed { i, solution ->
-            val time = measureNanoTime {
-                repeat(10) {
-                    val ans = solution(n)
-                    if (it == 9) {
-                        assertEquals(expected, ans)
-                    }
-                }
-            }
-            times.add(i, time)
+        solutions.forEach { solution ->
+            assertEquals(expected, tool.maxTripletProduct(n, solution))
         }
-        println("Brute solution took: ${1.0 * times[0] / 1_000_000}ms\n" +
-                "Optimised took: ${1.0 * times[1] / 1_000_000}ms\n")
     }
 }

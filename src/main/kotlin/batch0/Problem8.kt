@@ -17,7 +17,7 @@ package batch0
 
 class LargestProductInSeries {
     /**
-     * The constraints of this solution ensure that a substring will not exceed 13 characters, so
+     * The constraints of this solution ensure that [series] will not exceed 13 characters, so
      * the max product of 13 '9's would be less than Long.MAX_VALUE.
      */
     fun stringProduct(series: String): Long {
