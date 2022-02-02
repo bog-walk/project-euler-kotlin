@@ -3,7 +3,9 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import util.custom.intMatrixOf
-import java.io.File
+import util.tests.compareSpeed
+import util.tests.getSpeed
+import util.tests.getTestResource
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -19,59 +21,47 @@ internal class LargestProductInGridTest {
         "src/test/resources/LargestProductInGrid20By20", 20
     )
 
-    @Test
-    fun testMaxFromGrid() {
-        assertEquals(6, tool.maxFromGrid(smallGrid))
-        assertEquals(15, tool.maxFromGrid(midGrid))
-        assertEquals(70600674, tool.maxFromGrid(largeGrid))
+    private fun getTestGrid(filename: String, size: Int): Array<IntArray> {
+        val grid = Array(size) { IntArray(size) }
+        getTestResource(filename, transformation = String::toInt)
+            .map { it.toIntArray() }
+            .forEachIndexed { i, row -> grid[i] = row }
+        return grid
     }
 
     @Test
-    fun testMaxProduct_smallest() {
-        val matrix = intMatrixOf(smallGrid)
-        val tool = LargestProductInGrid()
-        assertEquals(6, tool.maxProductSmallest(matrix))
-    }
-
-    @Test
-    fun testAssessRows() {
-        val tool = LargestProductInGrid()
-        assertEquals(3, tool.assessRows(smallGrid))
-        assertEquals(15, tool.assessRows(midGrid))
-    }
-
-    @Test
-    fun testAssessCols() {
-        val tool = LargestProductInGrid()
-        assertEquals(6, tool.assessCols(smallGrid))
-        assertEquals(5, tool.assessCols(midGrid))
-    }
-
-    @Test
-    fun testAssessDiagonals() {
-        val tool = LargestProductInGrid()
-        assertEquals(3, tool.assessDiagonals(smallGrid))
-        assertEquals(1, tool.assessDiagonals(midGrid))
-    }
-
-    @Test
-    fun testGetTestGrid() {
+    fun `setup correctly`() {
         assertEquals(20, largeGrid.size)
         assertEquals(20, largeGrid[0].size)
-        assertEquals(89, largeGrid[0][0])
+        assertEquals(8, largeGrid[0][0])
         assertEquals(48, largeGrid[19][19])
         assertEquals(72, largeGrid[15][7])
     }
 
-    private fun getTestGrid(filename: String, size: Int): Array<IntArray> {
-        val grid = Array(size) { IntArray(size) }
-        var i = 0
-        File(filename).forEachLine { line ->
-            grid[i] = line.trim().split(" ").map {
-                it.toInt()
-            }.toIntArray()
-            i++
+    @Test
+    fun `largestProductInGrid correct for small & mid size`() {
+        val grids = listOf(smallGrid, midGrid)
+        val expected = listOf(6, 15)
+        for ((i, grid) in grids.withIndex()) {
+            val matrix = intMatrixOf(grid)
+            assertEquals(expected[i], tool.largestProductInGrid(grid))
+            assertEquals(expected[i], tool.largestProductInGridCustom(matrix))
         }
-        return grid
+    }
+
+    @Test
+    fun `largestProductInGrid speed`() {
+        val expected = 70_600_674
+        val speeds = mutableListOf<Pair<String, Long>>()
+        getSpeed(tool::largestProductInGrid, largeGrid).run {
+            speeds.add("All-in-one" to this.second)
+            assertEquals(expected, this.first)
+        }
+        val matrix = intMatrixOf(largeGrid)
+        getSpeed(tool::largestProductInGridCustom, matrix).run {
+            speeds.add("Custom" to this.second)
+            assertEquals(expected, this.first)
+        }
+        compareSpeed(speeds)
     }
 }

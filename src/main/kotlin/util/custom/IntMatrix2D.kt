@@ -1,11 +1,17 @@
 package util.custom
 
+/**
+ * Custom class that creates a 2-dimensional matrix of Integers, facilitating easy actions like
+ * addition, row setting/getting, transposition, getting diagonals, and slicing/clipping. This
+ * class is meant to mimic Python's native 2D matrix. Currently only works for square matrices.
+ */
 class IntMatrix2D(
     private val rows: Int,
     private val cols: Int,
     private val op: (() -> Int)? = null
 ) : Iterable<IntArray> {
     private val matrix = Array(rows) { IntArray(cols) { op?.invoke() ?: 0 } }
+    val size: Int = rows
 
     override fun toString(): String {
         val output = StringBuilder()
@@ -16,6 +22,19 @@ class IntMatrix2D(
         return output.toString()
     }
 
+    operator fun get(j: Int): IntArray {
+        return matrix[j]
+    }
+
+    operator fun set(i: Int, value: IntArray): Boolean {
+        if (value.size != cols) return false
+        matrix[i] = value
+        return true
+    }
+
+    /**
+     * Adds [n] to every element in the 2D matrix.
+     */
     operator fun plus(n: Int) {
         for (i in 0 until rows) {
             for (j in 0 until cols) {
@@ -35,11 +54,6 @@ class IntMatrix2D(
         return listOf(leading, counter)
     }
 
-    // To iterate through rows, not individual elements
-    override fun iterator(): Iterator<IntArray> {
-        return IntMatrix2DIterator(rows, matrix)
-    }
-
     fun transpose(): IntMatrix2D {
         val transposed = IntMatrix2D(cols, rows)
         for (i in 0 until rows) {
@@ -50,18 +64,17 @@ class IntMatrix2D(
         return transposed
     }
 
-    operator fun get(j: Int): IntArray {
-        return matrix[j]
-    }
-
-    operator fun set(i: Int, value: IntArray): Boolean {
-        if (value.size != cols) return false
-        matrix[i] = value
-        return true
+    /**
+     * Returns custom class that extends the iterator interface to allow sequential access of each
+     * 2D matrix row, not of the individual elements within each row. As each row is an IntArray,
+     * each row already has a built-in iterator().
+     */
+    override fun iterator(): Iterator<IntArray> {
+        return IntMatrix2DIterator(rows, matrix)
     }
 
     /**
-     * Remove a smaller square matrix of the provided size.
+     * Returns a smaller nested square matrix of the provided [size], if found.
      */
     fun clip(startX: Int, startY: Int, size: Int): IntMatrix2D? {
         if (size == 0 || size > rows || size > cols) return null
