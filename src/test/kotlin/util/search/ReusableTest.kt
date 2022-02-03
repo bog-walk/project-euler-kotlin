@@ -1,5 +1,7 @@
 package util.search
 
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -9,6 +11,7 @@ internal class ReusableTest {
     fun `binarySearch returns false if collection empty`() {
         val nums = emptyList<Int>()
         val target = 1
+        assertFalse { binarySearchManual(target, nums) }
         assertFalse { binarySearch(target, nums) }
     }
 
@@ -17,7 +20,9 @@ internal class ReusableTest {
         val nums = listOf(100)
         val targetA = 100
         val targetB = 1000
+        assertTrue { binarySearchManual(targetA, nums) }
         assertTrue { binarySearch(targetA, nums) }
+        assertFalse { binarySearchManual(targetB, nums) }
         assertFalse { binarySearch(targetB, nums) }
     }
 
@@ -26,6 +31,7 @@ internal class ReusableTest {
         val nums = List(1001) { it }
         val targets = listOf(0, 1000, 500, 43, 267, 681, 800)
         targets.forEach { target ->
+            assertTrue { binarySearchManual(target, nums) }
             assertTrue { binarySearch(target, nums) }
         }
     }
@@ -35,7 +41,25 @@ internal class ReusableTest {
         val nums = List(1001) { it }.filter { it % 2 == 0 }
         val targets = listOf(-1, 1, 11, 33, 139, 431, 673, 805, 999, 2000)
         targets.forEach { target ->
+            assertFalse { binarySearchManual(target, nums) }
             assertFalse { binarySearch(target, nums) }
         }
+    }
+
+    @Test
+    fun `binarySearch speed`() {
+        val nums = List(10_001) { it }
+        val target = 9998
+        val solutions: Map<String, (Int, List<Int>) -> Boolean> = mapOf(
+            "Manual" to ::binarySearchManual, "Built-in" to ::binarySearch
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, target, nums).run {
+                speeds.add(name to this.second)
+                assertTrue { this.first }
+            }
+        }
+        compareSpeed(speeds)
     }
 }

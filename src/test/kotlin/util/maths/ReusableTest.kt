@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.search.binarySearch
+import util.search.binarySearchManual
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.*
 
 internal class ReusableTest {
@@ -175,9 +179,10 @@ internal class ReusableTest {
         @Test
         fun `least common multiple correct with multiple arguments`() {
             val arguments = listOf(
-                longArrayOf(2, 6, 12), longArrayOf(31, 5, 7, 14), longArrayOf(8, 11, 3, 5, 2, 7, 6)
+                longArrayOf(2, 6, 12), longArrayOf(31, 5, 7, 14), longArrayOf(8, 11, 3, 5, 2, 7, 6),
+                longArrayOf(82, 34, 71, 24, 99, 37, 62, 11, 40)
             )
-            val expected = listOf<Long>(12, 2170, 9240)
+            val expected = listOf(12, 2170, 9240, 224_775_892_440)
             for ((i, args) in arguments.withIndex()) {
                 assertEquals(expected[i], lcm(*args))
             }

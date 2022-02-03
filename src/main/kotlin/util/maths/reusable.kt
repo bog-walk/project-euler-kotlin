@@ -222,13 +222,21 @@ fun Long.isTriangularNumber(): Int? {
  *
  * lcm(x, y) = |x * y| / gcd(x, y)
  *
+ * The original solution kept [n] as Long but consistently underperformed compared to the current
+ * solution that converts all [n] to BigInteger before reducing.
+ *
+ * SPEED 1.86ms VS 31.58ms for 2-element varargs with 4-digit result
+ *
+ * SPEED 1.33ms VS 33.15ms for 9-element varargs with 12-digit result
+ *
  * @throws IllegalArgumentException if any [n] = 0.
  */
 fun lcm(vararg n: Long): Long {
     require(n.all { it != 0L }) { "Parameter cannot be 0" }
-    return n.reduce { acc, num ->
-        abs(acc * num) / gcd(acc, num)
-    }
+    val nBI = n.map(BigInteger::valueOf)
+    return nBI.reduce { acc, num ->
+        (acc * num).abs() / acc.gcd(num)
+    }.longValueExact()
 }
 
 /**
