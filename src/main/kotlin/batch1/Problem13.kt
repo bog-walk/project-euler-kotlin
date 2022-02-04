@@ -1,6 +1,7 @@
 package batch1
 
 import util.custom.RollingQueue
+import java.math.BigInteger
 
 /**
  * Problem 13: Large Sum
@@ -13,36 +14,44 @@ import util.custom.RollingQueue
  *
  * e.g.: N.B. This is a scaled-down example (first 2 digits of N 5-digit numbers)
  *       N = 3
- *       34827, 93726, 90165
- *       sum = 218718
+ *       input = [34827, 93726, 90165]
+ *       sum = 218_718
  *       1st 2 digits = 21
  */
 
 class LargeSum {
-
     /**
-     * Given that BigInteger is not capable of handling this sum problem,
-     * this solution mimics manual addition from RTL.
+     * Solution simulates manual addition from RTL, using custom RollingQueue class to abstract
+     * away the need to maintain output length with every iteration.
+     *
+     * SPEED (WORSE) 18.79ms for 1000 50-digit numbers
      */
-    fun addInReverse(digits: List<String>): String {
-        val n = digits.size
-        if (n == 1) return digits.first().slice(0..9)
+    fun addInReverse(numbers: List<String>): String {
+        val n = numbers.size
+        if (n == 1) return numbers.single().slice(0..9)
         val output = RollingQueue<Int>(10)
-        val finalIndex = digits.first().length - 1
+        val finalIndex = numbers.first().length - 1
         var carryOver = 0
         for (i in finalIndex downTo 0) {
             val sum = List(n + 1) {
-                if (it == n) carryOver else digits[it][i].digitToInt()
+                if (it == n) carryOver else numbers[it][i].digitToInt()
             }.sum()
             output.add(sum % 10)
             carryOver = sum / 10
         }
-        if (carryOver > 0) {
-            do {
-                output.add(carryOver % 10)
-                carryOver /= 10
-            } while (carryOver != 0)
+        while (carryOver > 0) {
+            output.add(carryOver % 10)
+            carryOver /= 10
         }
         return output.reversed().joinToString("")
+    }
+
+    /**
+     * Solution using BigInteger to intrinsically sum all numbers.
+     *
+     * SPEED (BETTER) 3.48ms for 1000 50-digit numbers
+     */
+    fun sliceSum(numbers: List<String>): String {
+        return numbers.sumOf { BigInteger(it) }.toString().take(10)
     }
 }
