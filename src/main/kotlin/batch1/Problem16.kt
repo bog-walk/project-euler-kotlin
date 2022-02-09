@@ -1,5 +1,6 @@
 package batch1
 
+import util.maths.powerDigitSum
 import java.math.BigInteger
 
 /**
@@ -17,12 +18,10 @@ import java.math.BigInteger
  */
 
 class PowerDigitSum {
-    fun expDigSumUsingString(n: Int): Int {
-        val power = BigInteger.TWO.pow(n).toString()
-        return power.map(Char::digitToInt).sum()
-    }
-
-    fun expDigSumUsingMath(n: Int): Int {
+    /**
+     * SPEED (WORSE) 59.34ms for N = 1e4
+     */
+    fun expDigSumIterative(n: Int): Int {
         var power = BigInteger.TWO.pow(n)
         var total = 0
         val ten = 10.toBigInteger()
@@ -31,5 +30,12 @@ class PowerDigitSum {
             power /= ten
         }
         return total
+    }
+
+    /**
+     * SPEED (BETTER) 16.90ms for N = 1e4
+     */
+    fun expDigSumBuiltin(n: Int): Int {
+        return powerDigitSum(2, n)
     }
 }

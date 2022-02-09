@@ -3,6 +3,9 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
+import kotlin.test.Test
 
 internal class PowerDigitSumTest {
     private val tool = PowerDigitSum()
@@ -10,13 +13,31 @@ internal class PowerDigitSumTest {
     @ParameterizedTest(name="2^{0} -> {1}")
     @CsvSource(
         // lower constraint
-        "1, 2", "2, 4", "3, 8",
-        "4, 7", "7, 11", "9, 8", "15, 26", "99, 107",
-        // higher constraint
-        "1000, 1366", "10000, 13561"
+        "1, 2", "2, 4", "3, 8", "4, 7", "7, 11", "9, 8",
+        // normal values
+        "15, 26", "99, 107",
+        // higher constraints
+        "1000, 1366"
     )
-    fun testExpDigSum(n: Int, expected: Int) {
-        assertEquals(expected, tool.expDigSumUsingString(n))
-        assertEquals(expected, tool.expDigSumUsingMath(n))
+    fun `expDigSum correct`(n: Int, expected: Int) {
+        assertEquals(expected, tool.expDigSumBuiltin(n))
+        assertEquals(expected, tool.expDigSumIterative(n))
+    }
+
+    @Test
+    fun `expDigSum speed`() {
+        val n = 10_000
+        val expected = 13561
+        val solutions = mapOf(
+            "Iterative" to tool::expDigSumIterative, "Built-in" to tool::expDigSumBuiltin
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to this.second)
+                assertEquals(expected, this.first)
+            }
+        }
+        compareSpeed(speeds)
     }
 }
