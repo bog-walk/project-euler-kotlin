@@ -28,19 +28,6 @@ import util.maths.primeNumbersOG
 
 class HighlyDivisibleTriangularNumber {
     /**
-     * Counts unique divisors of [n] using prime decomposition.
-     *
-     * e.g. 28 = 2^2 * 7^1, therefore
-     *
-     * number of divisors of 28 = (2 + 1) * (1 + 1) = 6 -> {1, 2, 4, 7, 14, 28}
-     */
-    fun countDivisors(n: Int): Int {
-        return primeFactors(1L * n).values
-            .map { it + 1 }
-            .reduce { acc, v -> acc * v }
-    }
-
-    /**
      * Returns the found triangle number generated as a Gaussian sum that has had its divisors
      * counted using prime decomposition.
      *
@@ -69,6 +56,19 @@ class HighlyDivisibleTriangularNumber {
             dn1 = dn2
         }
         return t.gaussianSum().toInt()
+    }
+
+    /**
+     * Counts unique divisors of [n] using prime decomposition.
+     *
+     * e.g. 28 = 2^2 * 7^1, therefore
+     *
+     * number of divisors of 28 = (2 + 1) * (1 + 1) = 6 -> {1, 2, 4, 7, 14, 28}
+     */
+    fun countDivisors(n: Int): Int {
+        return primeFactors(1L * n).values
+            .map { it + 1 }
+            .reduce { acc, v -> acc * v }
     }
 
     /**

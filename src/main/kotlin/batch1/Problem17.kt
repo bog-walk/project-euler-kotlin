@@ -29,21 +29,13 @@ class NumberToWords {
     )
     private val powersOfTen = listOf(null, "Thousand", "Million", "Billion", "Trillion")
 
-    private fun numberUnderHundred(n: Int): String? {
-        return if (n < 20) {
-            underTwenty[n]
-        } else {
-            tens[n / 10] + (underTwenty[n % 10]?.replaceFirstChar { " $it" } ?: "")
-        }
-    }
-
-    private fun numberUnderThousand(n: Int, andIncluded: Boolean): String? {
-        return if (n < 100) {
-            numberUnderHundred(n)
-        } else {
-            val extra = if (andIncluded) " And " else " "
-            "${underTwenty[n / 100]} Hundred" +
-                    (numberUnderHundred(n % 100)?.replaceFirstChar { "$extra$it" } ?: "")
+    /**
+     * Project Euler specific implementation that sums the amount of letters (excludes whitespace
+     * & punctuations) in the written forms of the first N positive numbers.
+     */
+    fun countFirstNPositives(n: Long): Int {
+        return (1L..n).sumOf { num ->
+            numberWritten(num).count { it.isLetter() }
         }
     }
 
@@ -65,13 +57,21 @@ class NumberToWords {
         return words
     }
 
-    /**
-     * Project Euler specific implementation that sums the amount of letters (excludes whitespace
-     * & punctuations) in the written forms of the first N positive numbers.
-     */
-    fun countFirstNPositives(n: Long): Int {
-        return (1L..n).sumOf { num ->
-            numberWritten(num).count { it.isLetter() }
+    private fun numberUnderThousand(n: Int, andIncluded: Boolean): String? {
+        return if (n < 100) {
+            numberUnderHundred(n)
+        } else {
+            val extra = if (andIncluded) " And " else " "
+            "${underTwenty[n / 100]} Hundred" +
+                    (numberUnderHundred(n % 100)?.replaceFirstChar { "$extra$it" } ?: "")
+        }
+    }
+
+    private fun numberUnderHundred(n: Int): String? {
+        return if (n < 20) {
+            underTwenty[n]
+        } else {
+            tens[n / 10] + (underTwenty[n % 10]?.replaceFirstChar { " $it" } ?: "")
         }
     }
 }

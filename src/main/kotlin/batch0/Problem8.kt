@@ -17,20 +17,6 @@ package batch0
 
 class LargestProductInSeries {
     /**
-     * The constraints of this solution ensure that [series] will not exceed 13 characters, so
-     * the max product of 13 '9's would be less than Long.MAX_VALUE.
-     */
-    fun stringProduct(series: String): Long {
-        return series.fold(1L) { acc, ch ->
-            if (ch == '0') {
-                return 0L // prevents further folding
-            } else {
-                acc * ch.digitToInt()
-            }
-        }
-    }
-
-    /**
      * SPEED (WORSE) 7.4e5ns for N = 1000, K = 4
      * SPEED (BETTER) 4.3e5ns for N = 1000, K = 13
      */
@@ -64,6 +50,20 @@ class LargestProductInSeries {
                     largest = maxOf(largest, stringProduct(number.substring(i, i + k)))
                 }
                 largest
+            }
+        }
+    }
+
+    /**
+     * The constraints of this solution ensure that [series] will not exceed 13 characters, so
+     * the max product of 13 '9's would be less than Long.MAX_VALUE.
+     */
+    fun stringProduct(series: String): Long {
+        return series.fold(1L) { acc, ch ->
+            if (ch == '0') {
+                return 0L // prevents further folding
+            } else {
+                acc * ch.digitToInt()
             }
         }
     }

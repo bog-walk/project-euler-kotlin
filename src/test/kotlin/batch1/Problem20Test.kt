@@ -3,6 +3,9 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
+import kotlin.test.Test
 
 internal class FactorialDigitSumTest {
     private val tool = FactorialDigitSum()
@@ -16,9 +19,28 @@ internal class FactorialDigitSumTest {
         // larger N
         "100, 648", "333, 2862", "750, 7416",
         // upper constraints
-        "946, 9675", "1000, 10539"
+        "946, 9675"
     )
-    fun testFactorialDigitSum(n: Int, expected: Int) {
+    fun `factorialDigitSum correct`(n: Int, expected: Int) {
         assertEquals(expected, tool.factorialDigitSum(n))
+        assertEquals(expected, tool.factorialDigitSumAlt(n))
+    }
+
+    @Test
+    fun `factorialDigitSum upper constraints & speed`() {
+        val n = 1000
+        val expected = 10539
+        val solutions = mapOf(
+            "Original" to tool::factorialDigitSum,
+            "Alt" to tool::factorialDigitSumAlt
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to this.second)
+                assertEquals(expected, this.first)
+            }
+        }
+        compareSpeed(speeds)
     }
 }

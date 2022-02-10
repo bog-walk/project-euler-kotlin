@@ -24,14 +24,14 @@ import kotlin.math.hypot
  */
 
 class SpecialPythagoreanTriplet {
-    private fun Triple<Int, Int, Int>.product(): Int = first * second * third
-
     fun maxTripletProduct(
         n: Int,
         solution: (Int) -> Triple<Int, Int, Int>?
     ): Int {
         return solution(n)?.product() ?: -1
     }
+
+    private fun Triple<Int, Int, Int>.product(): Int = first * second * third
 
     /**
      * Solution iterates through values of c and b with some limits:
