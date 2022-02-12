@@ -1,7 +1,7 @@
 package batch2
 
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,22 +9,19 @@ import kotlin.test.assertEquals
 internal class NDigitFibonacciNumberTest {
     private val tool = NDigitFibonacciNumber()
 
-    @ParameterizedTest(name="1st {0} digits = F({1})")
-    @CsvSource(
-        // lower constraints
-        "2, 7", "3, 12", "4, 17",
-        // normal values
-        "9, 40", "1000, 4782",
-        // upper constraints
-        "5000, 23922"
-    )
-    fun testNDigitFibTerm(digits: Int, expected: Int) {
-        assertEquals(expected, tool.nDigitFibTermBrute(digits))
-        assertEquals(expected, tool.nDigitFibTermByDigitsGolden(digits))
+    @Test
+    fun `nDigitFibTerm correct`() {
+        val digits = listOf(2, 3, 4, 9, 1000)
+        val expected = listOf(7, 12, 17, 40, 4782)
+        val allTerms = tool.nDigitFibTermsBrute(1000)
+        for ((i, digit) in digits.withIndex()) {
+            assertEquals(expected[i], allTerms[digit - 2])
+            assertEquals(expected[i], tool.nDigitFibTermGoldenFormula(digit))
+        }
     }
 
     @Test
-    fun testNthFibUsingGoldenRatio() {
+    fun `golden ratio correct for getting Nth fib`() {
         val expected = listOf(
             0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597
         )
@@ -33,47 +30,52 @@ internal class NDigitFibonacciNumberTest {
     }
 
     @Test
-    fun testNDigitFibTermSlowGolden() {
+    fun `golden ratio correct for getting N-digit term`() {
         val expected = listOf(7, 12, 17, 21, 26, 31, 36, 40)
         for (n in 2..9) {
-            assertEquals(expected[n - 2], tool.nDigitFibTermUsingGoldenRatio(n))
+            assertEquals(expected[n - 2], tool.nDigitFibTermGoldenBrute(n))
         }
     }
 
     @Test
-    fun testGetFibTermSpeedComparison_lowN() {
+    fun `nDigitFibTerm speed for low N`() {
         val n = 10
         val expected = 45
-        val solutions = listOf(
-            tool::nDigitFibTermBrute,
-            tool::nDigitFibTermByDigitsGolden,
-            tool::nDigitFibTermUsingGoldenRatio
+        val solutions = mapOf(
+            "Golden formula" to tool::nDigitFibTermGoldenFormula,
+            "Golden brute" to tool::nDigitFibTermGoldenBrute
         )
-        val times = mutableListOf<Long>()
-        solutions.forEachIndexed { i, solution ->
-            val time = measureNanoTime {
-                assertEquals(expected, solution(n))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
-            times.add(i, time)
         }
-        println("Brute solution took: ${times[0]}ns\n" +
-                "Gold digits took: ${times[1]}ns\n" +
-                "Gold ratio took: ${times[2]}ns")
+        val bruteActual: Int
+        val bruteTime = measureNanoTime {
+            bruteActual = tool.nDigitFibTermsBrute(n)[n - 2]
+        }
+        speeds.add("Brute check" to bruteTime)
+        assertEquals(expected, bruteActual)
+        compareSpeed(speeds)
     }
 
     @Test
-    fun testGetFibTermSpeedComparison_highN() {
+    fun `nDigitFibTerm speed for high N`() {
         val n = 5000
-        val ansBrute: Int
-        val ansGoldDigits: Int
-        val timeBrute = measureNanoTime {
-            ansBrute = tool.nDigitFibTermBrute(n)
+        val expected = 23922
+        val speeds = mutableListOf<Pair<String, Long>>()
+        val bruteActual: Int
+        val bruteTime = measureNanoTime {
+            bruteActual = tool.nDigitFibTermsBrute(n)[n - 2]
         }
-        val timeGoldDigits = measureNanoTime {
-            ansGoldDigits = tool.nDigitFibTermByDigitsGolden(n)
+        speeds.add("Brute check" to bruteTime)
+        assertEquals(expected, bruteActual)
+        getSpeed(tool::nDigitFibTermGoldenFormula, n).run {
+            speeds.add("Golden formula" to second)
+            assertEquals(expected, first)
         }
-        println("Brute solution took: ${timeBrute / 1_000_000}ms\n" +
-                "Gold digits took: ${timeGoldDigits}ns")
-        assertEquals(ansBrute, ansGoldDigits)
+        compareSpeed(speeds)
     }
 }

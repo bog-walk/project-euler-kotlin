@@ -89,7 +89,7 @@ fun <T : Any, Q: Any, R : Any> getSpeed(
  * speed in nanoseconds (scientific notation), milliseconds, or seconds (to the required
  * precision), depending on the size of the speed value.
  */
-fun compareSpeed(speeds: List<Pair<String, Long>>, precision: Int = 4) {
+fun compareSpeed(speeds: List<Pair<String, Long>>, precision: Int = 2) {
     speeds
         .sortedBy { it.second }
         .forEach { (name, time) ->

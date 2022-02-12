@@ -12,82 +12,107 @@ import kotlin.math.*
  *
  * Constraints: 2 <= N <= 5000
  *
- * e.g.: Fibonacci sequence = {0,1,1,2,3,5,8,13,21,34,55,89,144}
- *       N = 3
+ * e.g.: N = 3
+ *       Fibonacci sequence = {0,1,1,2,3,5,8,13,21,34,55,89,144}
  *       first term with 3 digits = F(12)
  */
 
 class NDigitFibonacciNumber {
+    private val phi = (1 + sqrt(5.0)) / 2
+
     /**
-     * Iterative solution checks every Fibonacci term to see if it matches
-     * the amount of digits required.
+     * Iterative solution that checks all Fibonacci numbers.
      *
-     * SPEED: 1.2e6ns for N = 10.
-     *        7053ms (compared to ns with inverted formula) for N = 5000.
+     * SPEED (WORST for low N) 1.9e5ns for N = 10
+     * SPEED (BETTER for high N) 7.60s for N = 5000
+     *
+     * @return list of the first Fibonacci terms to have (index + 2) digits.
      */
-    fun nDigitFibTermBrute(n: Int): Int {
+    fun nDigitFibTermsBrute(maxDigits: Int): IntArray {
         var term = 7
         var fN = BigInteger.valueOf(13)
+        val terms = IntArray(maxDigits - 1).apply { this[0] = term }
         var fNMinus1 = BigInteger.valueOf(8)
-        while (fN.toString().length < n) {
+        var digits = 3
+        while (digits <= maxDigits) {
             term++
             val fNMinus2 = fNMinus1
             fNMinus1 = fN
             fN = fNMinus1 + fNMinus2
+            if (fN.toString().length == digits) {
+                terms[digits++ - 2] = term
+            }
         }
-        return term
+        return terms
     }
 
     /**
-     * Returns the Nth Fibonacci sequence number, as an alternative to iteration.
-     * Based on the closed-form formula:
-     * Fn = (Phi^n - Psi^n) / sqrt(5),
-     * with Phi = (1 + sqrt(5)) / 2 ~= 1.61803...
-     * & Psi = -Phi^-1.
-     * Rounding, using the nearest integer function, reduces the formula to:
-     * Fn = [Phi^n / sqrt(5)], where n >= 0.
-     * Truncation, using the floor function, would result instead in:
-     * Fn = [(Phi^n / sqrt(5)) + 0.5], where n >= 0.
-     */
-    fun nthFibUsingGoldenRatio(n: Int): Int {
-        val phi = (1 + sqrt(5.0)) / 2
-        return round(phi.pow(n) / sqrt(5.0)).toInt()
-    }
-
-    /**
-     * Based on the above formula being inverted to calculate log10 of
-     * each Fibonacci number, thereby returning the term that has the
-     * required amount of digits, without need to iterate.
+     * Iterative solution uses the Golden Ratio to check all Fibonacci numbers.
      *
-     * SPEED: 3.5e5ns for N = 10.
-     * (BEST for N > 10)  5.0e5ns for N = 5000.
-     */
-    fun nDigitFibTermByDigitsGolden(n: Int): Int {
-        val phi = (1 + sqrt(5.0)) / 2
-        return ceil((n - 1 + log10(5.0) / 2) / log10(phi)).toInt()
-    }
-
-    /**
-     * Iterative solution uses Golden Ratio to calculate the Fibonacci
-     * sequence numbers.
+     * Original solution compared digit lengths by casting fN to a String. This
+     * has been replaced by calling log10(fN) and comparing it to the required digits minus 1,
+     * with significant performance improvement.
      *
-     * SPEED (BEST for N <= 10): 8.2e4ns for N = 10.
-     * Significantly slower execution from N > 10,
-     * due to exponential need to calculate Phi^N.
+     * SPEED (BETTER for low N) 87900ns for N = 10
+     * SPEED (IMPOSSIBLE for N > 10) Significantly slower execution due to the exponential need
+     * to calculate larger Phi^N and resulting OverflowError
+     *
+     * @return first Fibonacci term to have N digits.
      */
-    fun nDigitFibTermUsingGoldenRatio(n: Int): Int {
+    fun nDigitFibTermGoldenBrute(n: Int): Int {
         var term = 7
         var fN = 13
-        // Pattern shows the amount of digits increases every 4th-5th term
+        // pattern shows the amount of digits increases every 4th-5th term
         val step = 4
-        while (fN.toString().length < n) {
+        while (log10(1.0 * fN) < n - 1) {
             term += step
             fN = nthFibUsingGoldenRatio(term)
-            while (fN.toString().length < n) {
+            while (log10(1.0 * fN) < n - 1) {
                 term++
                 fN = nthFibUsingGoldenRatio(term)
             }
         }
         return term
+    }
+
+    /**
+     * Finds the [n]th Fibonacci number using Binet's formula.
+     *
+     * The Golden Ration, Phi, provides an alternative to iteration, based on the closed-form
+     * formula:
+     *
+     * Fn = (Phi^n - Psi^n) / sqrt(5),
+     * with Phi = (1 + sqrt(5)) / 2 ~= 1.61803... & Psi = -Phi^-1
+     *
+     * Rounding, using the nearest integer function, reduces the formula to:
+     * Fn = round(Phi^n / sqrt(5)), where n >= 0.
+     *
+     * Truncation, using the floor function, would result instead in:
+     * Fn = floor((Phi^n / sqrt(5)) + 0.5), where n >= 0.
+     */
+    fun nthFibUsingGoldenRatio(n: Int): Int {
+        return round(phi.pow(n) / sqrt(5.0)).toInt()
+    }
+
+    /**
+     * O(n) solution based on the inversion of closed-form Binet's formula.
+     *
+     * Phi^t / sqrt(5) > 10^(n-1)
+     *
+     * Phi^t > 10^(n-1) * sqrt(5)
+     *
+     * log(Phi)t > log(10)(n - 1) + log(5)/2
+     *
+     * t > (1(n - 1) + log(5)/2) / log(Phi)
+     *
+     * t = ceil((n - 1 + log(5)/2) / log(Phi))
+     *
+     * SPEED (BEST for low N) 54600ns for N = 10
+     * SPEED (BEST for high N) 29200ns for N = 5000
+     *
+     * @return first Fibonacci term to have N digits.
+     */
+    fun nDigitFibTermGoldenFormula(n: Int): Int {
+        return ceil((n - 1 + log10(5.0) / 2) / log10(phi)).toInt()
     }
 }

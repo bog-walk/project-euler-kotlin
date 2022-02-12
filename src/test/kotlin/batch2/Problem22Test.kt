@@ -2,7 +2,7 @@ package batch2
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.io.File
+import util.tests.getTestResource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -22,12 +22,12 @@ internal class NamesScoresTest {
         "4, 'PAMELA', 240", "937, 'COLIN', 49714",
         "0, 'A', 1", "5199, 'ZZZZZZZZZZ', 1352000"
     )
-    fun testNameScore(index: Int, name: String, expected: Int) {
+    fun `nameScore correct`(index: Int, name: String, expected: Int) {
         assertEquals(expected, tool.nameScore(index, name))
     }
 
     @Test
-    fun testNameScore_smallList() {
+    fun `nameScore correct for a small list`() {
         val sorted = smallList.sorted()
         val expected = listOf(42, 244, 144, 88, 240)
         for ((index, name) in smallList.withIndex()) {
@@ -37,20 +37,28 @@ internal class NamesScoresTest {
     }
 
     @Test
-    fun testSumOfNameScores_smallList() {
-        assertEquals(758, tool.sumOfNameScores(smallList))
+    fun `PE problem correct for a small list`() {
+        val expected = 758
+        assertEquals(expected, tool.sumOfNameScores(smallList))
     }
 
     @Test
-    fun testNameScore_mediumList() {
+    fun `nameScore correct for a medium list`() {
         val sorted = mediumList.sorted()
-        assertEquals(130, tool.nameScore(sorted.indexOf("ELI"), "ELI"))
-        assertEquals(608, tool.nameScore(sorted.indexOf("NOAH"), "NOAH"))
+        val names = listOf("ELI", "NOAH")
+        val expected = listOf(130, 608)
+        for ((i, name) in names.withIndex()) {
+            assertEquals(
+                expected[i],
+                tool.nameScore(sorted.indexOf(name), name)
+            )
+        }
     }
 
     @Test
-    fun testSumOfNameScores_largeList() {
-        val input = File(longListLocation).readLines()
-        assertEquals(871198282, tool.sumOfNameScores(input))
+    fun `PE problem correct for a large list`() {
+        val longList = getTestResource(longListLocation)
+        val expected = 871_198_282
+        assertEquals(expected, tool.sumOfNameScores(longList))
     }
 }

@@ -81,8 +81,8 @@ internal class LargestProductInSeriesTest {
         )
         for ((name, solution) in solutions) {
             getSpeed(solution, number, n, k).run {
-                speeds.add(name to this.second)
-                assertEquals(expected, this.first)
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
         }
         compareSpeed(speeds)

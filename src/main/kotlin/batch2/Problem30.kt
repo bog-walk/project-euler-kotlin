@@ -7,8 +7,8 @@ import kotlin.math.pow
  *
  * https://projecteuler.net/problem=30
  *
- * Goal: Calculate the sum of all numbers that can be written
- * as the sum of the Nth power of their digits.
+ * Goal: Calculate the sum of all numbers that can be written as the sum of the Nth power of
+ * their digits.
  *
  * Constraints: 3 <= N <= 6
  *
@@ -22,13 +22,14 @@ import kotlin.math.pow
 class DigitFifthPowers {
     fun digitNthPowers(n: Int): List<Int> {
         val nums = mutableListOf<Int>()
-        val start = maxOf(100, (10.0.pow(n - 2)).toInt())
-        val end = minOf(999999, (9.0.pow(n) * n).toInt())
+        val powers = List(10) { (1.0 * it).pow(n).toInt() }
+        val start = maxOf(100, 10.0.pow(n - 2).toInt())
+        val end = minOf(999_999, (9.0.pow(n) * n).toInt())
         for (num in start until end) {
             var digits = num
             var sumOfPowers = 0
             while (digits > 0) {
-                sumOfPowers += (1.0 * digits % 10).pow(n).toInt()
+                sumOfPowers += powers[digits % 10]
                 if (sumOfPowers > num) break
                 digits /= 10
             }

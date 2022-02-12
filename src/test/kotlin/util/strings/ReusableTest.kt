@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Nested
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 internal class ReusableTest {
     @Nested
@@ -30,32 +29,6 @@ internal class ReusableTest {
                 assertFalse { n.isPalindromeManual() }
                 assertFalse { n.isPalindromeNumber() }
                 assertFalse { n.isPalindrome() }
-            }
-        }
-    }
-
-    @Nested
-    @DisplayName("getPermutations test suite")
-    inner class GetPermutations {
-        @Test
-        fun `getPermutations correct with small-sized list`() {
-            val chars = mutableListOf<Char>()
-            val expected = listOf(
-                listOf("0"), listOf("01", "10"), listOf("012", "021", "102", "120", "201", "210")
-            )
-            for ((i, ch) in ('0'..'2').withIndex()) {
-                chars.add(ch)
-                assertEquals(expected[i], getPermutations(chars, i + 1).sorted())
-            }
-        }
-
-        @Test
-        fun `getPermutations correct with large-sized list`() {
-            val chars = ('0'..'9').toMutableList()
-            val factorials = listOf(24, 120, 720, 5040, 40320, 362_880, 3_628_800)
-            for (n in 4..10) {
-                val perms = getPermutations(chars.subList(0, n), n)
-                assertEquals(factorials[n - 4], perms.size)
             }
         }
     }

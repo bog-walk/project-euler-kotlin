@@ -2,51 +2,48 @@ package batch2
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class NumberSpiralDiagonalsTest {
     private val tool = NumberSpiralDiagonals()
 
-    @ParameterizedTest(name="{0}x{0} sum = {1}")
+    @ParameterizedTest(name="{0}x{0} = {1}")
     @CsvSource(
         // lower constraints
         "1, 1", "3, 25", "5, 101", "7, 261",
-        // large values
-        "1001, 669171001", "7001, 789195405"
+        // normal values
+        "1001, 669_171_001", "7001, 789_195_405"
     )
-    fun testSpiralDiagSum(n: Int, expected: Int) {
+    fun `spiralDiagSum correct`(n: Long, expected: Int) {
         val solutions = listOf(
             tool::spiralDiagSumBrute,
-            tool::spiralDiagSumFormula,
+            tool::spiralDiagSumFormulaBrute,
             tool::spiralDiagSumFormulaDerived
         )
         solutions.forEach { solution ->
-            assertEquals(expected, solution(n.toBigInteger()))
+            assertEquals(expected, solution(n))
         }
     }
 
     @Test
-    fun testSpiralDiagSum_huge() {
-        val n = 1_000_000_000.toBigInteger()
-        val solutions = listOf(
-            tool::spiralDiagSumBrute,
-            tool::spiralDiagSumFormula,
-            tool::spiralDiagSumFormulaDerived
+    fun `spiralDiagSum speed`() {
+        val n = 1_000_001L
+        val expected = 4_315_867
+        val solutions = mapOf(
+            "Brute" to tool::spiralDiagSumBrute,
+            "Formula brute" to tool::spiralDiagSumFormulaBrute,
+            "Formula derived" to tool::spiralDiagSumFormulaDerived
         )
-        val times = mutableListOf<Long>()
-        val answers = mutableListOf<Int>()
-        solutions.forEachIndexed { i, solution ->
-            val time = measureNanoTime {
-                answers.add(i, solution(n))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
-            times.add(i, time)
         }
-        println("Brute took: ${times[0] / 1_000_000}ms\n" +
-                "Formula took: ${times[1] / 1_000_000}ms\n" +
-                "Derived formula took: ${times[2]}ns")
-        assertEquals(answers[0], answers[1])
-        assertEquals(answers[1], answers[2])
+        compareSpeed(speeds)
     }
 }

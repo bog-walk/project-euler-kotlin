@@ -22,12 +22,12 @@ internal class SummationOfPrimesTest {
         val n = 1e6.toInt()
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::sumOfPrimesQuickDraw, n).run {
-            speeds.add("Original" to this.second)
-            allPrimes = this.first
+            speeds.add("Original" to second)
+            allPrimes = first
         }
         getSpeed(tool::sumOfPrimesQuickDrawOptimised, n).run {
-            speeds.add("Optimised" to this.second)
-            allPrimesOpt = this.first
+            speeds.add("Optimised" to second)
+            allPrimesOpt = first
         }
         compareSpeed(speeds)
     }

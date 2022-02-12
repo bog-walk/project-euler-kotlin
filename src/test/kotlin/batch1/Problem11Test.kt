@@ -11,6 +11,7 @@ import kotlin.test.Test
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class LargestProductInGridTest {
     private val tool = LargestProductInGrid()
+
     private val smallGrid: Array<IntArray> = getTestGrid(
         "src/test/resources/LargestProductInGrid4By4", 4
     )
@@ -54,13 +55,13 @@ internal class LargestProductInGridTest {
         val expected = 70_600_674
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestProductInGrid, largeGrid).run {
-            speeds.add("All-in-one" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("All-in-one" to second)
+            assertEquals(expected, first)
         }
         val matrix = intMatrixOf(largeGrid)
         getSpeed(tool::largestProductInGridCustom, matrix).run {
-            speeds.add("Custom" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Custom" to second)
+            assertEquals(expected, first)
         }
         compareSpeed(speeds)
     }

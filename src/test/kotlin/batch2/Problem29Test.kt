@@ -3,37 +3,40 @@ package batch2
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 
 internal class DistinctPowersTest {
     private val tool = DistinctPowers()
 
-    @ParameterizedTest(name="N={0} -> {1}")
+    @ParameterizedTest(name="N={0} = {1}")
     @CsvSource(
         // lower constraints
-        "2, 1", "3, 4", "4, 8", "5, 15",
+        "2, 1", "3, 4", "4, 8", "5, 15", "10, 69",
         // normal values
-        "10, 69", "20, 324", "50, 2184", "100, 9183"
+        "20, 324", "50, 2184", "100, 9183", "200, 37774"
     )
-    fun testDistinctPowers(n: Int, expected: Long) {
+    fun `distinctPowers correct`(n: Int, expected: Long) {
         assertEquals(expected, tool.distinctPowersBrute(n))
         assertEquals(expected, tool.distinctPowers(n))
     }
 
     @Test
-    fun testDistinctPowers_speedComparison() {
-        val n = 500
-        val ansBrute: Long
-        val ansImproved: Long
-        val timeBrute = measureNanoTime {
-            ansBrute = tool.distinctPowersBrute(n)
+    fun `distinctPowers speed`() {
+        val n = 1000
+        val expected = 977_358L
+        val solutions = mapOf(
+            "Brute" to tool::distinctPowersBrute,
+            "Improved" to tool::distinctPowers
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
+            }
         }
-        val timeImproved = measureNanoTime {
-            ansImproved = tool.distinctPowers(n)
-        }
-        println("Brute solution took: ${timeBrute / 1_000_000}ms\n" +
-                "Improved solution took: ${timeImproved}ns")
-        assertEquals(ansBrute, ansImproved)
+        compareSpeed(speeds)
     }
 }

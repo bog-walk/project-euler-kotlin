@@ -34,8 +34,8 @@ internal class PowerDigitSumTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
-                speeds.add(name to this.second)
-                assertEquals(expected, this.first)
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
         }
         compareSpeed(speeds)

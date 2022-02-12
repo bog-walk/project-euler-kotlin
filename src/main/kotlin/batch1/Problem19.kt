@@ -100,7 +100,7 @@ class CountingSundays {
     }
 
     /**
-     * Brute search finds weekday on January 1st of provided year, based on the fact that
+     * Brute search finds weekday on January 1st of [year], based on the fact that
      * Jan 1st, 1900 was a Monday.
      *
      * @return Int from 0 to 6 with 0 = Sunday.

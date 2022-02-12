@@ -45,8 +45,8 @@ internal class MaximumPathSum1Test {
         val nested = getNestedPyramid(n, *elements)
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::maxPathSumDynamic, n, nested).run {
-            speeds.add("Dynamic" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Dynamic" to second)
+            assertEquals(expected, first)
         }
         val customActual: Int
         val customTime = measureNanoTime {

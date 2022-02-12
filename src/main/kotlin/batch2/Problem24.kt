@@ -11,8 +11,7 @@ import util.maths.factorial
  *
  * Constraints: 1 <= N <= 13!
  *
- * Lexicographic Permutation: the alphabetically/numerically ordered
- * arrangements of an object.
+ * Lexicographic Permutation: The alphabetically/numerically ordered arrangements of an object.
  * e.g. "abc" -> {"abc", "acb", "bac", "bca", "cab", "cba"}
  *
  * e.g.: N = 1 -> "abcdefghijklm"
@@ -21,16 +20,19 @@ import util.maths.factorial
 
 class LexicographicPermutations {
     /**
-     * Recursive solution uses the factorial (permutations without repetition)
-     * number system to calculate next character in permutation based on batch position.
-     * e.g. "abcd" has 4! = 24 permutations & each letter will have 6
-     * permutations in which that letter will be the 1st in the order.
+     * Recursive solution uses factorial (permutations without repetition) to calculate the next
+     * character in the permutation based on batch position.
      *
-     * @param[n] the nth permutation requested; should be zero-indexed.
-     * @param[input] the object to generate permutations of; should be
-     * already sorted in ascending lexicographic order.
+     * e.g. "abcd" has 4! = 24 permutations & each letter will have 6 permutations in which that
+     * letter will be the 1st in the order. If n = 13, this permutation will be in batch 2
+     * (starts with "c") at position 1 (both 0-indexed). So "c" is removed and n = 1 is used with
+     * the new string "abd". This continues until n = 0 and "cabd" is returned by the base case.
      *
-     * SPEED: 35.2692ms for 10-digit input repeated 100 times
+     * SPEED (EQUAL) 5.5e5ns for 10-digit string
+     *
+     * @param [n] the nth permutation requested should be zero-indexed.
+     * @param [input] the object to generate permutations of should be already sorted in
+     * ascending order.
      */
     fun lexicographicPerm(
         n: Long,
@@ -51,11 +53,15 @@ class LexicographicPermutations {
     }
 
     /**
-     * @param[n] the nth permutation requested; should be zero-indexed.
-     * @param[input] the object to generate permutations of; should be
-     * already sorted in ascending lexicographic order.
+     * Recursive solution above is altered by removing the unnecessary creation of a storage
+     * string to pass into every recursive call, as well as reducing the factorial call, since
+     * x! / x = (x - 1)!
      *
-     * SPEED (BETTER): 9.8471ms for 10-digit input repeated 100 times
+     * SPEED (EQUAL) 7.7e5ns for 10-digit string
+     *
+     * @param [n] the nth permutation requested should be zero-indexed.
+     * @param [input] the object to generate permutations of should be already sorted in
+     * ascending order.
      */
     fun lexicographicPermImproved(n: Long, input: String): String {
         return if (input.length == 1) {

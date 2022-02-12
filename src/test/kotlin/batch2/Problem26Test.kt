@@ -2,7 +2,8 @@ package batch2
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,26 +17,30 @@ internal class ReciprocalCyclesTest {
         // normal values
         "46, 29", "50, 47", "70, 61",
         // upper constraints
-        "1000, 983"
+        "1000, 983", "5000, 4967"
     )
-    fun testLongestReciprocalCycle(n: Int, expected: Int) {
-        assertEquals(expected, tool.longestRepetendDenominatorUsingPrimes(n))
+    fun `longestRepetendDenom correct`(n: Int, expected: Int) {
+        assertEquals(expected, tool.longestRepetendDenomUsingPrimes(n))
+        assertEquals(expected, tool.longestRepetendDenomUsingPrimesImproved(n))
         assertEquals(expected, tool.longestRepetendDenominator(n))
     }
 
     @Test
-    fun testLongestRepetend_speedComparison() {
-        val n = 10000
-        val ansNoPrime: Int
-        val ansPrime: Int
-        val timeNoPrime = measureNanoTime {
-            ansNoPrime = tool.longestRepetendDenominator(n)
+    fun `longestRepetendDenom speed`() {
+        val n = 10_000
+        val expected = 9967
+        val solutions = mapOf(
+            "Original prime" to tool::longestRepetendDenomUsingPrimes,
+            "Improved prime" to tool::longestRepetendDenomUsingPrimesImproved,
+            "Non-prime" to tool::longestRepetendDenominator
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
+            }
         }
-        val timePrime = measureNanoTime {
-            ansPrime = tool.longestRepetendDenominatorUsingPrimes(n)
-        }
-        println("Not using primes took: ${timeNoPrime / 1_000_000}ms\n" +
-                "Using primes took: ${timePrime / 1_000_000}ms")
-        assertEquals(ansNoPrime, ansPrime)
+        compareSpeed(speeds)
     }
 }

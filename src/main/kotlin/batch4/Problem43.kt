@@ -1,6 +1,6 @@
 package batch4
 
-import util.strings.getPermutations
+import util.combinatorics.getPermutations
 
 /**
  * Problem 43: Substring Divisibility

@@ -52,13 +52,13 @@ internal class HighlyDivisibleTriangularNumberTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
-                speeds.add(name to this.second)
-                assertEquals(expected, this.first)
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
         }
         getSpeed(tool::firstTrianglesCache, n).run {
-            speeds.add("Quick pick" to this.second)
-            assertEquals(expected, this.first[1000])
+            speeds.add("Quick pick" to second)
+            assertEquals(expected, first[1000])
         }
         compareSpeed(speeds)
     }

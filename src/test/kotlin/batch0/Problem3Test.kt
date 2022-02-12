@@ -34,12 +34,12 @@ internal class LargestPrimeFactorTest {
         val expected = 6857L
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestPrimeFactor, n).run {
-            speeds.add("Decomposition" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Decomposition" to second)
+            assertEquals(expected, first)
         }
         getSpeed(tool::largestPrimeFactorRecursive, n).run {
-            speeds.add("Recursive" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Recursive" to second)
+            assertEquals(expected, first)
         }
         compareSpeed(speeds)
     }
@@ -50,12 +50,12 @@ internal class LargestPrimeFactorTest {
         val expected = 5L
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestPrimeFactor, n).run {
-            speeds.add("Decomposition" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Decomposition" to second)
+            assertEquals(expected, first)
         }
         getSpeed(tool::largestPrimeFactorRecursive, n).run {
-            speeds.add("Recursive" to this.second)
-            assertEquals(expected, this.first)
+            speeds.add("Recursive" to second)
+            assertEquals(expected, first)
         }
         compareSpeed(speeds)
     }

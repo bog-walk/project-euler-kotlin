@@ -62,8 +62,8 @@ internal class LargeSumTest {
         val results = mutableListOf<String>()
         for ((name, solution) in solutions) {
             getSpeed(solution, hundredFiftyDigs).run {
-                speeds.add(name to this.second)
-                results.add(this.first)
+                speeds.add(name to second)
+                results.add(first)
             }
         }
         compareSpeed(speeds)

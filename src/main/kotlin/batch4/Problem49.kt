@@ -1,6 +1,6 @@
 package batch4
 
-import util.strings.getPermutations
+import util.combinatorics.getPermutations
 import util.maths.isPrime
 import util.maths.primeNumbers
 import kotlin.math.pow

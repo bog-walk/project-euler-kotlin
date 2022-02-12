@@ -46,43 +46,6 @@ fun String.isPalindrome(): Boolean {
 }
 
 /**
- * Heap's Algorithm to generate all [size]! permutations of a list of [size] characters with
- * minimal movement, so returned list is not necessarily sorted.
- *
- * Initially k = [size], then recursively k decrements and each step generates k! permutations that
- * end with the same [size] - k elements. Each step modifies the initial k - 1 elements with a
- * swap based on k's parity.
- *
- * @throws OutOfMemoryError if [size] > 10, consider using an iterative approach instead.
- */
-fun getPermutations(
-    chars: MutableList<Char>,
-    size: Int,
-    perms: MutableList<String> = mutableListOf()
-): List<String> {
-    if (size == 1) {
-        perms.add(chars.joinToString(""))
-    } else {
-        repeat(size) { i ->
-            getPermutations(chars, size - 1, perms)
-            // avoids unnecessary swaps of the kth & 0th element
-            if (i < size - 1) {
-                if (size % 2 == 0) {
-                    val swap = chars[i]
-                    chars[i] = chars[size - 1]
-                    chars[size - 1] = swap
-                } else {
-                    val swap = chars.first()
-                    chars[0] = chars[size - 1]
-                    chars[size - 1] = swap
-                }
-            }
-        }
-    }
-    return perms
-}
-
-/**
  * Checks if [this] contains all digits between 1 and [n] inclusive.
  *
  * While its default argument clears all leading/trailing whitespace, trim(*chars) removes
