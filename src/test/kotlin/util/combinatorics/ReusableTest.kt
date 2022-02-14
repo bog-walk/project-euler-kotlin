@@ -132,13 +132,13 @@ internal class ReusableTest {
         fun `permutations returns empty list if r greater than n or r equal 0`() {
             val input = "ABC".toList()
             var r = 5
-            assertTrue { combinations(input, r).toList().isEmpty() }
+            assertTrue { permutations(input.toMutableList(), r).toList().isEmpty() }
             r = 0
-            assertTrue { combinations(input, r).toList().isEmpty() }
+            assertTrue { permutations(input, r).toList().isEmpty() }
         }
 
         @Test
-        fun `permutations correct with small-sized list & n equal r`() {
+        fun `both permutations correct with small-sized list & n equal r`() {
             val chars = listOf(listOf('0'), listOf('0', '1'), listOf('0', '1', '2'))
             val expected = listOf(
                 listOf("0"), listOf("01", "10"), listOf("012", "021", "102", "120", "201", "210")
@@ -156,7 +156,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutations correct with large-sized list & n equal r`() {
+        fun `both permutations correct with large-sized list & n equal r`() {
             val chars = ('0'..'9').toMutableList()
             val factorials = listOf(24, 120, 720, 5040, 40320, 362_880)
             for (n in 4..9) {

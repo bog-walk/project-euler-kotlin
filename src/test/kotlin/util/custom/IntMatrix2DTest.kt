@@ -104,7 +104,7 @@ internal class IntMatrix2DTest {
     }
 
     @Test
-    fun `clip returns a new matirx with valid input`() {
+    fun `clip returns a new matrix with valid input`() {
         val matrix = IntMatrix2D(4, 4).apply {
             this[0] = intArrayOf(1, 2, 3, 4)
             this[1] = intArrayOf(4, 5, 6, 7)

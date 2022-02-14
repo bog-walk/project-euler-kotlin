@@ -74,7 +74,7 @@ fun <T: Any> combinationsWithReplacement(elements: Iterable<T>, r: Int) = sequen
  * end with the same [size] - k elements. Each step modifies the initial k - 1 elements with a
  * swap based on k's parity.
  *
- * SPEED (WORSE) 2.86s for N = 10, r = 10
+ * SPEED (WORSE) 2.46s for N = 10, r = 10
  *
  * @throws OutOfMemoryError if [size] > 10, consider using an iterative approach instead.
  */
@@ -90,15 +90,8 @@ fun getPermutations(
             getPermutations(chars, size - 1, perms)
             // avoids unnecessary swaps of the kth & 0th element
             if (i < size - 1) {
-                if (size % 2 == 0) {
-                    val swap = chars[i]
-                    chars[i] = chars[size - 1]
-                    chars[size - 1] = swap
-                } else {
-                    val swap = chars.first()
-                    chars[0] = chars[size - 1]
-                    chars[size - 1] = swap
-                }
+                val swap = if (size % 2 == 0) i else 0
+                chars[size - 1] = chars[swap].also { chars[swap] = chars[size - 1] }
             }
         }
     }
@@ -121,7 +114,7 @@ fun getPermutations(
  *
  * This solution will be preferentially used in future solutions.
  *
- * SPEED (BETTER) 27600ns for N = 10, r = 10
+ * SPEED (BETTER) 20500ns for N = 10, r = 10
  */
 fun <T: Any> permutations(elements: Iterable<T>, r: Int = -1) = sequence {
     val input = elements.toList()
