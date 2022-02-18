@@ -181,7 +181,7 @@ fun Long.isPrimeMRBI(certainty: Int = 5): Boolean {
  *
  * SPEED (EQUAL for N < 1e3) 6.4e5ns for 3-digit prime
  */
-fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
+internal fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
     if (this in 2L..3L) return true
     if (this < 2L || this % 2L == 0L) return false
     val one = BigInteger.ONE
@@ -291,7 +291,7 @@ fun primeFactors(n: Long): Map<Long, Int> {
  *
  * SPEED (WORSE) 28.75ms for N = 1e5
  */
-fun primeNumbersOG(n: Int): List<Int> {
+internal fun primeNumbersOG(n: Int): List<Int> {
     if (n < 2) return emptyList()
     // create mask representing [2, max], with all even numbers except 2 (index 0) marked false
     val boolMask = BooleanArray(n - 1) { !(it != 0 && it % 2 == 0) }
@@ -370,7 +370,7 @@ fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
  *
  * SPEED (WORSE) 6.91ms for N = 1e6 - 1
  */
-fun sumProperDivisorsOG(num: Int): Int {
+internal fun sumProperDivisorsOG(num: Int): Int {
     if (num < 2) return 0
     var sum = 1
     var maxDivisor = sqrt(1.0 * num).toInt()

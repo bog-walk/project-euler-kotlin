@@ -3,12 +3,12 @@ package util.strings
 /**
  * SPEED (WORST) 11.62ms for 18-digit N
  */
-fun String.isPalindromeBuiltIn() = this == this.reversed()
+internal fun String.isPalindromeBuiltIn() = this == this.reversed()
 
 /**
  * SPEED (BETTER) 3.16ms for 18-digit N
  */
-fun String.isPalindromeManual(): Boolean {
+internal fun String.isPalindromeManual(): Boolean {
     if (length == 1) return true
     val mid = lastIndex / 2
     val range = if (length % 2 == 1) (0 until mid) else (0..mid)
@@ -21,7 +21,7 @@ fun String.isPalindromeManual(): Boolean {
 /**
  * SPEED (BETTER) 49900ns for 18-digit N
  */
-fun String.isPalindromeNumber(): Boolean {
+internal fun String.isPalindromeNumber(): Boolean {
     if (length == 1) return true
     var num = this.toLong()
     var rev = 0L

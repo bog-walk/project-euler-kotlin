@@ -2,14 +2,15 @@ package batch3
 
 import util.maths.isPrime
 import util.maths.primeNumbers
+import util.search.binarySearch
 
 /**
  * Problem 35: Circular Primes
  *
  * https://projecteuler.net/problem=35
  *
- * Goal: Find the sum of all circular primes less than N, with rotations allowed
- * to exceed N & the rotation themselves allowed as duplicates if below N.
+ * Goal: Find the sum of all circular primes less than N, with rotations allowed to exceed N, &
+ * the rotations themselves allowed as duplicates if below N.
  *
  * Constraints: 10 <= N <= 1e6
  *
@@ -22,6 +23,45 @@ import util.maths.primeNumbers
  */
 
 class CircularPrimes {
+    /**
+     * Increase this solution's efficiency by only using Sieve of Eratosthenes once
+     * to calculate all primes less than the upper constraint.
+     */
+    fun sumOfCircularPrimes(n: Int): Int {
+        return getCircularPrimes(n).sum()
+    }
+
+    /**
+     * Solution is optimised by filtering out primes with any even digits as an even digit means
+     * at least 1 rotation will be even and therefore not prime.
+     *
+     * The primes list is also searched using a binary search algorithm, which brings solution
+     * speed from 489.23ms (originally using r in primes) to 205.29ms.
+     *
+     * @return unsorted list of circular primes < [n].
+     */
+    fun getCircularPrimes(n: Int): List<Int> {
+        val primes = primeNumbers(n - 1).filter {
+            it == 2 || it > 2 && it.toString().none { ch -> ch in "02468" }
+        }
+        if (n == 10) return primes
+        val circularPrimes = mutableListOf<Int>()
+        for (prime in primes) {
+            if (prime < 10) {
+                circularPrimes.add(prime)
+                continue
+            }
+            val pRotated = getRotations(prime)
+            // avoid duplicates and non-primes
+            if (
+                pRotated.any { r ->
+                    r in circularPrimes || r < n && !binarySearch(r, primes) || !r.isPrime()
+                }
+            ) continue
+            circularPrimes += pRotated.filter { it < n }
+        }
+        return circularPrimes
+    }
 
     private fun getRotations(num: Int): Set<Int> {
         val rotations = mutableSetOf(num)
@@ -33,35 +73,5 @@ class CircularPrimes {
             rotations += rotation.toInt()
         }
         return rotations
-    }
-
-    /**
-     * Solution optimised by first getting all primes less than N then filtering
-     * out primes with even digits as primes (other than 2) must be odd & an even
-     * digit means at least 1 rotation will be even.
-     */
-    fun getCircularPrimes(n: Int): List<Int> {
-        val primes = primeNumbers(n - 1).filter {
-            it == 2 || it > 2 && it.toString().none { ch -> ch in "02468" }
-        }
-        if (n == 10) return primes
-        val rotations = primes.slice(0 until 4).toMutableList()
-        for (prime in primes.subList(4, primes.size)) {
-            val pRotated = getRotations(prime)
-            val invalid = pRotated.any {
-                it in rotations || it < n && it !in primes || !it.isPrime()
-            }
-            if (invalid) continue
-            rotations += pRotated.filter { it < n }
-        }
-        return rotations
-    }
-
-    /**
-     * Increase this solution's efficiency by only using Sieve of Eratosthenes once
-     * to calculate all primes less than the upper constraint.
-     */
-    fun sumOfCircularPrimes(n: Int): Int {
-        return getCircularPrimes(n).sum()
     }
 }

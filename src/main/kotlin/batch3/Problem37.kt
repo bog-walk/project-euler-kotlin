@@ -1,20 +1,19 @@
 package batch3
 
 import util.maths.primeNumbers
+import util.search.binarySearch
 
 /**
  * Problem 37: Truncatable Primes
  *
  * https://projecteuler.net/problem=37
  *
- * Goal: Find the sum of all primes less than N that are truncatable
- * both from left to right and from right to left (single-digit primes
- * are not considered).
+ * Goal: Find the sum of all primes less than N that are truncatable both from left to right and
+ * from right to left (single-digit primes are not considered).
  *
  * Constraints: 100 <= N <= 1e6
  *
- * Truncatable Prime: A prime that remains prime as digits are continuously
- * removed from LTR or RTL.
+ * Truncatable Prime: A prime that remains prime as digits are continuously removed from LTR or RTL.
  * e.g. 3797 -> 797 -> 97 -> 7 and 3797 -> 379 -> 37 -> 3
  *
  * e.g.: N = 50
@@ -26,19 +25,20 @@ class TruncatablePrimes {
     /**
      * Solution speed optimised based on the following:
      *
-     * - There are only 11 such qualifying numbers.
+     *  - There are only 11 such qualifying numbers.
      *
-     * - A number must start and end with a single-digit prime.
+     *  - A number must start and end with a single-digit prime.
      *
-     * - No point in considering double digit primes less than 23.
+     *  - No point in considering double-digit primes less than 23.
      *
-     * - Above 100, pattern shows that qualifying numbers must
-     * start and end in a 3 or 7.
+     *  - Above 100, pattern shows that qualifying numbers must start and end in a 3 or 7.
      *
-     * - Above 1000, pattern shows that qualifying numbers must
-     * have their first & last 3 digits be a prime number.
+     *  - Above 1000, pattern shows that qualifying numbers must have their first & last 3 digits
+     *  be a prime number.
      *
-     * - No need to check first & last digits again in final loop.
+     *  - No need to check first & last digits again in final loop.
+     *
+     *  - A binary search algorithm is used to check the primes list.
      */
     fun sumOfTruncPrimes(n: Int): Int {
         val primes = primeNumbers(n - 1)
@@ -48,24 +48,21 @@ class TruncatablePrimes {
             val p = prime.toString()
             val digits = p.length
             if (digits == 2) {
-                if (p.take(1) !in "2357" || p.takeLast(1) !in "2357") {
-                    continue
-                }
+                if (p.take(1) !in "2357" || p.takeLast(1) !in "2357") continue
             } else {
-                if (p.take(1) !in "37" || p.takeLast(1) !in "37") {
-                    continue
-                }
+                if (p.take(1) !in "37" || p.takeLast(1) !in "37") continue
                 if (digits >= 4) {
-                    if (p.take(3).toInt() !in primes || p.takeLast(3).toInt() !in primes) {
-                        continue
-                    }
+                    if (
+                        !binarySearch(p.take(3).toInt(), primes) ||
+                        !binarySearch(p.takeLast(3).toInt(), primes)
+                        ) continue
                 }
             }
             if (digits > 2) {
                 for (i in 2 until digits) {
-                    if (p.take(i).toInt() !in primes || p.takeLast(i).toInt() !in primes) {
-                        continue@outer
-                    }
+                    if (!binarySearch(p.take(i).toInt(), primes) ||
+                        !binarySearch(p.takeLast(i).toInt(), primes)
+                    ) continue@outer
                 }
             }
             sum += prime

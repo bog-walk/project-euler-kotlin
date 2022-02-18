@@ -50,15 +50,14 @@ internal class ReusableTest {
     fun `binarySearch speed`() {
         val nums = List(10_001) { it }
         val target = 9998
-        val solutions: Map<String, (Int, List<Int>) -> Boolean> = mapOf(
-            "Manual" to ::binarySearchManual, "Built-in" to ::binarySearch
-        )
         val speeds = mutableListOf<Pair<String, Long>>()
-        for ((name, solution) in solutions) {
-            getSpeed(solution, target, nums).run {
-                speeds.add(name to this.second)
-                assertTrue { this.first }
-            }
+        getSpeed(::binarySearchManual, target, nums).run {
+            speeds.add("Manual" to this.second)
+            assertTrue { this.first }
+        }
+        getSpeed(::binarySearch, target, nums).run {
+            speeds.add("Built-in" to this.second)
+            assertTrue { this.first }
         }
         compareSpeed(speeds)
     }

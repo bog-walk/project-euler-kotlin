@@ -2,6 +2,7 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.math.pow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,49 +18,49 @@ internal class ChampernownesConstantTest {
         // higher indices
         "1000000000000, 1", "999999999934999995, 7", "1000000000000000000, 3"
     )
-    fun testGetConstant(index: Long, expected: Int) {
+    fun `getConstant correct`(index: Long, expected: Int) {
         assertEquals(expected, tool.getConstant(index))
     }
 
     @Test
-    fun testChampernownesProduct_low() {
+    fun `champernownesProduct correct for lower constraints`() {
         val inputs = listOf(
             listOf<Long>(1, 2, 3, 4, 5, 6, 7),
             listOf<Long>(8, 9, 10, 11, 12, 13, 14),
             listOf<Long>(1, 5, 10, 15, 20, 25, 30),
         )
         val expected = listOf(5040, 0, 140)
-        inputs.forEachIndexed { i, input ->
+        for ((i, input) in inputs.withIndex()) {
             assertEquals(expected[i], tool.champernownesProduct(input))
         }
     }
 
     @Test
-    fun testChampernownesProduct_mid() {
+    fun `champernownesProduct correct for mid constraints`() {
         val inputs = listOf(
             listOf<Long>(10, 20, 30, 40, 50, 60, 70),
             listOf<Long>(11, 21, 31, 41, 51, 61, 71),
             listOf<Long>(1, 2, 4, 8, 16, 32, 64, 128),
         )
         val expected = listOf(144, 0, 2304)
-        inputs.forEachIndexed { i, input ->
+        for ((i, input) in inputs.withIndex()) {
             assertEquals(expected[i], tool.champernownesProduct(input))
         }
     }
 
     @Test
-    fun testChampernownesProduct_high() {
+    fun `champernownesProduct correct for upper constraints`() {
         val inputs = listOf(
-            listOf<Long>(1, 10, 100, 1000, 10_000, 100_000, 1_000_000),
-            listOf(1000000000000, 10000000000000, 100000000000000, 1000000000000000,
-                10000000000000000, 100000000000000000, 1000000000000000000),
+            List(7) { e -> (10.0).pow(e).toLong() },
+            List(7) { e -> (10.0).pow(e + 12).toLong() },
             listOf(
-                9999999999999995, 999999999934999995, 999992599999999996,
-                999991999999998, 999999999999999999, 999123999999999999, 1000000000000000000
+                9_999_999_999_999_995, 999_999_999_934_999_995, 999_992_599_999_999_996,
+                999_991_999_999_998, 999_999_999_999_999_999, 999_123_999_999_999_999,
+                1_000_000_000_000_000_000
             )
         )
-        val expected = listOf(210, 5040, 370440)
-        inputs.forEachIndexed { i, input ->
+        val expected = listOf(210, 5040, 370_440)
+        for ((i, input) in inputs.withIndex()) {
             assertEquals(expected[i], tool.champernownesProduct(input))
         }
     }

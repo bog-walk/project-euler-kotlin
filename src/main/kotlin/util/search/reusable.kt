@@ -10,7 +10,7 @@ package util.search
  * sorted in ascending order. Currently only works with Lists.
  * @return false if collection is empty or element not present; otherwise, true.
  */
-fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<E>): Boolean {
+internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<E>): Boolean {
     var low = 0
     var high = collection.size - 1
     while (low <= high) {
@@ -30,16 +30,23 @@ fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<E>): Bool
  * Standard library implementation of the binary search algorithm.
  *
  * The function has extra functionality that can be used, e.g. defining the given list to a
- * smaller search range, or including a comparator, or calling the function on an Array. It
- * normally returns the index position of the target, if found; otherwise its inverse index (i.e.
- * the position at which the element should be inserted to maintain a sorted collection.
+ * smaller search range, or including a comparator. It normally returns the index position of the
+ * target, if found; otherwise its inverse index (i.e. the position at which the element should
+ * be inserted to maintain a sorted collection.
  *
  * This version will be preferentially used in all solutions.
+ *
+ * N.B. This version does not currently enable it being called on an Array.
  *
  * SPEED (BETTER) 52000ns for edge target in 1e4-sized list
  *
  * @return false if collection is empty or element not present; otherwise, true.
  */
-fun <E : Comparable<E>> binarySearch(target: E, collection: List<E>) : Boolean {
-    return collection.binarySearch(target) >= 0
+fun <E : Comparable<E>> binarySearch(
+    target: E,
+    collection: List<E>,
+    fromIndex: Int = 0,
+    toIndex: Int = collection.size
+) : Boolean {
+    return collection.binarySearch(target, fromIndex, toIndex) >= 0
 }

@@ -6,7 +6,7 @@ package util.combinatorics
  * SPEED (EQUAL) 23.8ms for N = 9, r = 6
  * SPEED (WORSE) 485.19ms for N = 19, r = 15
  */
-fun  <T: Any> getCombinations(elements: Iterable<T>, r: Int): List<List<T>> {
+internal fun  <T: Any> getCombinations(elements: Iterable<T>, r: Int): List<List<T>> {
     if (r == 1) return elements.map { listOf(it) }
     val input = elements.toList()
     if (r > input.size || r == 0) return emptyList()
@@ -103,7 +103,7 @@ fun <T: Any> combinationsWithReplacement(elements: Iterable<T>, r: Int) = sequen
  *
  * @throws OutOfMemoryError if [size] > 10, consider using an iterative approach instead.
  */
-fun getPermutations(
+internal fun getPermutations(
     chars: MutableList<Char>,
     size: Int,
     perms: MutableList<String> = mutableListOf()

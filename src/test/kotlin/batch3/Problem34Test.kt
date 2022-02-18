@@ -15,12 +15,12 @@ internal class DigitFactorialsTest {
         // larger values
         "100, 239", "200, 384", "500, 603"
     )
-    fun testSumOfDigitFactorials_HR(n: Int, expected: Int) {
+    fun `HR problem correct`(n: Int, expected: Int) {
         assertEquals(expected, tool.sumOfDigitFactorialsHR(n))
     }
 
     @Test
-    fun testSumOfDigitFactorials_PE() {
+    fun `PE problem correct`() {
         assertEquals(40730, tool.sumOfDigitFactorialsPE())
     }
 }

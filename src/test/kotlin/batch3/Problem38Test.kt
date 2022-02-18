@@ -7,8 +7,8 @@ internal class PandigitalMultiplesTest {
     private val tool = PandigitalMultiples()
 
     @Test
-    fun testFindPandigitalMultipliers() {
-        val nums = listOf(100, 1000, 10000)
+    fun `HR problem correct`() {
+        val nums = listOf(100, 1000, 10_000)
         val expected = listOf(
             listOf(listOf(18, 78), listOf(9)),
             listOf(listOf(18, 78), listOf(9, 192, 219, 273, 327)),
@@ -29,7 +29,7 @@ internal class PandigitalMultiplesTest {
     }
 
     @Test
-    fun testLargest9Pandigital() {
+    fun `PE problem correct`() {
         val expected = "932718654"
         assertEquals(expected, tool.largest9Pandigital())
     }

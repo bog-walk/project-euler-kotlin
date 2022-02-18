@@ -2,7 +2,8 @@ package batch3
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,37 +12,35 @@ internal class IntegerRightTrianglesTest() {
 
     @ParameterizedTest(name="N = {0}")
     @CsvSource(
-        // low N
+        // lowest constraints
         "12, 12", "15, 12", "40, 12", "50, 12",
-        // mid N
+        // less low constraints
         "80, 60", "100, 60",
-        // higher N
+        // lower constraints
         "1000, 840"
     )
-    fun testMostTripletSolutions(n: Int, expected: Int) {
+    fun `mostTripletSolutions correct for lower constraints`(n: Int, expected: Int) {
         assertEquals(expected, tool.mostTripletSolutionsBrute(n))
         assertEquals(expected, tool.mostTripletSolutions(n))
         assertEquals(expected, tool.mostTripletSolutionsImproved(n))
     }
 
     @Test
-    fun testMostTriplets_speedComparison() {
-        val n = 100000
+    fun `mostTripletSolutions speed`() {
+        val n = 100_000
         val expected = 55440
-        val solutions = listOf(
-            tool::mostTripletSolutionsBrute,
-            tool::mostTripletSolutions,
-            tool::mostTripletSolutionsImproved
+        val solutions = mapOf(
+            "Brute" to tool::mostTripletSolutionsBrute,
+            "Original" to tool::mostTripletSolutions,
+            "Improved" to tool::mostTripletSolutionsImproved
         )
-        val times = mutableListOf<Long>()
-        solutions.forEachIndexed { i, solution ->
-            val time = measureNanoTime {
-                assertEquals(expected, solution(n))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
             }
-            times.add(i, time)
         }
-        println("Brute solution took: ${1.0 * times[0] / 1_000_000_000}s\n" +
-                "Normal solution took: ${1.0 * times[1] / 1_000_000_000}s\n" +
-                "Improved solution took: ${1.0 * times[2] / 1_000_000_000}s\n")
+        compareSpeed(speeds)
     }
 }

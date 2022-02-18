@@ -1,6 +1,5 @@
 package batch3
 
-
 import util.maths.factorial
 
 /**
@@ -8,23 +7,29 @@ import util.maths.factorial
  *
  * https://projecteuler.net/problem=34
  *
- * Goal: Find the sum of all numbers less than N that divide the sum of
- * the factorial of their digits (& therefore have minimum 2 digits).
+ * Goal: Find the sum of all numbers less than N that divide the sum of the factorial of their
+ * digits (& therefore have minimum 2 digits).
  *
  * Constraints: 10 <= N <= 1e5
  *
+ * Factorion: A natural number that equals the sum of the factorials of its digits.
+ * The only non-single-digit factorions are: 145 and 40585.
+ *
  * e.g.: N = 20
  *       qualifying numbers = {19}
- *       as 1! + 9! = 362881, which % 19 = 0
- *       e.g. 18 does not work as 1! + 8! = 40321, which % 19 > 0
+ *       as 1! + 9! = 362_881, which % 19 = 0
+ *       e.g. 18 does not work as 1! + 8! = 40321, which % 18 > 0
  *       sum = 19
  */
 
 class DigitFactorials {
-    // pre-calculation of all digits to increase performance
+    // pre-calculation of all digit factorials to increase performance
     private val factorials = List(10) { it.factorial().intValueExact() }
 
     /**
+     * HackerRank specific implementation that finds the sum of all numbers < [n] that are divisors
+     * of the sum of the factorials of their digits.
+     *
      * Increase this solution's efficiency by creating an array of upper constraint
      * size (plus 1) & looping once through all numbers then caching the result plus the
      * previously calculated sum, if it matches the necessary requirements.
@@ -41,13 +46,11 @@ class DigitFactorials {
     }
 
     /**
-     * Project Euler specific implementation that finds the sum of all numbers
-     * that are equal to the sum of the factorial of their digits.
-     * Search limit based on double-digit need and that a 7-digit number of only
-     * 9! would sum to 2_540_160, so the 1st digit of the 7-digit number cannot
-     * be greater than 2. An 8-digit number is not possible as 8 * 9! still
-     * results in a 7-digit sum.
-     * The only 2 numbers are: 145 and 40585.
+     * Project Euler specific implementation that finds the sum of all numbers that are factorions.
+     *
+     * The numbers cannot have more than 7 digits, as 9! * 8 returns only a 7-digit number.
+     *
+     * 9! * 7 returns 2_540_160, so the 1st digit of the 7-digit number cannot be greater than 2.
      */
     fun sumOfDigitFactorialsPE(): Int {
         var sum = 0
