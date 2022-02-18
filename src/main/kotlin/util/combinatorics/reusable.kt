@@ -1,7 +1,27 @@
 package util.combinatorics
 
 /**
- * Mimics the Python itertools module function and returns [r]-length subLists of elements.
+ * Original implementation of an algorithm that returns [r]-length subLists of [elements].
+ *
+ * SPEED (EQUAL) 23.8ms for N = 9, r = 6
+ * SPEED (WORSE) 485.19ms for N = 19, r = 15
+ */
+fun  <T: Any> getCombinations(elements: Iterable<T>, r: Int): List<List<T>> {
+    if (r == 1) return elements.map { listOf(it) }
+    val input = elements.toList()
+    if (r > input.size || r == 0) return emptyList()
+    val combinations = mutableListOf<List<T>>()
+    for (i in input.indices) {
+        val element = mutableListOf(input[i])
+        for (c in getCombinations(input.slice((i+1)..input.lastIndex), r-1)) {
+            combinations.add(element + c)
+        }
+    }
+    return combinations
+}
+
+/**
+ * Mimics the Python itertools module function and returns [r]-length subLists of [elements].
  *
  * If [elements] is sorted, combinations will be yielded in lexicographic order.
  *
@@ -12,6 +32,11 @@ package util.combinatorics
  * The number of yielded combinations, if n = the amount of elements, is:
  *
  * n!/r!/(n - r)!
+ *
+ * This solution will be preferentially used in future solutions.
+ *
+ * SPEED (EQUAL) 24.1ms for N = 9, r = 6
+ * SPEED (BETTER) 69.72ms for N = 19, r = 15
  */
 fun <T: Any> combinations(elements: Iterable<T>, r: Int) = sequence {
     val input = elements.toList()
@@ -139,5 +164,25 @@ fun <T: Any> permutations(elements: Iterable<T>, r: Int = -1) = sequence {
                 break
             }
         }
+    }
+}
+
+/**
+ * Returns Cartesian product of [elements].
+ *
+ * If [elements] is sorted, product lists will be yielded in lexicographic order.
+ *
+ * e.g. elements = "ABCD", "xy" -> Ax Ay Bx By Cx Cy Dx Dy
+ *
+ * This version currently does not enable the product of an iterable with itself.
+ */
+fun <T: Any> product(vararg elements: Iterable<T>) = sequence {
+    if (elements.isEmpty()) return@sequence
+    val inputs = elements.map { it.toList() }
+    val results = inputs.fold(listOf(listOf<T>())) { acc, list ->
+        acc.flatMap { accList -> list.map { e -> accList + e } }
+    }
+    for (result in results) {
+        yield(result)
     }
 }

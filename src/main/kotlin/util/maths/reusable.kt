@@ -267,8 +267,8 @@ fun powerDigitSum(base: Int, exp: Int): Int {
  *
  * e.g. N = 12 returns {2=2, 3=1} -> 2^2 * 3^1 = 12
  *
- * @throws IllegalArgumentException if [n] <= 1.
  * @return map of prime factors (keys) and their exponents (values).
+ * @throws IllegalArgumentException if [n] <= 1.
  */
 fun primeFactors(n: Long): Map<Long, Int> {
     require(n > 1) { "Must provide a natural number greater than 1" }

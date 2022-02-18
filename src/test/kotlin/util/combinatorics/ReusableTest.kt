@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import util.tests.compareSpeed
 import util.tests.getSpeed
+import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -18,8 +19,10 @@ internal class ReusableTest {
             val input = "ABCD".toList()
             var r = 5
             assertTrue { combinations(input, r).toList().isEmpty() }
+            assertTrue { getCombinations(input, r).toList().isEmpty() }
             r = 0
             assertTrue { combinations(input, r).toList().isEmpty() }
+            assertTrue { getCombinations(input, r).toList().isEmpty() }
         }
 
         @Test
@@ -30,6 +33,10 @@ internal class ReusableTest {
             assertContentEquals(
                 expected, combinations(input, r).map { it.joinToString("") }.toList()
             )
+            assertContentEquals(
+                expected,
+                getCombinations(input, r).map { it.joinToString("") }.toList()
+            )
         }
 
         @Test
@@ -39,6 +46,10 @@ internal class ReusableTest {
             val expected = listOf("AB", "AC", "AD", "BC", "BD", "CD")
             assertContentEquals(
                 expected, combinations(input, r).map { it.joinToString("") }.toList()
+            )
+            assertContentEquals(
+                expected,
+                getCombinations(input, r).map { it.joinToString("") }.toList()
             )
         }
 
@@ -51,14 +62,29 @@ internal class ReusableTest {
                 expected,
                 combinations(input, r).map { it.joinToString("").toInt() }.toList()
             )
+            assertContentEquals(
+                expected,
+                getCombinations(input, r).map { it.joinToString("").toInt() }.toList()
+            )
         }
 
         @Test
-        fun `combinations correct for large-sized range`() {
-            val input = 1..9
-            val r = 6
-            val expectedSize = 84
-            assertEquals(expectedSize, combinations(input, r).toList().size)
+        fun `speed comparison for large-sized range`() {
+            val input = 1..19
+            val r = 15
+            val expectedSize = 3876
+            val speeds = mutableListOf<Pair<String, Long>>()
+            getSpeed(::getCombinations, input, r).run {
+                speeds.add("Old" to second)
+                assertEquals(expectedSize, first.size)
+            }
+            val newActual: List<List<Int>>
+            val newTime = measureNanoTime {
+                newActual = combinations(input, r).toList()
+            }
+            speeds.add("New" to newTime)
+            assertEquals(expectedSize, newActual.size)
+            compareSpeed(speeds)
         }
     }
 
@@ -212,6 +238,72 @@ internal class ReusableTest {
                 assertEquals(expectedSize, first.toList().size)
             }
             compareSpeed(speeds)
+        }
+    }
+
+    @Nested
+    @DisplayName("product test suite")
+    inner class Product {
+        @Test
+        fun `product returns empty list if empty iterables provided`() {
+            assertTrue { product(emptyList(), emptyList()).toList().isEmpty() }
+        }
+
+        @Test
+        fun `product returns 1 product if single iterable with single element provided`() {
+            val input = "A".toList()
+            val expected = listOf("A")
+            assertContentEquals(
+                expected, product(input).map { it.joinToString("") }.toList()
+            )
+        }
+
+        @Test
+        fun `product correct for small-sized single iterable`() {
+            val input = "ABC".toList()
+            val expected = listOf("A", "B","C")
+            assertContentEquals(
+                expected, product(input).map { it.joinToString("") }.toList()
+            )
+        }
+
+        @Test
+        fun `product correct for 2 small-sized iterables of different lengths`() {
+            val input1 = "ABCD".toList()
+            val input2 = "xy".toList()
+            val expected = listOf("Ax", "Ay", "Bx", "By", "Cx", "Cy", "Dx", "Dy")
+            assertContentEquals(
+                expected,
+                product(input1, input2).map { it.joinToString("") }.toList()
+            )
+        }
+
+        @Test
+        fun `product correct for multiple small-sized iterables`() {
+            val inputs = arrayOf(0..2, 1..3, 5..8)
+            val expectedSize = 36
+            val expectedHead = listOf(15, 16, 17,  18, 25, 26)
+            val expectedTail = listOf(227, 228, 235, 236, 237, 238)
+            val actual = product(*inputs).map { it.joinToString("").toInt() }.toList()
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedHead, actual.take(6))
+            assertContentEquals(expectedTail, actual.takeLast(6))
+        }
+
+        @Test
+        fun `product correct for 2 large-sized iterables`() {
+            val inputs = arrayOf('A'..'P', '1'..'9')
+            val expectedSize = 144
+            val expectedHead = listOf(
+                "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "B1"
+            )
+            val expectedTail = listOf(
+                "O9", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9"
+            )
+            val actual = product(*inputs).map { it.joinToString("") }.toList()
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedHead, actual.take(10))
+            assertContentEquals(expectedTail, actual.takeLast(10))
         }
     }
 }

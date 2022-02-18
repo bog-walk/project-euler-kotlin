@@ -3,7 +3,8 @@ package batch3
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 
 internal class CoinSumsTest {
@@ -21,24 +22,25 @@ internal class CoinSumsTest {
         // upper constraints
         "10000, 296710490"
     )
-    fun testCountCoinCombos(n: Int, expected: Int) {
+    fun `countCoinCombos correct for all but upper N`(n: Int, expected: Int) {
         assertEquals(expected, tool.countCoinCombos(n))
         assertEquals(expected, tool.countCoinCombosRecursive(n))
     }
 
     @Test
-    fun testCountCoinCombos_speedComparison() {
-        val n = 100000
-        val ansRecursive: Int
-        val ansOptimised: Int
-        val timeRecursive = measureNanoTime {
-            ansRecursive = tool.countCoinCombosRecursive(n)
+    fun `countCoinCombos speed for upper constraints`() {
+        val n = 100_000
+        val speeds = mutableListOf<Pair<String, Long>>()
+        val results = mutableListOf<Int>()
+        getSpeed(tool::countCoinCombosRecursive, n).run {
+            speeds.add("Recursive" to second)
+            results.add(first)
         }
-        val timeOptimised = measureNanoTime {
-            ansOptimised = tool.countCoinCombos(n)
+        getSpeed(tool::countCoinCombos, n).run {
+            speeds.add("Optimised" to second)
+            results.add(first)
         }
-        println("Recursive solution took: ${timeRecursive / 1_000_000}ms\n" +
-                "Optimised solution took: ${timeOptimised / 1_000_000}ms")
-        assertEquals(ansRecursive, ansOptimised)
+        compareSpeed(speeds)
+        assertEquals(results.first(), results.last())
     }
 }

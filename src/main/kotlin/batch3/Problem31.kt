@@ -7,8 +7,8 @@ import java.math.BigInteger
  *
  * https://projecteuler.net/problem=31
  *
- * Goal: Count the number of ways (mod 1e9 + 7) that N pence
- * can be made using any combination of English coins.
+ * Goal: Count the number of ways (mod 1e9 + 7) that N pence can be made using any combination of
+ * English coins.
  *
  * Constraints: 1 <= N <= 1e5
  *
@@ -24,20 +24,29 @@ class CoinSums {
     private val modulus = BigInteger.valueOf(1_000_000_007)
     private val coins = listOf(1, 2, 5, 10, 20, 50, 100, 200)
 
-    private val recursiveMemo = Array(100001) { Array<BigInteger>(8) { BigInteger.ZERO } }
+    private val recursiveMemo = Array(100_001) {
+        Array<BigInteger>(8) { BigInteger.ZERO }
+    }
 
     /**
-     * Recursive solution optimised with memoisation using top-down approach.
-     * Repeatedly subtract each coin value from the target & sum combos previously
+     * Recursive solution uses helper function to allow memoization using top-down, thereby
+     * optimising this top-down approach.
+     *
+     * SPEED (WORSE) 17.22s for N = 1e5
+     *
+     * @param [n] total amount that needs to be achieved by all combinations.
+     * @param [coin] index of coin value from class [coins]. Default is the largest coin
+     * available (2 pounds). This parameter allows flexibility in the method purpose. e.g. Count
+     * combos for making 10p using 2p (& lower coins) = 6, instead of making 10p using all
+     * possible coins = 11 combos.
+     */
+    fun countCoinCombosRecursive(n: Int, coin: Int = 7): Int {
+        return recursiveCombos(n, coin).mod(modulus).intValueExact()
+    }
+
+    /**
+     * Repeatedly subtract each coin value from the target value & sum combos previously
      * calculated for smaller targets.
-     *
-     * @param [coin] Index of coin value from [coins] above. Default is the
-     * largest coin available (2 pounds).
-     * This parameter allows flexibility in method purpose ->
-     * e.g. Could find combos for making 10p using 2p (& lower coins) = 6,
-     * instead of making 10p using all possible coins = 11 combos.
-     *
-     * SPEED: 15764ms for N = 1e5
      */
     private fun recursiveCombos(n: Int, coin: Int): BigInteger {
         if (coin < 1) return BigInteger.ONE
@@ -52,24 +61,23 @@ class CoinSums {
         return combos
     }
 
-    fun countCoinCombosRecursive(n: Int, coin: Int = 7): Int {
-        return recursiveCombos(n, coin).mod(modulus).intValueExact()
-    }
-
     /**
-     * Bottom-up approach that determines a target's combo based on:
-     * - the previous combo calculated for the coin with a smaller target, &
-     * - the previous combo calculated for a coin of lesser value.
+     * Solution uses bottom-up approach that determines a target's combo based on:
      *
-     * SPEED (BEST): 56ms for N = 1e5
-     * Better performance due less expensive loops (vs recursive function calls)
-     * & use of less memory with better cache-access.
+     *  - The previous combo calculated for the coin with a smaller target, &
+     *
+     *  - The previous combo calculated for a coin of lesser value.
+     *
+     * SPEED (BETTER) 52.26ms for N = 1e5
+     * Better performance due less expensive loops (vs more expensive recursive function calls) &
+     * use of less memory with better cache-access.
      */
     fun countCoinCombos(n: Int): Int {
-        val combosByCoin = Array<BigInteger>(n + 1) { BigInteger.ZERO }
-        // Base case for when 0p is needed
-        combosByCoin[0] = BigInteger.ONE
-        coins.forEach { coin ->
+        // index 0 exists for when 0p is needed
+        val combosByCoin = Array<BigInteger>(n + 1) {
+            BigInteger.ZERO
+        }.apply { this[0] = BigInteger.ONE }
+        for (coin in coins) {
             for (i in coin..n) {
                 combosByCoin[i] += combosByCoin[i - coin]
             }

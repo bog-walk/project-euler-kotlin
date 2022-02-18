@@ -100,7 +100,7 @@ fun compareSpeed(speeds: List<Pair<String, Long>>, precision: Int = 2) {
                 time >= 1_000_000 -> {
                     "%.2fms".format(1.0 * time / 1_000_000)
                 }
-                time >= 100_000 -> {
+                time >= 10_000 -> {
                     "%.1ens".format(1.0 * time)
                 }
                 else -> "${time}ns"
@@ -150,14 +150,3 @@ fun <R : Any> getTestResource(
     }
     return resource
 }
-
-
-
-
-
-
-
-
-
-
-
