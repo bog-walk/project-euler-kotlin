@@ -14,13 +14,13 @@ internal class EvenFibonacciTest {
     @CsvSource(
         // lower constraints
         "10, 10",
-        // normal values
+        // mid constraints
         "30, 10", "200, 188", "2200, 798",
         // N is an even fibonacci
         "34, 10", "10946, 3382",
         // N is next to even fibonacci
         "9, 10", "2583, 798",
-        // large values
+        // larger mid constraints
         "4_000_000, 4_613_732"
     )
     fun `sumOfEvenFibs correct`(n: Long, expected: Long) {
@@ -42,7 +42,7 @@ internal class EvenFibonacciTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

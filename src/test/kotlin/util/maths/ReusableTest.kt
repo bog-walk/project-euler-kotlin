@@ -81,6 +81,27 @@ internal class ReusableTest {
     }
 
     @Nested
+    @DisplayName("isHexagonal test suite")
+    inner class IsHexagonal {
+        @Test
+        fun `isHexagonal correct with hexagonal numbers`() {
+            val nums = listOf<Long>(1, 6, 15, 28, 45, 325, 703, 1326)
+            val expected = listOf(1, 2, 3, 4, 5, 13, 19, 26)
+            nums.forEachIndexed { i, n ->
+                assertEquals(expected[i], n.isHexagonalNumber())
+            }
+        }
+
+        @Test
+        fun `isHexagonal returns null with non-hexagonal numbers`() {
+            val nums = listOf<Long>(2, 23, 100, 313, 691, 1111)
+            nums.forEach { n ->
+                assertNull(n.isHexagonalNumber())
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("isPentagonal test suite")
     inner class IsPentagonal {
         @Test

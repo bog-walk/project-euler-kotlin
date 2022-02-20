@@ -14,9 +14,9 @@ internal class PowerDigitSumTest {
     @CsvSource(
         // lower constraint
         "1, 2", "2, 4", "3, 8", "4, 7", "7, 11", "9, 8",
-        // normal values
+        // mid constraints
         "15, 26", "99, 107",
-        // higher constraints
+        // upper constraints
         "1000, 1366"
     )
     fun `expDigSum correct`(n: Int, expected: Int) {
@@ -35,7 +35,7 @@ internal class PowerDigitSumTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

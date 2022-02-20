@@ -14,7 +14,7 @@ internal class NumberSpiralDiagonalsTest {
     @CsvSource(
         // lower constraints
         "1, 1", "3, 25", "5, 101", "7, 261",
-        // normal values
+        // mid constraints
         "1001, 669_171_001", "7001, 789_195_405"
     )
     fun `spiralDiagSum correct`(n: Long, expected: Int) {
@@ -41,7 +41,7 @@ internal class NumberSpiralDiagonalsTest {
         for((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

@@ -61,6 +61,30 @@ tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
 }
 
 /**
+ * Returns the corresponding term of the number if hexagonal, or null.
+ *
+ * Derivation solution is based on the formula:
+ *
+ * n(2n - 1) = hN, in quadratic form becomes:
+ *
+ * 0 = 2n^2 - n - hN, with a, b, c = 2, -1, -hN
+ *
+ * putting these values in the quadratic formula becomes:
+ *
+ * n = (1 +/- sqrt(1 + 8hN)) / 4
+ *
+ * so the inverse function, positive solution becomes:
+ *
+ * n = (1 + sqrt(1 + 8h_n)) / 4
+ *
+ * @return  If hN is the nth hexagonal, or null
+ */
+fun Long.isHexagonalNumber(): Int? {
+    val n = 0.25 * (1 + sqrt(1 + 8.0 * this))
+    return if (n == floor(n)) n.toInt() else null
+}
+
+/**
  * Returns the corresponding term of the number if pentagonal, or null.
  *
  * Derivation solution is based on the formula:
@@ -291,7 +315,7 @@ fun primeFactors(n: Long): Map<Long, Int> {
  *
  * SPEED (WORSE) 28.75ms for N = 1e5
  */
-internal fun primeNumbersOG(n: Int): List<Int> {
+fun primeNumbersOG(n: Int): List<Int> {
     if (n < 2) return emptyList()
     // create mask representing [2, max], with all even numbers except 2 (index 0) marked false
     val boolMask = BooleanArray(n - 1) { !(it != 0 && it % 2 == 0) }
@@ -370,7 +394,7 @@ fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
  *
  * SPEED (WORSE) 6.91ms for N = 1e6 - 1
  */
-internal fun sumProperDivisorsOG(num: Int): Int {
+fun sumProperDivisorsOG(num: Int): Int {
     if (num < 2) return 0
     var sum = 1
     var maxDivisor = sqrt(1.0 * num).toInt()

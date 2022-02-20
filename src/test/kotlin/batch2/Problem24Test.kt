@@ -40,11 +40,11 @@ internal class LexicographicPermutationsTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::lexicographicPerm, permutation, input).run {
             speeds.add("Original" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Original -> $first")
         }
         getSpeed(tool::lexicographicPermImproved, permutation, input).run {
             speeds.add("Improved" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Improved -> $first")
         }
         compareSpeed(speeds)
     }

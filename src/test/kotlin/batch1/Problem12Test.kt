@@ -53,12 +53,12 @@ internal class HighlyDivisibleTriangularNumberTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         getSpeed(tool::firstTrianglesCache, n).run {
             speeds.add("Quick pick" to second)
-            assertEquals(expected, first[1000])
+            assertEquals(expected, first[1000], "Incorrect Quick pick -> $first")
         }
         compareSpeed(speeds)
     }

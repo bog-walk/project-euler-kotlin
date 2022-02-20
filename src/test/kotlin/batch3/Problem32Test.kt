@@ -29,7 +29,7 @@ internal class PandigitalProductsTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

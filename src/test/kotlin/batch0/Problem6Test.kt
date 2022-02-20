@@ -14,9 +14,9 @@ internal class SumSquareDifferenceTest {
     @CsvSource(
         // lower constraints
         "1, 0", "2, 4", "3, 22",
-        // normal values
+        // mid constraints
         "10, 2640", "51, 1_712_750", "100, 25_164_150",
-        // large values
+        // larger mid constraints
         "2256, 6_477_756_566_600", "7000, 600_307_154_415_500"
     )
     fun `sumSquareDiff correct`(n: Int, expected: Long) {
@@ -36,7 +36,7 @@ internal class SumSquareDifferenceTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

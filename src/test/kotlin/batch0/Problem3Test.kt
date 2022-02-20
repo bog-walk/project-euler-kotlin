@@ -16,9 +16,9 @@ internal class LargestPrimeFactorTest {
         "10, 5",
         // N is small prime
         "17, 17", "23, 23",
-        // normal values
+        // mid constraints
         "48, 3", "147, 7", "330, 11",
-        // large values
+        // larger mid constraints
         "13195, 29", "200_000, 5", "600851475143, 6857",
         // large prime numbers, including Euler's
         "7919, 7919", "2_147_483_647, 2_147_483_647"
@@ -35,11 +35,11 @@ internal class LargestPrimeFactorTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestPrimeFactor, n).run {
             speeds.add("Decomposition" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Decomposition -> $first")
         }
         getSpeed(tool::largestPrimeFactorRecursive, n).run {
             speeds.add("Recursive" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Recursive -> $first")
         }
         compareSpeed(speeds)
     }
@@ -51,11 +51,11 @@ internal class LargestPrimeFactorTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestPrimeFactor, n).run {
             speeds.add("Decomposition" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Decomposition -> $first")
         }
         getSpeed(tool::largestPrimeFactorRecursive, n).run {
             speeds.add("Recursive" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Recursive -> $first")
         }
         compareSpeed(speeds)
     }

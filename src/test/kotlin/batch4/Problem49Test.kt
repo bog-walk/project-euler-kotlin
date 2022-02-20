@@ -1,6 +1,7 @@
 package batch4
 
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -9,56 +10,66 @@ internal class PrimePermutationsTest {
     private val tool = PrimePermutations()
 
     @Test
-    fun testPrimePermSequence_4Digit() {
+    fun `primePermSequence correct for 4-digit permutations`() {
         val n = 10_000
-        val expected = listOf("148748178147", "296962999629")
-        assertContentEquals(expected, tool.primePermSequence(n, k=3))
-        assertContentEquals(emptyList(), tool.primePermSequence(n, k=4))
-        assertContentEquals(expected, tool.primePermSequenceImproved(n, k=3))
-        assertContentEquals(emptyList(), tool.primePermSequenceImproved(n, k=4))
+        val expected = listOf(listOf("148748178147", "296962999629"), emptyList())
+        for (k in 3..4) {
+            assertContentEquals(expected[k-3], tool.primePermSequence(n, k))
+            assertContentEquals(expected[k-3], tool.primePermSequenceImproved(n, k))
+        }
     }
 
     @Test
-    fun testPrimePermSequence_5DigitLow() {
+    fun `primePermSequence correct for lower 5-digit permutations`() {
         val n = 20_000
         val expected = listOf(
+            listOf(
             "148748178147", "296962999629", "114831481318143", "114974171971941",
             "127131321713721", "127391723921739", "127571725721757", "127991729921799",
             "148214812181421", "148313148148131", "148974718979481", "185035180385103",
             "185935189385193", "195433549151439"
+            ),
+            emptyList()
         )
-        assertContentEquals(expected, tool.primePermSequence(n, k=3))
-        assertContentEquals(emptyList(), tool.primePermSequence(n, k=4))
-        assertContentEquals(expected, tool.primePermSequenceImproved(n, k=3))
-        assertContentEquals(emptyList(), tool.primePermSequenceImproved(n, k=4))
+        for (k in 3..4) {
+            assertContentEquals(expected[k-3], tool.primePermSequence(n, k))
+            assertContentEquals(expected[k-3], tool.primePermSequenceImproved(n, k))
+        }
     }
 
     @Test
-    fun testPrimePermSequence_5DigitHigh() {
+    fun `primePermSequence correct for higher 5-digit permutations with K equal 3`() {
         val n = 100_000
+        val k = 3
         val expectedSize = 55
-        assertEquals(expectedSize, tool.primePermSequence(n, k=3).size)
-        assertEquals(expectedSize, tool.primePermSequenceImproved(n, k=3).size)
-        val expected = listOf("83987889379388798837")
-        assertContentEquals(expected, tool.primePermSequence(n, k=4))
-        assertContentEquals(expected, tool.primePermSequenceImproved(n, k=4))
+        assertEquals(expectedSize, tool.primePermSequence(n, k).size)
+        assertEquals(expectedSize, tool.primePermSequenceImproved(n, k).size)
     }
 
     @Test
-    fun testPrimePermSequenceSpeed() {
+    fun `primePermSequence correct for higher 5-digit permutations with K equal 4`() {
+        val n = 100_000
+        val k = 4
+        val expected = listOf("83987889379388798837")
+        assertContentEquals(expected, tool.primePermSequence(n, k))
+        assertContentEquals(expected, tool.primePermSequenceImproved(n, k))
+    }
+
+    @Test
+    fun `primePermSequence speed`() {
         val n = 1_000_000
         val k = 3
         val expectedSize = 883
-        val solutions = listOf(
-            tool::primePermSequence, tool::primePermSequenceImproved
+        val solutions = mapOf(
+            "Original" to tool::primePermSequence, "Improved" to tool::primePermSequenceImproved
         )
-        val times = LongArray(solutions.size)
-        solutions.forEachIndexed { i, solution ->
-            times[i] = measureNanoTime {
-                assertEquals(expectedSize, solution(n, k).size)
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n, k).run {
+                speeds.add(name to second)
+                assertEquals(expectedSize, first.size, "Incorrect $name -> ${first.size}")
             }
         }
-        print("Original solution took: ${1.0 * times[0] / 1_000_000_000}s\n" +
-                "Improved solution took: ${1.0 * times[1] / 1_000_000_000}s\n")
+        compareSpeed(speeds)
     }
 }

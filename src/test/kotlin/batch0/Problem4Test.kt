@@ -14,7 +14,7 @@ internal class LargestPalindromeProductTest {
     @CsvSource(
         // lower constraints
         "101_102, 101_101", "101_110, 101_101",
-        // normal value
+        // mid constraints
         "794_000, 793_397", "650_001, 649_946",
         // palindrome value
         "332_233, 330_033"
@@ -36,7 +36,7 @@ internal class LargestPalindromeProductTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

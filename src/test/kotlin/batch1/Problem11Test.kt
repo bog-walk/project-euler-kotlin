@@ -56,12 +56,12 @@ internal class LargestProductInGridTest {
         val speeds = mutableListOf<Pair<String, Long>>()
         getSpeed(tool::largestProductInGrid, largeGrid).run {
             speeds.add("All-in-one" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect All-in-one -> $first")
         }
         val matrix = intMatrixOf(largeGrid)
         getSpeed(tool::largestProductInGridCustom, matrix).run {
             speeds.add("Custom" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Custom -> $first")
         }
         compareSpeed(speeds)
     }

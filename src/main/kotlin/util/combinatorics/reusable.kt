@@ -168,6 +168,32 @@ fun <T: Any> permutations(elements: Iterable<T>, r: Int = -1) = sequence {
 }
 
 /**
+ * Generates a hash key based on the amount of repeated digits, represented as an ordered LTR
+ * array.
+ *
+ * Hash key must be stored as an array rather than a number to allow for the possibility that [n]
+ * may have a digit that is repeated more than 9 times.
+ *
+ * e.g. 1487 -> [0, 1, 0, 0, 1, 0, 0, 1, 1]
+ *      2214 -> [0, 1, 2, 0, 4]
+ *      1_000_000_000_000 -> [12, 1]
+ *
+ * N.B. An alternative hash key would be the sorted string cast of the number, using
+ * num.toString().toList().sorted().joinToString("").
+ * e.g. 1487 -> "1478", 2023 -> "0223".
+ */
+fun permutationID(n: Long): IntArray {
+    var perm = n
+    val permID = IntArray(n.toString().maxOf { it }.digitToInt() + 1)
+    while (perm > 0) {
+        val digit = (perm % 10).toInt()
+        permID[digit] += 1
+        perm /= 10
+    }
+    return permID
+}
+
+/**
  * Returns Cartesian product of [elements].
  *
  * If [elements] is sorted, product lists will be yielded in lexicographic order.

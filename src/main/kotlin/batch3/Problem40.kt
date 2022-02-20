@@ -28,7 +28,7 @@ class ChampernownesConstant {
 
     /**
      * N.B. At upper constraints, using a classic for-loop resulted in a better speed performance
-     * of 1.4e+5ns compared to a speed of 2.59ms when map() & fold() are called on [digits].
+     * of 1.4e5ns compared to a speed of 2.59ms when map() & fold() are called on [digits].
      */
     fun champernownesProduct(digits: List<Long>): Int {
         var product = 1

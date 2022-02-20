@@ -41,7 +41,7 @@ internal class SummationOfPrimesTest {
     @CsvSource(
         // lower constraints
         "2, 2", "3, 5", "5, 10", "10, 17",
-        // normal values
+        // mid constraints
         "100, 1060", "5000, 1_548_136",
         // upper constraints
         "300_000, 3_709_507_114", "1_000_000, 37_550_402_023"

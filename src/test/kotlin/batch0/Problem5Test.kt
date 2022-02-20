@@ -14,9 +14,9 @@ internal class SmallestMultipleTest {
     @CsvSource(
        // lower constraints
         "1, 1", "2, 2", "3, 6",
-        // normal values
+        // mid constraints
         "6, 60", "10, 2520", "20, 232_792_560",
-        // higher constraints
+        // upper constraints
         "30, 2_329_089_562_800"
     )
     fun `lcmOfRange correct`(n: Int, expected: Long) {
@@ -38,7 +38,7 @@ internal class SmallestMultipleTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

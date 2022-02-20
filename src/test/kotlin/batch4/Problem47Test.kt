@@ -8,7 +8,8 @@ internal class DistinctPrimesFactorsTest {
     private val tool = DistinctPrimesFactors()
 
     @Test
-    fun testConsecutiveDistinctPrimes_k2() {
+    fun `HR problem correct for K equal 2`() {
+        val k = 2
         val nums = listOf(20, 100)
         val expected = listOf(
             listOf(14, 20),
@@ -18,34 +19,35 @@ internal class DistinctPrimesFactorsTest {
             )
         )
         for ((i, n) in nums.withIndex()) {
-            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k=2))
+            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k))
         }
     }
 
     @Test
-    fun testConsecutiveDistinctPrimes_k3() {
+    fun `HR problem correct for K equal 3`() {
+        val k = 3
         val nums = listOf(644, 1000)
-        val expected = listOf(listOf(644), listOf(644, 740, 804, 986)
-        )
+        val expected = listOf(listOf(644), listOf(644, 740, 804, 986))
         for ((i, n) in nums.withIndex()) {
-            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k=3))
+            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k))
         }
     }
 
     @Test
-    fun testConsecutiveDistinctPrimes_k4() {
+    fun `HR problem correct for K equal 4`() {
+        val k = 4
         val nums = listOf(10_000, 100_000, 300_000)
         val expected = listOf(
-            emptyList(), emptyList(), listOf(134043, 238203, 253894, 259368)
+            emptyList(), emptyList(), listOf(134_043, 238_203, 253_894, 259_368)
         )
         for ((i, n) in nums.withIndex()) {
-            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k=4))
+            assertContentEquals(expected[i], tool.consecutiveDistinctPrimes(n, k))
         }
     }
 
     @Test
-    fun testFirst4DistinctPrimes() {
-        val expected = 134043
+    fun `PE problem correct`() {
+        val expected = 134_043
         assertEquals(expected, tool.first4DistinctPrimes())
     }
 }

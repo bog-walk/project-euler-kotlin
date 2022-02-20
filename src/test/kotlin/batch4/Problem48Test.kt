@@ -2,7 +2,8 @@ package batch4
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,25 +17,25 @@ internal class SelfPowersTest {
         // mid constraints
         "99, 9027641920", "1000, 9110846700", "8431, 2756754292"
     )
-    fun testSelfPowersSum(n: Int, expected: Long) {
+    fun `selPowersSum correct`(n: Int, expected: Long) {
         assertEquals(expected, tool.selfPowersSum(n))
         assertEquals(expected, tool.selfPowersSumModulo(n))
     }
 
     @Test
-    fun testSelfPowerSumSpeed() {
-        val n = 100_000
-        val expected = 3031782500
-        val solutions = listOf(
-            tool::selfPowersSum, tool::selfPowersSumModulo
+    fun `selfPowersSum speed`() {
+        val n = 10_000
+        val expected = 6_237_204_500
+        val solutions = mapOf(
+            "BigInteger" to tool::selfPowersSum, "Modular" to tool::selfPowersSumModulo
         )
-        val times = LongArray(solutions.size)
-        solutions.forEachIndexed { i, solution ->
-            times[i] = measureNanoTime {
-                assertEquals(expected, solution(n))
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n).run {
+                speeds.add(name to second)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
-        print("Builtin solution took: ${1.0 * times[0] / 1_000_000_000}s\n" +
-                "Mod solution took: ${1.0 * times[1] / 1_000_000_000}s\n")
+        compareSpeed(speeds)
     }
 }

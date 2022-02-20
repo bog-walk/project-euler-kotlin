@@ -15,9 +15,9 @@ internal class CoinSumsTest {
         // lower constraints
         "1, 1", "2, 2", "3, 2", "4, 3", "5, 4",
         "6, 5", "7, 6", "8, 7", "9, 8",
-        // small values
+        // lower mid constraints
         "10, 11", "15, 22", "20, 41",
-        // large values
+        // upper mid constraints
         "50, 451", "200, 73682", "500, 6295434",
         // upper constraints
         "10000, 296710490"

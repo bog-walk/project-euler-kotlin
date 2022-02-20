@@ -14,7 +14,7 @@ internal class ReciprocalCyclesTest {
     @CsvSource(
         // lower constraints
         "5, 3", "10, 7", "14, 7", "19, 17", "25, 23",
-        // normal values
+        // mid constraints
         "46, 29", "50, 47", "70, 61",
         // upper constraints
         "1000, 983", "5000, 4967"
@@ -38,7 +38,7 @@ internal class ReciprocalCyclesTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

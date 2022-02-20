@@ -241,6 +241,44 @@ internal class ReusableTest {
         }
     }
 
+    @Test
+    fun `permutationID correct when less than 9 duplicates of a digit exist`() {
+        val nums = listOf<Long>(
+            1487, 2214, 999, 15, 148_748_178_147, 1_000_000_000
+        )
+        val expected = listOf(
+            intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1), intArrayOf(0, 1, 2, 0, 1),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 3), intArrayOf(0, 1, 0, 0, 0, 1),
+            intArrayOf(0, 3, 0, 0, 3, 0, 0, 3, 3), intArrayOf(9, 1)
+        )
+        for ((i, n) in nums.withIndex()) {
+            assertContentEquals(expected[i], permutationID(n))
+        }
+    }
+
+    @Test
+    fun `permutationID correct when more than 9 duplicates of a digit exist`() {
+        val nums = listOf(
+            1_000_000_000_000, 31_111_111_111, 999_999_999_999
+        )
+        val expected = listOf(
+            intArrayOf(12, 1), intArrayOf(0, 10, 0, 1),
+            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 12)
+        )
+        for ((i, n) in nums.withIndex()) {
+            assertContentEquals(expected[i], permutationID(n))
+        }
+    }
+
+    @Test
+    fun `permutationID static for permutations of the same number`() {
+        val nums = listOf<Long>(1487, 4871, 8714, 7814, 1748)
+        val expected = intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1)
+        for (n in nums) {
+            assertContentEquals(expected, permutationID(n))
+        }
+    }
+
     @Nested
     @DisplayName("product test suite")
     inner class Product {

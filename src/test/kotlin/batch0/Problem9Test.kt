@@ -27,7 +27,7 @@ internal class SpecialPythagoreanTripletTest {
     @CsvSource(
         // lower constraints
         "12, 3, 4, 5", "24, 6, 8, 10", "30, 5, 12, 13",
-        // normal values
+        // mid constraints
         "90, 15, 36, 39", "650, 25, 312, 313", "1000, 200, 375, 425",
         // large values
         "2214, 533, 756, 925", "3000, 750, 1000, 1250"
@@ -55,7 +55,7 @@ internal class SpecialPythagoreanTripletTest {
         for ((name, solution) in solutions) {
             getSpeed(tool::maxTripletProduct, n, solution).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)
@@ -67,7 +67,7 @@ internal class SpecialPythagoreanTripletTest {
         "1, -1", "10, -1", "1231, -1",
         // lower constraints
         "12, 60",
-        // normal values
+        // mid constraints
         "90, 21060", "1000, 31_875_000"
     )
     fun `maxTripletProduct correct`(n: Int, expected: Int) {

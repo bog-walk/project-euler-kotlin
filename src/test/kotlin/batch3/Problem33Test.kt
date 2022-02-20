@@ -146,7 +146,7 @@ internal class DigitCancellingFractionsTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)

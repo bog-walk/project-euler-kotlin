@@ -9,13 +9,12 @@ import kotlin.math.sqrt
  *
  * https://projecteuler.net/problem=42
  *
- * Goal: Given an integer, if it is a triangle number t_n, return its
- * corresponding term n; otherwise, return -1.
+ * Goal: Given an integer, if it is a triangle number tN, return its corresponding term n;
+ * otherwise, return -1.
  *
- * Constraints: 1 <= t_n <= 1e18
+ * Constraints: 1 <= tN <= 1e18
  *
- * Triangle Number Sequence: The nth term is given by ->
- * t_n = 0.5 * n * (n + 1) ->
+ * Triangle Number Sequence: The nth term is given by -> tN = n(n + 1) / 2 ->
  * 1, 3, 6, 10, 15, 21, 28, 36, 45, 55,...
  *
  * e.g.: N = 2
@@ -26,38 +25,51 @@ import kotlin.math.sqrt
 
 class CodedTriangleNumbers {
     /**
-     * Triangle Number Sequence has interesting properties, e.g. the
-     * sequence follows the pattern (odd, odd, even, even,...) & each
-     * t_n is the sum of (t_n - 1) & current n.
-     *
-     * Rather than brute iteration that pre-computes all triangle numbers
-     * below 1e18, this solution is based on the following:
-     * t_n = 0.5 * n * (n + 1) ->
-     * 2 * t_n = n * (n + 1), which means
-     * (2 * t_n) / n = n + 1 and (2 * t_n) / (n + 1) = n, therefore
-     * 2 * t_n == lcm(n, n+ 1) and
-     * n must at minimum be sqrt(2 * t_n)
+     * SPEED (WORSE) 1.4e5ns for tN = 1e18
      */
-    private fun getTriangleTerm(tN: Long): Int? {
-        val tN2 = 2L * tN
-        val n = sqrt(1.0 * tN2).toInt()
-        return if (tN2 == lcm(n.toLong(), 1L + n)) n else null
-    }
-
     fun triangleNumber(tN: Long): Int = getTriangleTerm(tN) ?: -1
 
-    fun triangleNumberAlt(tN: Long): Int = tN.isTriangularNumber() ?: -1
+    /**
+     * Triangle Number Sequence follows the pattern (odd, odd, even, even,...) & each tN is the
+     * sum of the previous tN & the current n.
+     *
+     * Rather than brute pre-computation of all triangle numbers below 1e18, this solution is
+     * based on the formula:
+     *
+     * tN = n(n + 1) / 2
+     *
+     * 2tN = n(n + 1)
+     *
+     * 2tN / n = n + 1 and 2tN / (n + 1) = n, therefore:
+     *
+     * 2tN == lcm(n, n + 1) and
+     *
+     * n must at minimum be sqrt(2tN)
+     */
+    private fun getTriangleTerm(tN: Long): Int? {
+        val tN2 = 2 * tN
+        val n = sqrt(1.0 * tN2).toLong()
+        return if (tN2 == lcm(n, 1 + n)) n.toInt() else null
+    }
 
     /**
-     * Project Euler specific implementation that returns the count, from an
-     * input of <2000 words, of words whose summed alphabetical character value
-     * corresponds to a triangle number. e.g. "SKY" = 19 + 11 + 25 = 55 = t_10.
+     * Solution formula optimised by using its derived inverse top-level function.
+     *
+     * SPEED (BETTER) 2.9e4ns for tN = 1e18
      */
-    fun countTriangleWords(input: List<String>): Int {
-        return input.mapNotNull { word ->
+    fun triangleNumberImproved(tN: Long): Int = tN.isTriangularNumber() ?: -1
+
+    /**
+     * Project Euler specific implementation that returns the count, from an input of <2000
+     * words, of words whose summed alphabetical character value corresponds to a triangle number.
+     *
+     * e.g. "SKY" = 19 + 11 + 25 = 55 = t_10
+     */
+    fun countTriangleWords(words: List<String>): Int {
+        return words.mapNotNull { word ->
             // get alphabetical position based on 'A' code = 65
-            val num = word.map { ch -> ch.code - 64L }.sum()
-            getTriangleTerm(num)
+            val num = word.sumOf { ch -> ch.code - 64L }
+            num.isTriangularNumber()
         }.count()
     }
 }

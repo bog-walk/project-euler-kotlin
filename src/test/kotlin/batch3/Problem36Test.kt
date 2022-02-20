@@ -14,7 +14,7 @@ internal class DoubleBasePalindromesTest {
     @CsvSource(
         // lower constraints
         "10, 2, 25", "10, 4, 11", "10, 6, 22", "10, 8, 37",
-        // normal values
+        // mid constraints
         "1000, 3, 2638", "1000, 5, 1940", "1000, 7, 855",
         // upper constraints
         "1_000_000, 2, 872_187", "1_000_000, 9, 782_868"

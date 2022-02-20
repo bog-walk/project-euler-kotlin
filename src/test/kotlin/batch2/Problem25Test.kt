@@ -49,7 +49,7 @@ internal class NDigitFibonacciNumberTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         val bruteActual: Int
@@ -57,7 +57,7 @@ internal class NDigitFibonacciNumberTest {
             bruteActual = tool.nDigitFibTermsBrute(n)[n - 2]
         }
         speeds.add("Brute check" to bruteTime)
-        assertEquals(expected, bruteActual)
+        assertEquals(expected, bruteActual, "Incorrect Brute check -> $bruteActual")
         compareSpeed(speeds)
     }
 
@@ -74,7 +74,7 @@ internal class NDigitFibonacciNumberTest {
         assertEquals(expected, bruteActual)
         getSpeed(tool::nDigitFibTermGoldenFormula, n).run {
             speeds.add("Golden formula" to second)
-            assertEquals(expected, first)
+            assertEquals(expected, first, "Incorrect Golden Formula -> $first")
         }
         compareSpeed(speeds)
     }

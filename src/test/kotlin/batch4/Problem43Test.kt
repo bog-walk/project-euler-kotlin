@@ -1,41 +1,43 @@
 package batch4
 
-import kotlin.system.measureNanoTime
+import util.tests.compareSpeed
+import util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class SubstringDivisibilityTest {
     private val tool = SubstringDivisibility()
 
     @Test
-    fun testSumOfPandigitalSubs() {
+    fun `sumOfPandigitalSubstrings correct for N less than 9`() {
         val expected = listOf<Long>(
-            22212, 711104, 12444480, 189838560, 1099210170, 1113342912
+            22212, 711_104, 12_444_480, 189_838_560, 1_099_210_170, 1_113_342_912
         )
         for (n in 3..8) {
             assertEquals(expected[n - 3], tool.sumOfPandigitalSubstrings(n))
-            assertEquals(expected[n - 3], tool.sumOfPandigitalSubstrings_alt(n))
+            assertEquals(expected[n - 3], tool.sumOfPandigitalSubstringsImproved(n))
         }
     }
 
     @Test
-    fun testSumOf9PandigitalSubs_speed() {
+    fun `PE problem speed`() {
         val n = 9
-        val expected = 16695334890
-        val solutions = LongArray(3)
-        val ogTime = measureNanoTime {
-            solutions[0] = tool.sumOfPandigitalSubstrings(n)
+        val expected = 16_695_334_890
+        val solutions = mapOf(
+            "Windowed" to tool::sumOfPandigitalSubstrings,
+            "Improved" to tool::sumOfPandigitalSubstringsImproved
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, n). run {
+                speeds.add(name to second)
+                assertEquals(expected, first, "Incorrect $name -> $first")
+            }
         }
-        val altTime = measureNanoTime {
-            solutions[1] = tool.sumOfPandigitalSubstrings_alt(n)
+        getSpeed(tool::sumOf9PandigitalSubstrings).run {
+            speeds.add("PE" to second)
+            assertEquals(expected, first, "Incorrect PE -> $first")
         }
-        val seqTime = measureNanoTime {
-            solutions[2] = tool.sumOf9PandigitalSubstrings()
-        }
-        println("Original solution took: ${1.0 * ogTime / 1_000_000_000}s\n" +
-                "Alt solution took: ${1.0 * altTime / 1_000_000_000}s\n" +
-                "Sequence solution took: ${1.0 * seqTime / 1_000_000_000}s")
-        assertTrue { solutions.all { expected == it } }
+        compareSpeed(speeds)
     }
 }

@@ -14,7 +14,7 @@ internal class DistinctPowersTest {
     @CsvSource(
         // lower constraints
         "2, 1", "3, 4", "4, 8", "5, 15", "10, 69",
-        // normal values
+        // mid constraints
         "20, 324", "50, 2184", "100, 9183", "200, 37774"
     )
     fun `distinctPowers correct`(n: Int, expected: Long) {
@@ -34,7 +34,7 @@ internal class DistinctPowersTest {
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
-                assertEquals(expected, first)
+                assertEquals(expected, first, "Incorrect $name -> $first")
             }
         }
         compareSpeed(speeds)
