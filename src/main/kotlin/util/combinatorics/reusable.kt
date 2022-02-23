@@ -1,5 +1,20 @@
 package util.combinatorics
 
+import util.maths.factorial
+import java.math.BigInteger
+
+/**
+ * Returns the number of ways to choose [k] items from [n] items without repetition and without
+ * order, namely C(n, k).
+ *
+ * @throws IllegalArgumentException if either Int is negative.
+ */
+fun binomialCoefficient(n: Int, k: Int): BigInteger {
+    require(n >= 0 && k >= 0) { "Both numbers must be non-negative" }
+    if (k > n) return BigInteger.ZERO
+    return n.factorial() / (k.factorial() * (n - k).factorial())
+}
+
 /**
  * Original implementation of an algorithm that returns [r]-length subLists of [elements].
  *

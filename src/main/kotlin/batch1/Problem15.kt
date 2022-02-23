@@ -1,6 +1,6 @@
 package batch1
 
-import util.maths.binomialCoefficient
+import util.combinatorics.binomialCoefficient
 import java.math.BigInteger
 
 /**

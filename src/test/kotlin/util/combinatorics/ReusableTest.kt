@@ -2,8 +2,12 @@ package util.combinatorics
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import util.tests.compareSpeed
 import util.tests.getSpeed
+import java.math.BigInteger
 import kotlin.system.measureNanoTime
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -11,6 +15,31 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class ReusableTest {
+    @Nested
+    @DisplayName("binomial coefficient test suite")
+    inner class BinomialCoefficient {
+        @ParameterizedTest(name="{0}_C_{1} = {2}")
+        @CsvSource(
+            // k > n
+            "0, 1, 0", "1, 2, 0",
+            // lower constraints
+            "0, 0, 1", "1, 0, 1", "1, 1, 1",
+            // normal values
+            "3, 1, 3", "4, 2, 6", "12, 3, 220", "20, 7, 77520",
+            // larger values
+            "30, 18, 86493225", "100, 40, 13746234145802811501267369720"
+        )
+        fun `binomial coefficient correct with valid input`(n: Int, k: Int, expected: String) {
+            assertEquals(BigInteger(expected), binomialCoefficient(n, k))
+        }
+
+        @Test
+        fun `binomial coefficient throws exception with invalid input`() {
+            assertThrows<IllegalArgumentException> { binomialCoefficient(5, -1) }
+            assertThrows<IllegalArgumentException> { binomialCoefficient(-10, 2) }
+        }
+    }
+
     @Nested
     @DisplayName("combinations test suite")
     inner class Combinations {
