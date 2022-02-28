@@ -211,15 +211,23 @@ fun permutationID(n: Long): IntArray {
 /**
  * Returns Cartesian product of [elements].
  *
+ * To return the product of an iterable with itself, specify the number of repetitions using
+ * [repeat].
+ *
  * If [elements] is sorted, product lists will be yielded in lexicographic order.
  *
  * e.g. elements = "ABCD", "xy" -> Ax Ay Bx By Cx Cy Dx Dy
- *
- * This version currently does not enable the product of an iterable with itself.
+ * e.g. elements = "AB", repeat = 2 -> AA AB BA BB
  */
-fun <T: Any> product(vararg elements: Iterable<T>) = sequence {
+fun <T: Any> product(
+    vararg elements: Iterable<T>,
+    repeat: Int = 1
+) = sequence {
     if (elements.isEmpty()) return@sequence
-    val inputs = elements.map { it.toList() }
+    val inputs = mutableListOf<List<T>>()
+    for (i in 0 until repeat) {
+        inputs += elements.map { it.toList() }
+    }
     val results = inputs.fold(listOf(listOf<T>())) { acc, list ->
         acc.flatMap { accList -> list.map { e -> accList + e } }
     }

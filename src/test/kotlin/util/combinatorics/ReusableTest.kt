@@ -372,5 +372,36 @@ internal class ReusableTest {
             assertContentEquals(expectedHead, actual.take(10))
             assertContentEquals(expectedTail, actual.takeLast(10))
         }
+
+        @Test
+        fun `product correct for 1 iterable when repeat greater than 1`() {
+            val input = 0..2
+            val repeat = 2
+            val expected = listOf(
+                listOf(0, 0), listOf(0, 1), listOf(0, 2), listOf(1, 0), listOf(1, 1), listOf(1, 2),
+                listOf(2, 0), listOf(2, 1), listOf(2, 2)
+            )
+            assertContentEquals(expected, product(input, repeat=repeat).toList())
+        }
+
+        @Test
+        fun `product correct for 2 iterables when repeat greater than 1`() {
+            val input1 = "ab".toList()
+            val input2 = "cd".toList()
+            val repeat = 3
+            val expectedSize = 64
+            val expectedHead = listOf(
+                "acacac", "acacad", "acacbc", "acacbd", "acadac"
+            )
+            val expectedTail = listOf(
+                "bdbcbd", "bdbdac", "bdbdad", "bdbdbc", "bdbdbd"
+            )
+            val actual = product(input1, input2, repeat=repeat)
+                .map { it.joinToString("") }
+                .toList()
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedHead, actual.take(5))
+            assertContentEquals(expectedTail, actual.takeLast(5))
+        }
     }
 }

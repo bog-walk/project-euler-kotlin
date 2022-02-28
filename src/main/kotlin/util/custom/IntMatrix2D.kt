@@ -87,7 +87,7 @@ class IntMatrix2D(
                 this[i] = row.sliceArray(startY..endYIncl)
             }
         }
-        return intMatrixOf(clip as Array<IntArray>)
+        return intMatrixOf(clip)
     }
 }
 
