@@ -13,7 +13,7 @@ import kotlin.math.pow
  *
  * Constraints: 3 <= N <= 1e18
  *
- * Euler's Totient Function: Phi(n) is used to determine the count positive integers < n that are
+ * Euler's Totient Function: Phi(n) is used to determine the count of positive integers < n that are
  * relatively prime to n. An integer k is relatively prime to n (aka co-prime or its totative) if
  * gcd(n, k) = 1, as the only positive integer that is a divisor of both of them is 1.
  * n = 2 -> {1}                -> Phi(n) = 1; n/Phi(n) = 2
@@ -72,7 +72,7 @@ class TotientMaximum {
     }
 
     /**
-     * Based on Euler's product formula:
+     * Solution optimised by taking Euler's product formula further:
      *
      *      Phi(n) = n * Pi(1 - (1/p)), with p being distinct prime factors of n.
      *
@@ -81,7 +81,9 @@ class TotientMaximum {
      *      n/Phi(n) = n / (n * Pi(1 - (1/p)))
      *      n/Phi(n) = Pi(p / (p - 1))
      *
-     * so maximised n/Phi(n) will occur when Pi(p) is maximised to a value under n.
+     * Among all numbers having exactly k-distinct prime factors, the quotient is maximised for
+     * those numbers divisible by the k-smallest primes. So if n_k is the product of the
+     * k-smallest primes, n_k/Phi(n_k) is maximised over all n/Phi(n) that occur for n < n_{k+1}.
      *
      * N.B. Upper constraints 1e18 will be reached by prime number 47.
      *
