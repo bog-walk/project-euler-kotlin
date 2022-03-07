@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 internal class CodedTriangleNumbersTest {
     private val tool = CodedTriangleNumbers()
 
-    private val inputLocation = "src/test/resources/CodedTriangleNumbers"
+    private val inputLocation = "src/test/resources/CodedTriangleNumbers.txt"
 
     @Test
     fun `triangleNumber returns -1 for non-triangular numbers`() {

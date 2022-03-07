@@ -9,7 +9,7 @@ private typealias DoubleArgFunc<T, Q, R> = (T, Q) -> R
 private typealias TripleArgFunc<T, Q, R> = (T, Q, Q) -> R
 
 /**
- * Using KFunction.call() lead to erroneous speed differences, always shown in the first list
+ * Using KFunction.call() led to erroneous speed differences, always shown in the first list
  * element's speed output (~600ms extra compared to normal test), regardless of order. Assumed this
  * had something to do with reflection & started from scratch.
  *

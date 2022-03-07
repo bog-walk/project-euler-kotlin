@@ -13,7 +13,7 @@ import kotlin.test.Test
 internal class LargestProductInSeriesTest {
     private val tool = LargestProductInSeries()
     private val thousandDigits = getTestResource(
-        "src/test/resources/LargestProductInSeries1000"
+        "src/test/resources/LargestProductInSeries1000.txt"
     ).joinToString("")
 
     @ParameterizedTest(name="{0} *..* = {1}")

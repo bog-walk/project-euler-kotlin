@@ -12,9 +12,9 @@ internal class LargeSumTest {
     private val tool = LargeSum()
     private val threeDigs = listOf("123", "456", "789", "812", "234")
     private val tenDigs = listOf("6041184107", "5351558590", "1833324270")
-    private val fiveFiftyDigs = getTestResource("src/test/resources/LargeSum5N")
-    private val hundredFiftyDigs = getTestResource("src/test/resources/LargeSum100N")
-    private val thousandFiftyDigs = getTestResource("src/test/resources/LargeSum1000N")
+    private val fiveFiftyDigs = getTestResource("src/test/resources/LargeSum5N.txt")
+    private val hundredFiftyDigs = getTestResource("src/test/resources/LargeSum100N.txt")
+    private val thousandFiftyDigs = getTestResource("src/test/resources/LargeSum1000N.txt")
 
     @Test
     fun `setUp correct`() {
@@ -47,14 +47,14 @@ internal class LargeSumTest {
     }
 
     @Test
-    fun `correct when N is large`() {
+    fun `correct when number has max amount of digits`() {
         val expected = "2728190129"
         assertEquals(expected, tool.addInReverse(fiveFiftyDigs))
         assertEquals(expected, tool.sliceSum(fiveFiftyDigs))
     }
 
     @Test
-    fun `speed for upper constraint N`() {
+    fun `speed for max digits with mid constraint N`() {
         val solutions = mapOf(
             "Manual" to tool::addInReverse, "BigInteger" to tool::sliceSum
         )
@@ -62,6 +62,23 @@ internal class LargeSumTest {
         val results = mutableListOf<String>()
         for ((name, solution) in solutions) {
             getSpeed(solution, hundredFiftyDigs).run {
+                speeds.add(name to second)
+                results.add(first)
+            }
+        }
+        compareSpeed(speeds)
+        assertEquals(results[0], results[1])
+    }
+
+    @Test
+    fun `speed for max digits with upper constraint N`() {
+        val solutions = mapOf(
+            "Manual" to tool::addInReverse, "BigInteger" to tool::sliceSum
+        )
+        val speeds = mutableListOf<Pair<String, Long>>()
+        val results = mutableListOf<String>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, thousandFiftyDigs).run {
                 speeds.add(name to second)
                 results.add(first)
             }

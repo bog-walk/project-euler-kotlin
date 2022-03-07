@@ -55,7 +55,7 @@ internal class PokerHandsTest {
     @Test
     fun `PE problem correct`() {
         val expected = 376
-        val plays = getTestResource("src/test/resources/PokerHands") { it }
+        val plays = getTestResource("src/test/resources/PokerHands.txt") { it }
         val player1Wins = plays.count { play ->
             tool.pokerHandWinner(play.take(5), play.takeLast(5)) == 1
         }

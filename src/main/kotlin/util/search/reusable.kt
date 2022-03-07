@@ -4,7 +4,7 @@ package util.search
  * Binary search algorithm implementation that was written before realising Kotlin already
  * implements this algorithm in its standard library.
  *
- * SPEED (WORSE) 79900ns for edge target in 1e4-sized list
+ * SPEED (WORSE) 8.0e4ns for edge target in 1e4-sized list
  *
  * @param [collection] an ordered & subscriptable container assumed to be already
  * sorted in ascending order. Currently only works with Lists.
@@ -38,7 +38,7 @@ internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<
  *
  * N.B. This version does not currently enable it being called on an Array.
  *
- * SPEED (BETTER) 52000ns for edge target in 1e4-sized list
+ * SPEED (BETTER) 5.2e4ns for edge target in 1e4-sized list
  *
  * @return false if collection is empty or element not present; otherwise, true.
  */

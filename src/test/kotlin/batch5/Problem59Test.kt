@@ -36,7 +36,7 @@ internal class XORDecryptionTest {
     @Test
     fun `HR problem correct when message has letters, digits, & punctuations`() {
         val filepaths = listOf(
-            "src/test/resources/XORDecryptionLDP1", "src/test/resources/XORDecryptionLDP2"
+            "src/test/resources/XORDecryptionLDP1.txt", "src/test/resources/XORDecryptionLDP2.txt"
         )
         val expected = listOf("qzd", "lse")
         for ((i, filepath) in filepaths.withIndex()) {
@@ -53,7 +53,7 @@ internal class XORDecryptionTest {
     fun `PE problem correct`() {
         val expected = 129_448
         val encryption = getTestResource(
-            "src/test/resources/XORDecryptionPE", ", \n".toCharArray(), ","
+            "src/test/resources/XORDecryptionPE.txt", ", \n".toCharArray(), ","
             ) {
                 it.toInt()
             }.flatten()

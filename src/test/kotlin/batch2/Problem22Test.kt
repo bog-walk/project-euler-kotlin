@@ -15,7 +15,7 @@ internal class NamesScoresTest {
         "AIDEN", "BENJAMIN", "HARPER", "MUHAMMAD", "PENELOPE", "RILEY", "JACOB",
         "SEBASTIAN", "LILY", "ELI", "IVY", "STELLA", "HANNAH", "VIOLET"
     )
-    private val longListLocation = "src/test/resources/NamesScores"
+    private val longListLocation = "src/test/resources/NamesScores.txt"
 
     @ParameterizedTest(name="{0} scores {1}")
     @CsvSource(

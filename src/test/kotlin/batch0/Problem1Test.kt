@@ -16,7 +16,7 @@ internal class MultiplesOf3Or5Test {
             "20, 1, 2, 190",
             // K1 == K2
             "10, 3, 3, 18",
-            // normal values
+            // mid constraints
             "10, 3, 5, 23", "100, 3, 5, 2318", "1000, 3, 5, 233_168",
             // upper constraints
             "23000, 8, 21, 44_087_172", "10_000_000, 20, 32, 3_749_995_000_000"

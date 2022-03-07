@@ -13,13 +13,13 @@ internal class LargestProductInGridTest {
     private val tool = LargestProductInGrid()
 
     private val smallGrid: Array<IntArray> = getTestGrid(
-        "src/test/resources/LargestProductInGrid4By4", 4
+        "src/test/resources/LargestProductInGrid4By4.txt", 4
     )
     private val midGrid: Array<IntArray> = getTestGrid(
-        "src/test/resources/LargestProductInGrid6By6", 6
+        "src/test/resources/LargestProductInGrid6By6.txt", 6
     )
     private val largeGrid: Array<IntArray> = getTestGrid(
-        "src/test/resources/LargestProductInGrid20By20", 20
+        "src/test/resources/LargestProductInGrid20By20.txt", 20
     )
 
     private fun getTestGrid(filename: String, size: Int): Array<IntArray> {

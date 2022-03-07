@@ -15,7 +15,7 @@ internal class MaximumPathSum2Test {
         val n = 30
         val expected = 2156
         val input = getTestResource(
-            "src/test/resources/MaximumPathSum2With30Rows"
+            "src/test/resources/MaximumPathSum2With30Rows.txt"
         ) { it.toInt() }
         val elements = input.flatten().toIntArray()
         val pyramid = input.map { it.toIntArray() }.toTypedArray()
@@ -39,7 +39,7 @@ internal class MaximumPathSum2Test {
         val n = 35
         val expected = 2487
         val input = getTestResource(
-            "src/test/resources/MaximumPathSum2With35Rows"
+            "src/test/resources/MaximumPathSum2With35Rows.txt"
         ) { it.toInt() }
         val elements = input.flatten().toIntArray()
         val pyramid = input.map { it.toIntArray() }.toTypedArray()
@@ -63,7 +63,7 @@ internal class MaximumPathSum2Test {
         val n = 100
         val expected = 7273
         val pyramid = getTestResource(
-            "src/test/resources/MaximumPathSum2With100Rows"
+            "src/test/resources/MaximumPathSum2With100Rows.txt"
         ) { it.toInt() }.map { it.toIntArray() }.toTypedArray()
 
         getSpeed(tool::maxPathSumDynamic, n, pyramid).run {
