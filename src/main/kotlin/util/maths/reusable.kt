@@ -3,6 +3,8 @@ package util.maths
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.floor
+import kotlin.math.ln
+import kotlin.math.log10
 import kotlin.math.sqrt
 
 /**
@@ -258,9 +260,37 @@ fun Long.isTriangularNumber(): Int? {
 fun lcm(vararg n: Long): Long {
     require(n.all { it != 0L }) { "Parameter cannot be 0" }
     val nBI = n.map(BigInteger::valueOf)
-    return nBI.reduce { acc, num ->
-        (acc * num).abs() / acc.gcd(num)
-    }.longValueExact()
+    return nBI.reduce { acc, num -> acc.lcm(num) }.longValueExact()
+}
+
+/**
+ * Calculates the least common multiple of 2 BigIntegers.
+ *
+ * Function extracted from the more general lcm() that accepts a variable amount of Long
+ * arguments, to allow solution sets to use the formula directly.
+ */
+fun BigInteger.lcm(other: BigInteger): BigInteger {
+    return (this * other).abs() / this.gcd(other)
+}
+
+/**
+ * Computes the common logarithm (base 10) of a BigInteger.
+ *
+ * Based on sections of java.math.BigInteger's source code for roundToDouble().
+ *
+ * @throws IllegalArgumentException if this BigInteger is 0 or negative.
+ * @see <a href="https://developer.classpath.org/doc/java/math/BigInteger-source.html">Source
+ * code line 1686</a>
+ */
+fun BigInteger.log10(): Double {
+    require(signum() == 1) { "Value must be positive" }
+    // 'this' will fit in Long if no excessBits
+    val excessBits = bitLength() - 63
+    return if (excessBits > 0) {
+        log10(shr(excessBits).toDouble()) + excessBits * ln(2.0) / ln(10.0)
+    } else {
+        log10(this.toDouble())
+    }
 }
 
 /**

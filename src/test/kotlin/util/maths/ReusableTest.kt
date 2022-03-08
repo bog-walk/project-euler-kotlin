@@ -212,6 +212,51 @@ internal class ReusableTest {
             assertThrows<IllegalArgumentException> { lcm(2, 0) }
             assertThrows<IllegalArgumentException> { lcm(0, 0) }
         }
+
+        @Test
+        fun `least common multiple correct for 2 small BigIntegers`() {
+            val n1 = BigInteger.ONE
+            val n2 = BigInteger.TEN
+            val expected = BigInteger.TEN
+            assertEquals(expected, n1.lcm(n2))
+        }
+
+        @Test
+        fun `least common multiple correct for 2 large BigIntegers`() {
+            val n1 = "333333333333333333333".toBigInteger()
+            val n2 = "666666666666666666666".toBigInteger()
+            val expected = "666666666666666666666".toBigInteger()
+            assertEquals(expected, n1.lcm(n2))
+        }
+    }
+
+    @Nested
+    @DisplayName("log10 test suite")
+    inner class BigIntegerLog10 {
+        @ParameterizedTest(name = "BI = {0}")
+        @CsvSource(
+            // small numbers
+            "1, 0.0", "2, 0.3010299956639812", "10, 1.0", "1234, 3.091315159697223",
+            // medium numbers
+            "999999, 5.999999565705301", "100000000000, 11.0", "1234567890123456, 15.0915149772127",
+            // Int.MAX_VALUE, Long.MAX_VALUE
+            "2147483647, 9.331929865381182", "9223372036854775807, 18.964889726830815",
+            // large numbers
+            "9999999999999999999, 19.0", "12345678901234567890, 19.0915149772127",
+            "999999999999999999999999999999999, 33.0",
+            "10000000000000000000000000000000000000, 37.0",
+            "16016016098798700000001872635495879999123456737465, 49.204554496674696"
+        )
+        fun `log10 correct for valid BigIntegers`(input: String, expected: Double) {
+            val num = input.toBigInteger()
+            assertEquals(expected, num.log10(), absoluteTolerance = 1e14)
+        }
+
+        @Test
+        fun `log10 throws exception with invalid BigIntegers`() {
+            assertThrows<IllegalArgumentException> { BigInteger.ZERO.log10() }
+            assertThrows<IllegalArgumentException> { BigInteger.ONE.negate().log10() }
+        }
     }
 
     @ParameterizedTest(name="sum({1}^{2}) = {0}")

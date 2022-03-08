@@ -1,5 +1,6 @@
 package batch5
 
+import util.maths.lcm
 import java.math.BigInteger
 
 /**
@@ -82,7 +83,7 @@ class SquareRootConvergents {
         n2: BigInteger,
         d2: BigInteger
     ): Pair<BigInteger, BigInteger> {
-        val denominator = d1 * d2 / d1.gcd(d2)
+        val denominator = d1.lcm(d2)
         val numerator = denominator / d1 * n1 + denominator / d2 * n2
         val divisor = numerator.gcd(denominator)
         return numerator / divisor to denominator / divisor

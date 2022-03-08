@@ -2,9 +2,12 @@ package util.strings
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class ReusableTest {
     @Nested
@@ -53,5 +56,23 @@ internal class ReusableTest {
                 assertFalse { num.isPandigital(digits[i]) }
             }
         }
+    }
+
+    @ParameterizedTest(name="BI = {0}")
+    @CsvSource(
+        // small numbers
+        "0, 1", "1, 1", "5, 1", "10, 2", "78, 2", "1234, 4", "999999, 6",
+        // medium numbers
+        "100000000000, 12", "1234567890123456, 16",
+        // Int.MAX_VALUE, Long.MAX_VALUE
+        "2147483647, 10", "9223372036854775807, 19",
+        // large numbers
+        "9999999999999999999, 19", "12345678901234567890, 20",
+        "999999999999999999999999999999999, 33", "10000000000000000000000000000000000000, 38",
+        "16016016098798700000001872635495879999123456737465, 50"
+    )
+    fun `digitCount correct for BigInteger`(input: String, expected: Int) {
+        val num = input.toBigInteger()
+        assertEquals(expected, num.digitCount())
     }
 }
