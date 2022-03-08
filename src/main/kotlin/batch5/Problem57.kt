@@ -1,6 +1,7 @@
 package batch5
 
 import util.maths.lcm
+import util.strings.digitCount
 import java.math.BigInteger
 
 /**
@@ -44,7 +45,7 @@ class SquareRootConvergents {
      * Remember that log10(10) = 1.0 because 10^1 = 10 and every 2-digit number will be a
      * fraction between 1 and 2. Consider implementing a helper to do so for BigInteger.
      *
-     * SPEED (WORSE) 1.18s for N = 2e3
+     * SPEED (WORSE) 937.57ms for N = 2e3
      *
      * @return list of integers representing the iteration where number of digits in the
      * numerator exceeds number of digits in the denominator.
@@ -62,7 +63,7 @@ class SquareRootConvergents {
                 BigInteger.ONE, BigInteger.ONE, infFraction.first, infFraction.second
             )
             if (
-                fraction.first.toString().length > fraction.second.toString().length
+                fraction.first.digitCount() > fraction.second.digitCount()
             ) {
                 iterations.add(i)
             }
@@ -92,7 +93,7 @@ class SquareRootConvergents {
     /**
      * Solution optimised based on the following:
      *
-     *  Further reducing the above formula:
+     * - Further reducing the above formula:
      *
      *      if a_0 = 1 + 1/2, a_1 = 1 + 1/(2 + 1/2)
      *      then a_(i+1) = 1 + 1/(1 + a_i)
@@ -101,10 +102,10 @@ class SquareRootConvergents {
      *
      *      a_(i+1) = (2d_i + n_i) / (d_i + n_i)
      *
-     *  Storing the ceiling for current number of digits, i.e. 10 for 1-digit numbers, 100
+     *  - Storing the ceiling for current number of digits, i.e. 10 for 1-digit numbers, 100
      *  for 2-digit numbers, etc. This is compared instead of repeatedly calling log10().
      *
-     * SPEED (BETTER) 3.73ms for N = 2e3
+     * SPEED (BETTER) 4.31ms for N = 2e3
      *
      * @return list of integers representing the iteration where number of digits in the
      * numerator exceeds number of digits in the denominator.

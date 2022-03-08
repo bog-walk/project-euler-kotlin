@@ -1,5 +1,6 @@
 package batch2
 
+import util.strings.digitCount
 import java.math.BigInteger
 import kotlin.math.*
 
@@ -23,8 +24,8 @@ class NDigitFibonacciNumber {
     /**
      * Iterative solution that checks all Fibonacci numbers.
      *
-     * SPEED (WORST for low N) 1.9e5ns for N = 10
-     * SPEED (BETTER for high N) 7.60s for N = 5000
+     * SPEED (WORST for low N) 1.2ms for N = 10
+     * SPEED (BETTER for high N) 666.91ms for N = 5000
      *
      * @return list of the first Fibonacci terms to have (index + 2) digits.
      */
@@ -39,7 +40,7 @@ class NDigitFibonacciNumber {
             val fNMinus2 = fNMinus1
             fNMinus1 = fN
             fN = fNMinus1 + fNMinus2
-            if (fN.toString().length == digits) {
+            if (fN.digitCount() == digits) {
                 terms[digits++ - 2] = term
             }
         }
@@ -53,7 +54,7 @@ class NDigitFibonacciNumber {
      * has been replaced by calling log10(fN) and comparing it to the required digits minus 1,
      * with significant performance improvement.
      *
-     * SPEED (BETTER for low N) 87900ns for N = 10
+     * SPEED (BETTER for low N) 4.0e4ns for N = 10
      * SPEED (IMPOSSIBLE for N > 10) Significantly slower execution due to the exponential need
      * to calculate larger Phi^N and resulting OverflowError
      *
@@ -109,8 +110,8 @@ class NDigitFibonacciNumber {
      *
      *      t = ceil((n - 1 + log(5)/2) / log(Phi))
      *
-     * SPEED (BEST for low N) 54600ns for N = 10
-     * SPEED (BEST for high N) 29200ns for N = 5000
+     * SPEED (BEST for low N) 3.2e4ns for N = 10
+     * SPEED (BEST for high N) 3.9e4ns for N = 5000
      *
      * @return first Fibonacci term to have N digits.
      */
