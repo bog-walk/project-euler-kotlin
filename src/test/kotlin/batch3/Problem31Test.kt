@@ -30,17 +30,16 @@ internal class CoinSumsTest {
     @Test
     fun `countCoinCombos speed for upper constraints`() {
         val n = 100_000
+        val expected = 836_633_026
         val speeds = mutableListOf<Pair<String, Long>>()
-        val results = mutableListOf<Int>()
         getSpeed(tool::countCoinCombosRecursive, n).run {
             speeds.add("Recursive" to second)
-            results.add(first)
+            assertEquals(expected, first)
         }
         getSpeed(tool::countCoinCombos, n).run {
             speeds.add("Optimised" to second)
-            results.add(first)
+            assertEquals(expected, first)
         }
         compareSpeed(speeds)
-        assertEquals(results.first(), results.last())
     }
 }

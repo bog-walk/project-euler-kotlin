@@ -55,13 +55,13 @@ class MultiplesOf3Or5 {
      *
      * Solution based on the formula:
      *
-     * {n-1}Sigma{k=0} a + kd = n(2a + (n - 1)d)/2,
+     *      {n-1}Sigma{k=0} a + kd = n(2a + (n - 1)d)/2,
      *
      * where a is the 1st term, d is the delta, and n is the amount of terms to add.
      *
      * a and d are the same in this case, so the formula becomes:
      *
-     * {n-1}Sigma{k=0} a + kd = (n(n + 1)d)/2
+     *      {n-1}Sigma{k=0} a + kd = (n(n + 1)d)/2
      *
      * Note that this is an adapted Gaussian sum formula, where n is replaced with the amount of
      * terms that are evenly divisible by d, then the original formula is multiplied by d.

@@ -13,6 +13,7 @@ import java.math.BigInteger
  * Constraints: 8 <= N <= 1e4
  *
  * Square Root of 2: This can be expressed as an infinite continued fraction ->
+ *
  *      Iteration 1 -> sqrt(2) = 1 + 1/2 = 3/2 = 1.5
  *      Iteration 2 -> 1 + 1/(2 + 1/2) = 7/5 = 1.4
  *      Iteration 3 -> 1 + 1/(2 + (1/(2+1/2))) = 17/12 = 1.41666...
@@ -90,7 +91,8 @@ class SquareRootConvergents {
     /**
      * Solution optimised based on the following:
      *
-     *  -   Further reducing the above formula:
+     *  Further reducing the above formula:
+     *
      *      if a_0 = 1 + 1/2, a_1 = 1 + 1/(2 + 1/2)
      *      then a_(i+1) = 1 + 1/(1 + a_i)
      *
@@ -98,7 +100,7 @@ class SquareRootConvergents {
      *
      *      a_(i+1) = (2d_i + n_i) / (d_i + n_i)
      *
-     *  -   Storing the ceiling for current number of digits, i.e. 10 for 1-digit numbers, 100
+     *  Storing the ceiling for current number of digits, i.e. 10 for 1-digit numbers, 100
      *  for 2-digit numbers, etc. This is compared instead of repeatedly calling log10().
      *
      * SPEED (BETTER) 3.73ms for N = 2e3

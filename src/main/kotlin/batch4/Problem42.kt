@@ -36,15 +36,15 @@ class CodedTriangleNumbers {
      * Rather than brute pre-computation of all triangle numbers below 1e18, this solution is
      * based on the formula:
      *
-     * tN = n(n + 1) / 2
+     *      tN = n(n + 1) / 2
      *
-     * 2tN = n(n + 1)
+     *      2tN = n(n + 1)
      *
-     * 2tN / n = n + 1 and 2tN / (n + 1) = n, therefore:
+     *      2tN / n = n + 1 and 2tN / (n + 1) = n, therefore:
      *
-     * 2tN == lcm(n, n + 1) and
+     *      2tN == lcm(n, n + 1) and
      *
-     * n must at minimum be sqrt(2tN)
+     *      n must at minimum be sqrt(2tN)
      */
     private fun getTriangleTerm(tN: Long): Int? {
         val tN2 = 2 * tN

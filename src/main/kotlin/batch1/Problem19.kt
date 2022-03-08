@@ -156,7 +156,7 @@ class CountingSundays {
      *
      * Zeller's Congruence algorithm is based on the formula:
      *
-     * h = (day + 13(month + 1)/5 + K + K/4 + J/4 + 5J) % 7
+     *      h = (day + 13(month + 1)/5 + K + K/4 + J/4 + 5J) % 7
      *
      * with month & year being adjusted to have January and February as the 13th & 14th months of
      * the preceding year, and (K, J) = (year % 100, year / 100). Note that this only applies to

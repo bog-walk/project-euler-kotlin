@@ -58,17 +58,17 @@ class SmallestMultiple {
     /**
      * Uses prime numbers to calculate the lcm of a range, based on the formula:
      *
-     * p_i^a_i = n
+     *      p_i^a_i = n
      *
-     * a_i * log(p_i) = log(n)
+     *      a_i * log(p_i) = log(n)
      *
-     * a_i = floor(log(n) / log(p_i))
+     *      a_i = floor(log(n) / log(p_i))
      *
-     * e.g. N = 6, primes < N = {2, 3, 5};
-     * the exponent of the 1st prime will be 2 as 2^2 < 6 but 2^3 > 6;
-     * the exponent of the 2nd prime will be 1 as 3^1 < 6 but 3^2 > 6;
-     * the exponent of the 3rd prime will be 1 as 5^1 < 6 but 5^2 > 6;
-     * therefore, lcm = 2^2 * 3^1 * 5^1 = 60.
+     *      e.g. N = 6, primes < N = {2, 3, 5};
+     *      the exponent of the 1st prime will be 2 as 2^2 < 6 but 2^3 > 6;
+     *      the exponent of the 2nd prime will be 1 as 3^1 < 6 but 3^2 > 6;
+     *      the exponent of the 3rd prime will be 1 as 5^1 < 6 but 5^2 > 6;
+     *      therefore, lcm = 2^2 * 3^1 * 5^1 = 60.
      *
      * SPEED (BETTER) 43.95ms for N = 40
      */

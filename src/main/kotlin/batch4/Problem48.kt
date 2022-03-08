@@ -23,11 +23,11 @@ class SelfPowers {
     /**
      * Solution based on the modular arithmetic rule that:
      *
-     * (x + y) % z == ((x % z) + (y % z)) % z
+     *      (x + y) % z == ((x % z) + (y % z)) % z
      *
      * This same rule applies to multiplication with modulo:
      *
-     * (x * y) % z == ((x % z) * (y % z)) % z
+     *      (x * y) % z == ((x % z) * (y % z)) % z
      *
      * The carried over number for each new self-power is thereby significantly reduced by
      * performing modulo at every step, which avoids the need to use BigInteger.

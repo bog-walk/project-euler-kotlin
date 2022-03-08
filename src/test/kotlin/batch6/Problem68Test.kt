@@ -80,6 +80,7 @@ internal class Magic5GonRingTest {
         }
         compareSpeed(speeds)
         assertContentEquals(results[0], results[1])
+        assertContentEquals(results[2], results[2])
     }
 
     @Test

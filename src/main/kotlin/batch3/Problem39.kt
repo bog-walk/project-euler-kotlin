@@ -33,9 +33,9 @@ class IntegerRightTriangles {
      *
      *  - If c = P - a - b is inserted into the equation a^2 + b^2 = c^2, then:
      *
-     *  a^2 + b^2 = P^2 - 2aP - 2bP + 2ab + a^2 + b^2
+     *          a^2 + b^2 = P^2 - 2aP - 2bP + 2ab + a^2 + b^2
      *
-     *  b = P(P - 2 a) / 2(P - a)
+     *          b = P(P - 2 a) / 2(P - a)
      *
      *  which means values of P and a that result in an integer value b represent a valid Triplet.
      *
@@ -102,7 +102,7 @@ class IntegerRightTriangles {
      * N.B. The upper bound for m is found by substituting Euclid's formulae into the perimeter
      * formula & reducing to:
      *
-     * p = 2dm(m + n)
+     *      p = 2dm(m + n)
      *
      * which means when d = 1 & n = 1, at most 2m^2 must be below the given limit.
      *
@@ -127,17 +127,8 @@ class IntegerRightTriangles {
             }
             m++
         }
-        //val best = IntArray(limit + 1)
         var bestP = 12
         var bestCount = 1
-        //for (i in 12..limit) {
-            //val count = pSols[i]
-           // if (count > bestCount) {
-                //bestP = i
-                //bestCount = count
-            //}
-            //best[i] = bestP
-        //}
         val best = IntArray(limit + 1) { i ->
             if (i < 12) pSols[i] else {
                 val count = pSols[i]

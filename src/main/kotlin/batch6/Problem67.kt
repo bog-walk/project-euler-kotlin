@@ -32,7 +32,7 @@ class MaximumPathSum2 {
      * 30 rows, as shown by the 27x longer speed taken to find the solution when only 5 more rows
      * were added to the same pyramid. A 100 row pyramid would have 2^99 possible routes and even
      * if 1e12 routes could be assessed every second, it would take ~> 20e9 years to iterate
-     * through tme all.
+     * through them all.
      *
      * SPEED (WORSE) 3.72s for N = 30
      * SPEED (WORSE) 102.33s for N = 35

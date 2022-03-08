@@ -35,12 +35,12 @@ class HighlyDivisibleTriangularNumber {
      * a common prime factor nor a common divisor), the amount of divisors can be assessed based
      * on the cycling formulae:
      *
-     *  - t represents Gaussian sum = n(n + 1)/2
+     *      t represents Gaussian sum = n(n + 1)/2
      *
-     *  - (even n) D(t) = D(n/2) * D(n+1)
-     *    D(n+1) becomes D(n) for the next number, which will be odd.
+     *      (even n) D(t) = D(n/2) * D(n+1)
+     *      D(n+1) becomes D(n) for the next number, which will be odd.
      *
-     *  - (odd n) D(t) = D(n) * D((n+1)/2)
+     *      (odd n) D(t) = D(n) * D((n+1)/2)
      *
      * SPEED (WORST) 559.59ms for N = 1e3
      */

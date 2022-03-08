@@ -60,7 +60,7 @@ class EvenFibonacci {
     /**
      * Sums every 3rd term in the sequence starting with 2, using the formula:
      *
-     * F(n) = 4F(n - 3) + F(n - 6)
+     *      F(n) = 4F(n - 3) + F(n - 6)
      *
      * SPEED (BEST) 25400ns for N = 4e16
      */

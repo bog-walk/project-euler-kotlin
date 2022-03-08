@@ -68,11 +68,11 @@ class LargestPalindromeProduct {
      * A palindrome of the product of two 3-digit integers must be 6-digits long & one of the
      * integers must have a factor of 11, based on the following algebra:
      *
-     * P = 100_000x + 10_000y + 1000z + 100z + 100y + x
+     *      P = 100_000x + 10_000y + 1000z + 100z + 100y + x
      *
-     * P = 100_001x + 10_010y + 1100z
+     *      P = 100_001x + 10_010y + 1100z
      *
-     * P = 11*(9091x + 910y + 100z)
+     *      P = 11*(9091x + 910y + 100z)
      *
      * Rather than stepping down to each palindrome & searching for a valid product, this
      * solution tries all product combos that involve one of the integers being a multiple of 11.

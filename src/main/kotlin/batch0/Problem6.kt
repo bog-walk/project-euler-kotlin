@@ -37,13 +37,13 @@ class SumSquareDifference {
      *
      * The sum of the sequence's squares is based on the assumption that:
      *
-     * f(n) = an^3 + bn^2 + cn + d, with f(0) = 0, f(1) = 1, f(2) = 5, f(3) = 14
+     *      f(n) = an^3 + bn^2 + cn + d, with f(0) = 0, f(1) = 1, f(2) = 5, f(3) = 14
      *
      * The formula (square pyramidal numbers) can then be solved as:
      *
-     * f(n) = (2n^3 + 3n^2 + n)/6
+     *      f(n) = (2n^3 + 3n^2 + n)/6
      *
-     * f(n) = (n(2n + 1)(n + 1))/6
+     *      f(n) = (n(2n + 1)(n + 1))/6
      *
      * SPEED (BETTER) 1.70ms for N = 1e4
      */

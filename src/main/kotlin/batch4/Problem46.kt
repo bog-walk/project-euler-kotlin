@@ -17,12 +17,13 @@ import kotlin.math.sqrt
  *
  * Goldbach's False Conjecture: Every odd composite number can be written as the sum of a prime
  * and twice a square. Proven to be FALSE.
- * e.g. 9 = 7 + 2 * 1^2
- *      15 = 7 + 2 * 2^2 || 13 + 2 * 1^2
- *      21 = 3 + 2 * 3^2 || 13 + 2 * 2^2 || 19 + 2 * 1^2
- *      25 = 7 + 2 * 3^2 || 17 + 2 * 2^2 || 23 + 2 * 1^2
- *      27 = 19 + 2 * 2^2
- *      33 = 31 + 2 * 1^2
+ *
+ *      e.g. 9 = 7 + 2 * 1^2
+ *           15 = 7 + 2 * 2^2 || 13 + 2 * 1^2
+ *           21 = 3 + 2 * 3^2 || 13 + 2 * 2^2 || 19 + 2 * 1^2
+ *           25 = 7 + 2 * 3^2 || 17 + 2 * 2^2 || 23 + 2 * 1^2
+ *           27 = 19 + 2 * 2^2
+ *           33 = 31 + 2 * 1^2
  *
  * e.g.: N = 9
  *       result = 1

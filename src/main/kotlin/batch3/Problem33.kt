@@ -91,11 +91,11 @@ class DigitCancellingFractions {
      *
      * This order of solutions is based on the combination equation:
      *
-     * (n10^k + c) / (c10^k + d) = n/d
+     *      (n10^k + c) / (c10^k + d) = n/d
      *
      * which reduces to:
      *
-     * n(10^k -1)(c - d) = c(d - n)
+     *      n(10^k -1)(c - d) = c(d - n)
      *
      * SPEED (BETTER for PE problem) 63.15ms for N = 4, K = 1
      *
@@ -211,11 +211,11 @@ class DigitCancellingFractions {
      * cancellation combos they allow. Rather than loop through denominators, gcd() is used to
      * assess reductive equivalence based on the following:
      *
-     * n_og / d_og = n_r / d_r, and
+     *      n_og / d_og = n_r / d_r, and
      *
-     * n_r = n_og / gcd(n_og, d_og)
+     *      n_r = n_og / gcd(n_og, d_og)
      *
-     * d_r = d_og / gcd(n_og, d_og)
+     *      d_r = d_og / gcd(n_og, d_og)
      *
      * SPEED (BETTER for HR problem) 507.98ms for N = 4, K = 1
      *

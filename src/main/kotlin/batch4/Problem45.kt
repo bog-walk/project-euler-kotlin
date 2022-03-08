@@ -15,11 +15,17 @@ import util.maths.isTriangularNumber
  *              a < b
  *              a,b in {3, 5, 6} -> {triangle, pentagonal, hexagonal}
  *
- * Triangle Number: tN = n(n + 1) / 2
+ * Triangle Number:
  *
- * Pentagonal Number: pN = n(3n - 1) / 2
+ *      tN = n(n + 1) / 2
  *
- * Hexagonal Number: hN = n(2n - 1)
+ * Pentagonal Number:
+ *
+ *      pN = n(3n - 1) / 2
+ *
+ * Hexagonal Number:
+ *
+ *      hN = n(2n - 1)
  *
  * Some numbers can be all 3 type ->
  * e.g. T_1 = P_1 = H_1 = 1
@@ -70,27 +76,27 @@ class TriPentHex {
     /**
      * For triangular-pentagonal combos, where T_x = P_y:
      *
-     * x(x + 1) / 2 = y(3y - 1) / 2, after completing the square becomes:
+     *      x(x + 1) / 2 = y(3y - 1) / 2, after completing the square becomes:
      *
-     * (6x - 1)^2 - 3(2y + 1)^2 = -2, a diophantine:
+     *      (6x - 1)^2 - 3(2y + 1)^2 = -2, a diophantine:
      *
-     * 36x^2 - 12x - 12y^2 - 12y, solved for 2 integer variables:
+     *      36x^2 - 12x - 12y^2 - 12y, solved for 2 integer variables:
      *
-     * T_(x+1) = -2T_x - P_y and
+     *      T_(x+1) = -2T_x - P_y and
      *
-     * P_(y+1) = -3T_x - 2P_y - 1
+     *      P_(y+1) = -3T_x - 2P_y - 1
      *
      * For pentagonal-hexagonal combos, where P_x = H_y:
      *
-     * x(3x - 1) / 2 = y(2y - 1), after completing the square becomes:
+     *      x(3x - 1) / 2 = y(2y - 1), after completing the square becomes:
      *
-     * (6x - 1)^2 - 3(4y - 1)^2 = -2, a diophantine:
+     *      (6x - 1)^2 - 3(4y - 1)^2 = -2, a diophantine:
      *
-     * 36x^2 - 12x - 48y^2 + 24y, solved for 2 integer variables:
+     *      36x^2 - 12x - 48y^2 + 24y, solved for 2 integer variables:
      *
-     * P_(x+1) = 97P_x + 112H_y - 44 and
+     *      P_(x+1) = 97P_x + 112H_y - 44 and
      *
-     * H_(y+1) = 84P_x + 97H_y - 38
+     *      H_(y+1) = 84P_x + 97H_y - 38
      *
      * SPEED (BETTER) for N = 2e14, pentagonal-hexagonal combo
      */
@@ -129,13 +135,13 @@ class TriPentHex {
      * All hexagonal numbers are a subset of triangular numbers made from an odd n,
      * as T_(2n - 1) == H_n, based on completing the squares below:
      *
-     * n(n + 1) / 2 = m(2m - 1)
+     *      n(n + 1) / 2 = m(2m - 1)
      *
-     * n^2 + n = 4m^2 - 2m
+     *      n^2 + n = 4m^2 - 2m
      *
-     * (n + 0.5)^2 = 4(m - 0.25)^2
+     *      (n + 0.5)^2 = 4(m - 0.25)^2
      *
-     * n = 2m - 1
+     *      n = 2m - 1
      *
      * So this solution only needs to check for hexagonal numbers that are also pentagonal.
      */

@@ -32,7 +32,7 @@ class CoinSums {
      * Recursive solution uses helper function to allow memoization using top-down, thereby
      * optimising this top-down approach.
      *
-     * SPEED (WORSE) 17.22s for N = 1e5
+     * SPEED (WORSE) 20.34s for N = 1e5
      *
      * @param [n] total amount that needs to be achieved by all combinations.
      * @param [coin] index of coin value from class [coins]. Default is the largest coin
@@ -68,7 +68,7 @@ class CoinSums {
      *
      *  - The previous combo calculated for a coin of lesser value.
      *
-     * SPEED (BETTER) 52.26ms for N = 1e5
+     * SPEED (BETTER) 34.14ms for N = 1e5
      * Better performance due less expensive loops (vs more expensive recursive function calls) &
      * use of less memory with better cache-access.
      */

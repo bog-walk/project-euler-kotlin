@@ -14,7 +14,8 @@ import kotlin.math.pow
  *
  * Champernowne's Constant: The irrational decimal fraction created by concatenating all positive
  * integers to the right of a decimal point, such that:
- * C = 0.123456789101112131415161718192021...
+ *
+ *      C = 0.123456789101112131415161718192021...
  *
  * e.g.: i1..i7 = 1 2 3 4 5 6 7
  *       expression = 1 * 2 * 3 * 4 * 5 * 6 * 7

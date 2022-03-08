@@ -13,7 +13,9 @@ import java.math.BigInteger
  *
  * Constraints: 2 <= N <= 1000, 1 <= K <= 1e18
  *
- * Binomial Coefficient: C(n, r) = n! / r!(n - r)!, where r <= n.
+ * Binomial Coefficient:
+ *
+ *      C(n, r) = n! / r!(n - r)!, where r <= n.
  *
  * There are 10 combinations when 3 digits are chosen from 5 digits, with no repetition & order
  * not mattering: C(5, 3) = 10. It is not until n = 23 that the amount of combinations first
@@ -65,11 +67,13 @@ class CombinatoricSelections {
      * Solution is still based on the symmetry of Pascal's Triangle & its rules as detailed in
      * the solution above, with some additions:
      *
-     *  -   C(n, r-1) = C(n, r) * (n-r) / (r+1) and
+     *      C(n, r-1) = C(n, r) * (n-r) / (r+1) and
+     *
      *      C(n-1, r) = C(n, r) * (n-r) / n
-     *      Movement through the triangle (bottom-up & only checking border values) mimics that
-     *      in the above function, but C(n, r) values when moving right in a row or up a row are
-     *      determined with these formulae, instead of factorials.
+     *
+     *  -   Movement through the triangle (bottom-up & only checking border values) mimics that
+     *  in the above function, but C(n, r) values when moving right in a row or up a row are
+     *  determined with these formulae, instead of factorials.
      *
      *  -   Starting from the bottom of the triangle & moving up, if the value of r is allowed to
      *  exceed its midline value, then it means no value > k was found and the outer loop can be

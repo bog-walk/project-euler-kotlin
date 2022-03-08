@@ -31,11 +31,11 @@ class ConvergentsOfE {
      * Solution based on the pattern observed for the numerator in the continued fraction
      * representation:
      *
-     *  if n_1_1 = 2, n_1_2 = 3, n_1_3 = 8, with m_1_1 = 1, m_1_2 = 1, m_1_3 = 2, then
+     *      if n_1_1 = 2, n_1_2 = 3, n_1_3 = 8, with m_1_1 = 1, m_1_2 = 1, m_1_3 = 2, then
      *
-     *  8 = 2 + 2 * 3, which continues for the sequences as ->
+     *      8 = 2 + 2 * 3, which continues for the sequences as ->
      *
-     *  n_i_j = n_i_j-2 + m_i_j * n_i_j-1
+     *      n_i_j = n_i_j-2 + m_i_j * n_i_j-1
      */
     fun nthConvergentDigitSum(n: Int): Int {
         // represents [nI, nIMinus2, nIMinus1]

@@ -73,9 +73,9 @@ class SpecialPythagoreanTriplet {
      *
      * - Inserting c = [n] - a - b into the formula a^2 + b^2 = c^2 reduces to:
      *
-     *  2ab + 2bn = n^2 - 2an
+     *          2ab + 2bn = n^2 - 2an
      *
-     *  b = n(n - 2a)/2(n - a)
+     *          b = n(n - 2a)/2(n - a)
      *
      * - Exhaustive search shows that the first maximum triplet found will be the only solution,
      * so the loop can be broken early.
@@ -108,7 +108,7 @@ class SpecialPythagoreanTriplet {
      * - All Pythagorean triplets can be reduced to a primitive one by dividing out the
      * gcd(a,b,c) = d, such that:
      *
-     *  a + b + c = 2m(m + n) * d, with n > m > 0.
+     *          a + b + c = 2m(m + n) * d, with n > m > 0.
      *
      * - A triplet is primitive if m XOR n is even and gcd(m,n) = 1. The latter occurs because
      * gdc(a,b) = gcd(b,c) = gcd(c,a) = 1.

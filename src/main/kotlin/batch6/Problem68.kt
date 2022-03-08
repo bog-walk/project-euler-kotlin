@@ -14,7 +14,7 @@ import util.combinatorics.permutations
  * Constraints: 3 <= N <= 10
  *
  * Magic 3-Gon Ring (as seen in above link): The ring has 3 external nodes, each ending a line of
- * 3 nodes (6 nodes total representing digits 1 to 6). The ring can be completed to the lines
+ * 3 nodes (6 nodes total representing digits 1 to 6). The ring can be completed so the lines
  * reach 4 different totals, [9, 12], so there are 8 solutions in total:
  *      9 -> [{4,2,3}, {5,3,1}, {6,1,2}], [{4,3,2}, {6,2,1}, {5,1,3}]
  *      10 -> [{2,3,5}, {4,5,1}, {6,1,3}], [{2,5,3}, {6,3,1}, {4,1,5}]
@@ -63,7 +63,7 @@ class Magic5GonRing {
     /**
      * Solution uses recursion to search through all permutations ([n] * 2 digits choose 3) from an
      * increasingly smaller set of remaining digits. Permutations are checked to see if they sum
-     * to [s] & if their middle digit matches the last digit of the perm found previously.
+     * to [s] & if their middle digit matches the last digit of the permutation found previously.
      *
      * A stack of the remaining digits to use is cached so the search can continue if a solution
      * that cannot close the ring is reached. This is done by adding the elements of the last
@@ -195,6 +195,9 @@ class Magic5GonRing {
      * already have been found by previous iterations). So the starter digit 6 would only end up
      * searching through ringNodes = [6, [7, 12], X, X]
      *
+     * Lastly, neither digit 1 nor digit n need to be assessed as they will be found in later or
+     * earlier iterations.
+     *
      * SPEED (BEST) 36.84ms for N = 7, S = 23
      */
     fun magicRingSolutionsOptimised(n: Int, s: Int): List<String> {
@@ -221,8 +224,9 @@ class Magic5GonRing {
                     solutions.add(solution2)
                 }
             } else {
-                for (digit in allDigits) {
-                    if (i == 0 && digit < ringNodes[0] || digit !in remainingDigits) continue
+                val searchRange = if (i == 0) (ringNodes[0] + 1)..(n * 2) else allDigits
+                for (digit in searchRange) {
+                    if (digit !in remainingDigits) continue
                     val nextExternal = s - ringNodes[i] - digit
                     if (nextExternal == digit || nextExternal !in remainingDigits) continue
                     ringNodes[i+1] = digit
@@ -235,7 +239,7 @@ class Magic5GonRing {
             }
         }
 
-        for (digit in allDigits) {
+        for (digit in 2 until n * 2) {
             ringNodes[0] = digit
             remainingDigits.remove(digit)
             nextRingNode(0)
