@@ -17,7 +17,7 @@ import kotlin.math.sqrt
  * Farey Sequence: A sequence of completely reduced fractions, either between 0 and 1, or which
  * when in reduced terms have denominators <= N, arranged in order of increasing size.
  *
- *      e.g. if d < 9, the Farey sequence would be ->
+ *      e.g. if d <= 8, the Farey sequence would be ->
  *          1/8, 1/7, 1/6, 1/5, 1/4, 2/7, 1/3, 3/8, 2/5, 3/7, 1/2, 4/7, 3/5, 5/8, 2/3, 5/7, 3/4,
  *          4/5, 5/6, 6/7, 7/8
  *
