@@ -56,6 +56,31 @@ internal class ReusableTest {
     }
 
     @Nested
+    @DisplayName("isCoPrime test suite")
+    inner class IsCoPrime {
+        @Test
+        fun `isCoPrime returns true for coprime pairs`() {
+            val pairs = listOf(
+                1 to 2, 2 to 3, 3 to 5, 4 to 7, 4 to 9, 5 to 7, 5 to 9, 11 to 13,
+                14 to 15, 17 to 19, 29 to 31, 3 to 67, 99 to 100, 34 to 79, 54 to 67
+            )
+            for ((x, y) in pairs) {
+                assertTrue(isCoPrime(x, y))
+            }
+        }
+
+        @Test
+        fun `isCoPrime returns false for non-coprime pairs`() {
+            val pairs = listOf(
+                3 to 12, 4 to 18, 5 to 5, 6 to 10, 24 to 57, 13 to 117, 99 to 102
+            )
+            for ((x, y) in pairs) {
+                assertFalse(isCoPrime(x, y))
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("isHexagonal test suite")
     inner class IsHexagonal {
         @Test
@@ -342,6 +367,15 @@ internal class ReusableTest {
                 assertThrows<IllegalArgumentException> { pythagoreanTriplet(m, n, d) }
             }
         }
+    }
+
+    @ParameterizedTest(name="({0}, {1}, {2}) = {3}")
+    @CsvSource(
+        "0, 0, 0, 0", "1, 0, 0, 1", "1, 1, 1, 3", "1, 2, 3, 6", "10, 100, 99, 209"
+    )
+    fun `triple sum correct`(a: Int, b: Int, c:Int, expected: Int) {
+        val triple = Triple(a, b , c)
+        assertEquals(expected, triple.sum())
     }
 
     @ParameterizedTest(name="sum(d({0})) = {1}")

@@ -46,7 +46,7 @@ class TriPentHex {
      * numbers jump to the limit faster than the other 2, and the pentagonal number sequence
      * grows faster than triangular numbers.
      *
-     * SPEED (WORSE) for N = 2e14, pentagonal-hexagonal combo
+     * SPEED (WORSE) 319.36ms for N = 2e14, pentagonal-hexagonal combo
      */
     fun commonNumbers(n: Long, a: Int, b: Int): List<Long> {
         val common = mutableListOf(1L)
@@ -98,7 +98,7 @@ class TriPentHex {
      *
      *      H_(y+1) = 84P_x + 97H_y - 38
      *
-     * SPEED (BETTER) for N = 2e14, pentagonal-hexagonal combo
+     * SPEED (BETTER) 3.7e4ns for N = 2e14, pentagonal-hexagonal combo
      */
     fun commonNumbersFormula(n: Long, a: Int, b: Int): List<Long> {
         val common = mutableListOf<Long>()

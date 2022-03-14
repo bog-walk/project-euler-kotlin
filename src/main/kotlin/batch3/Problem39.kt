@@ -1,7 +1,8 @@
 package batch3
 
-import util.maths.gcd
+import util.maths.isCoPrime
 import util.maths.pythagoreanTriplet
+import util.maths.sum
 import kotlin.math.ceil
 import kotlin.math.sqrt
 
@@ -76,7 +77,7 @@ class IntegerRightTriangles {
                     val kMax = p / (2 * m)
                     var k = if (m % 2 == 1) m + 2 else m + 1
                     while (k < 2 * m && k <= kMax) {
-                        if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
+                        if (kMax % k == 0 && isCoPrime(k, m)) {
                             pSols++
                         }
                         k += 2
@@ -113,10 +114,8 @@ class IntegerRightTriangles {
         var m = 2
         while (2 * m * m < limit) {
             for (n in 1 until m) {
-                // ensure that both m and n are not odd and that m and n are co-prime (gcd == 1)
-                if (m % 2 == 1 && n % 2 == 1 || gcd(m.toLong(), n.toLong()) > 1L) {
-                    continue
-                }
+                // ensure both m and n are not odd and that m and n are co-prime (gcd == 1)
+                if (m % 2 == 1 && n % 2 == 1 || !isCoPrime(m, n)) continue
                 var d = 1
                 while (true) {
                     val p = pythagoreanTriplet(m, n, d).sum()
@@ -141,6 +140,4 @@ class IntegerRightTriangles {
         }
         return best[limit]
     }
-
-    private fun Triple<Int, Int, Int>.sum(): Int = first + second + third
 }

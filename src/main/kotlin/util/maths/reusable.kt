@@ -51,6 +51,12 @@ tailrec fun Int.factorial(run: BigInteger = BigInteger.ONE): BigInteger {
 }
 
 /**
+ * Two integers are co-prime (relatively/mutually prime) if the only positive integer that is a
+ * divisor of both of them is 1.
+ */
+fun isCoPrime(x: Int, y: Int): Boolean = gcd(x.toLong(), y.toLong()) == 1L
+
+/**
  * Returns the corresponding term of the number if hexagonal, or null.
  *
  * Derivation solution is based on the formula:
@@ -391,13 +397,18 @@ fun primeNumbers(n: Int): List<Int> {
  */
 fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     require(n in 1 until m) { "Positive integers assumed to be m > n > 0" }
-    require(!(m % 2 != 0 && n % 2 != 0)) { "Both integers cannot be odd" }
-    require(gcd(m.toLong(), n.toLong()) == 1L) { "Positive integers must be co-prime" }
+    require(!(m % 2 == 1 && n % 2 == 1)) { "Both integers cannot be odd" }
+    require(isCoPrime(m, n)) { "Positive integers must be co-prime" }
     val a = (m * m - n * n) * d
     val b = 2 * m * n * d
     val c = (m * m + n * n) * d
     return Triple(minOf(a, b), maxOf(a, b), c)
 }
+
+/**
+ * Returns the sum of elements in a Triple of numbers.
+ */
+fun Triple<Int, Int, Int>.sum(): Int = first + second + third
 
 /**
  * Calculates the sum of all divisors of [num], not inclusive of [num].

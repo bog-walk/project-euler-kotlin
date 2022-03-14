@@ -1,6 +1,6 @@
 package batch0
 
-import util.maths.gcd
+import util.maths.isCoPrime
 import util.maths.pythagoreanTriplet
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -84,7 +84,7 @@ class SpecialPythagoreanTriplet {
      * triplet must be even as the sum of evens is an even number and the sum of 2 odds is
      * an even number as well.
      *
-     * SPEED (BETTER) 56600ns for N = 3000
+     * SPEED (BETTER) 5.9e4ns for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
      */
@@ -116,7 +116,7 @@ class SpecialPythagoreanTriplet {
      * - Exhaustive search shows that the first maximum triplet found will be the only solution,
      * so the loop can be broken early.
      *
-     * SPEED (BEST): 31500ns for N = 3000
+     * SPEED (BEST): 3.4e4ns for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
      */
@@ -135,7 +135,7 @@ class SpecialPythagoreanTriplet {
                 }
                 var k = if (m % 2 == 1) m + 2 else m + 1
                 while (k < 2 * m && k <= kMax) {
-                    if (kMax % k == 0 && gcd(k.toLong(), m.toLong()) == 1L) {
+                    if (kMax % k == 0 && isCoPrime(k, m)) {
                         maxTriplet = pythagoreanTriplet(m, k - m, limit / (k * m))
                         break@outer
                     }
