@@ -1,7 +1,5 @@
 package batch7
 
-import java.math.BigInteger
-
 /**
  * Problem 76: Counting Summations
  *
@@ -30,17 +28,21 @@ class CountingSummations {
      * generate all counts <= 1000 for quick-pick testing, the array must be of size 1002 & the
      * loop limits must be 1001, then all results can be found by subtracting 1 from the stored
      * value.
+     *
+     * SPEED (using BigInteger) 68.00ms for N = 1e3
+     * SPEED (using Long) 18.45ms for N = 1e3
+     * N.B. The original solution used BigInteger to calculate & store counts. This was replaced
+     * with Long values & performing modulus after every summation, resulting in a ~4x speed boost.
      */
     fun countSumCombos(n: Int): Int {
-        val modulus = BigInteger.valueOf(1_000_000_007)
-        val combosBySum = Array<BigInteger>(n + 1) {
-            BigInteger.ZERO
-        }.apply { this[0] = BigInteger.ONE }
+        val modulus = 1_000_000_007L
+        val combosBySum = LongArray(n + 1) { 0L }.apply { this[0] = 1L }
         for (i in 1 until n) {
             for (j in i..n) {
                 combosBySum[j] += combosBySum[j - i]
+                combosBySum[j] %= modulus
             }
         }
-        return combosBySum[n].mod(modulus).intValueExact()
+        return combosBySum[n].toInt()
     }
 }

@@ -1,6 +1,5 @@
 package batch7
 
-import java.math.BigInteger
 import kotlin.math.pow
 import kotlin.math.sign
 
@@ -79,26 +78,33 @@ class CoinPartitions {
      *
      *      p(n) = Sigma{k!=0} ((-1)^{k-1} * p(n - g_k))
      *
-     * SPEED (BETTER) 6.40s for N = 1e3
+     * SPEED (BETTER) 2.51ms for N = 1e3
+     * SPEED (using BigInteger) 5.50s for N = 6e4
+     * SPEED (using Long) 1.05s for N = 6e4
+     *
+     * N.B. This solution originally calculated count using BigInteger & used the modulus after
+     * every summation to allow an integer value to be cached for every N. Using Long instead
+     * improved performance speed by 5x. Because of this change, the count could occasionally
+     * become negative, so a check was placed to reverse the modulus if this occurs.
      *
      * @return IntArray of partitions (mod 1e9 + 7) of all N <= limit, with index == N.
      */
     fun coinPileCombosTheorem(limit: Int, modValue: Int = modulus): IntArray {
-        val modBI = modValue.toBigInteger()
         val partitions = IntArray(limit + 1).apply { this[0] = 1 }
         for (n in 1..limit) {
-            var count = BigInteger.ZERO
+            var count = 0L
             var k = 1
             while (true) {
                 val pentagonal = k * (3 * k - 1) / 2
                 if (pentagonal > n) break
-                val unary = (-1.0).pow(k-1).toInt().toBigInteger()
-                count += unary * partitions[n-pentagonal].toBigInteger()
-                count = count.mod(modBI)
+                val unary = (-1.0).pow(k-1).toLong()
+                count += unary * partitions[n-pentagonal]
+                count %= modValue
+                if (count < 0L) count += modValue
                 k *= -1
                 if (k.sign == 1) k++
             }
-            partitions[n] = count.intValueExact()
+            partitions[n] = count.toInt()
         }
         return partitions
     }

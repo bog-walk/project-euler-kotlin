@@ -68,20 +68,20 @@ class CoinSums {
      *
      *  - The previous combo calculated for a coin of lesser value.
      *
-     * SPEED (BETTER) 34.14ms for N = 1e5
+     * SPEED (BETTER) 23.55ms for N = 1e5
      * Better performance due less expensive loops (vs more expensive recursive function calls) &
      * use of less memory with better cache-access.
      */
     fun countCoinCombos(n: Int): Int {
+        val longMod = modulus.longValueExact()
         // index 0 exists for when 0p is needed
-        val combosByCoin = Array<BigInteger>(n + 1) {
-            BigInteger.ZERO
-        }.apply { this[0] = BigInteger.ONE }
+        val combosByCoin = LongArray(n + 1) { 0L }.apply { this[0] = 1L }
         for (coin in coins) {
             for (i in coin..n) {
                 combosByCoin[i] += combosByCoin[i - coin]
+                combosByCoin[i] %= longMod
             }
         }
-        return combosByCoin[n].mod(modulus).intValueExact()
+        return combosByCoin[n].toInt()
     }
 }
