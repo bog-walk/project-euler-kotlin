@@ -19,22 +19,6 @@ import util.maths.primeNumbers
 
 class PrimeSummations {
     /**
-     * Solution is identical to the bottom-up approach that found the number of ways a total could
-     * be achieved, either using coins of different values (Batch 3 - Problem 31) or using
-     * combinations of lesser value positive integers (Batch 7 - Problem 76).
-     */
-    fun allPrimeSumCombos(n: Int): LongArray {
-        val primeCombosBySum = LongArray(n + 1).apply { this[0] = 1L }
-        val primes = primeNumbers(n)
-        for (prime in primes) {
-            for (i in prime..n) {
-                primeCombosBySum[i] += primeCombosBySum[i - prime]
-            }
-        }
-        return primeCombosBySum
-    }
-
-    /**
      * Project Euler specific implementation that requests the first integer that can be written
      * as the sum of primes in over 5000 different ways.
      */
@@ -47,5 +31,23 @@ class PrimeSummations {
             result = allCounts.indexOfFirst { it > 5000 }
         }
         return result
+    }
+
+    /**
+     * Solution is identical to the bottom-up approach that found the number of ways a total could
+     * be achieved, either using coins of different values (Batch 3 - Problem 31) or using
+     * combinations of lesser value positive integers (Batch 7 - Problem 76).
+     *
+     * @return LongArray of prime partitions (mod 1e9 + 7) of all N <= limit, with index == N.
+     */
+    fun allPrimeSumCombos(n: Int): LongArray {
+        val primeCombosBySum = LongArray(n + 1).apply { this[0] = 1L }
+        val primes = primeNumbers(n)
+        for (prime in primes) {
+            for (i in prime..n) {
+                primeCombosBySum[i] += primeCombosBySum[i - prime]
+            }
+        }
+        return primeCombosBySum
     }
 }
