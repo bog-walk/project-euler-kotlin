@@ -2,13 +2,7 @@ package batch7
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
-import util.combinatorics.combinations
-import util.tests.compareSpeed
-import util.tests.getSpeed
 import util.tests.getTestResource
-import kotlin.random.Random
 import kotlin.test.assertNull
 
 internal class PasscodeDerivationTest {
@@ -16,33 +10,27 @@ internal class PasscodeDerivationTest {
 
     @Test
     fun `HR problem returns null for invalid passcode`() {
-        val logins = listOf("an0", "n/.", ".#a")
-        assertNull(tool.derivePasscode(logins))
+        val logins = listOf(
+            listOf("an0", "n/.", ".#a"), listOf("123", "231")
+        )
+        for (login in logins) {
+            assertNull(tool.derivePasscode(login))
+            assertNull(tool.derivePassCodeGraph(login))
+        }
     }
 
     @Test
     fun `HR problem correct for valid passcodes`() {
         val logins = listOf(
+            listOf("abc"),
             listOf("SMH", "TON", "RNG", "WRO", "THG"),
             listOf("@<!", "@!3", "<R3", "@!R", "<!3", "@R3")
         )
-        val expected = listOf("SMTHWRONG", "@<!R3")
+        val expected = listOf("abc", "SMTHWRONG", "@<!R3")
         for ((i, e) in expected.withIndex()) {
             assertEquals(e, tool.derivePasscode(logins[i]))
+            assertEquals(e, tool.derivePassCodeGraph(logins[i]))
         }
-    }
-
-    @Test
-    fun `HR problem correct for random passcode`() {
-        val length = 10
-        val passcode = List(length) {
-            Random.nextInt(33, 127).toChar()
-        }.joinToString("")
-        val logins = combinations((0..9), 3).toList().shuffled().take(20).map {
-            it.map { i -> passcode[i] }.joinToString("")
-        }
-        val actual = tool.derivePasscode(logins)
-        assertEquals(passcode, actual)
     }
 
     @Test
@@ -50,5 +38,6 @@ internal class PasscodeDerivationTest {
         val logins = getTestResource("src/test/resources/PasscodeDerivation.txt").distinct()
         val expected = "73162890"
         assertEquals(expected, tool.derivePasscode(logins))
+        assertEquals(expected, tool.derivePassCodeGraph(logins))
     }
 }
