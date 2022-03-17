@@ -39,7 +39,7 @@ class PasscodeDerivation {
      *
      * SPEED (BETTER) 3.80ms for 50-login attempts
      */
-    fun derivePassCodeGraph(logins: List<String>): String? {
+    fun derivePasscodeImproved(logins: List<String>): String? {
         // reduce cache size to ASCII characters between 33 and 126 inclusive
         val offset = 33
         val connections = Array<Set<Int>?>(127 - offset) { null }

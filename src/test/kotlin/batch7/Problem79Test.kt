@@ -15,7 +15,7 @@ internal class PasscodeDerivationTest {
         )
         for (login in logins) {
             assertNull(tool.derivePasscode(login))
-            assertNull(tool.derivePassCodeGraph(login))
+            assertNull(tool.derivePasscodeImproved(login))
         }
     }
 
@@ -29,7 +29,7 @@ internal class PasscodeDerivationTest {
         val expected = listOf("abc", "SMTHWRONG", "@<!R3")
         for ((i, e) in expected.withIndex()) {
             assertEquals(e, tool.derivePasscode(logins[i]))
-            assertEquals(e, tool.derivePassCodeGraph(logins[i]))
+            assertEquals(e, tool.derivePasscodeImproved(logins[i]))
         }
     }
 
@@ -38,6 +38,6 @@ internal class PasscodeDerivationTest {
         val logins = getTestResource("src/test/resources/PasscodeDerivation.txt").distinct()
         val expected = "73162890"
         assertEquals(expected, tool.derivePasscode(logins))
-        assertEquals(expected, tool.derivePassCodeGraph(logins))
+        assertEquals(expected, tool.derivePasscodeImproved(logins))
     }
 }
