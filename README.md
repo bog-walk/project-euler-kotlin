@@ -9,8 +9,8 @@ Problem content on the Project Euler site is licensed under [CC BY-NC-SA 4.0](ht
 Some problems have been altered to either generalise their goal or implement further constraints, as influenced by 
 the problem outlines found on [HackerRank](https://www.hackerrank.com/contests/projecteuler/challenges).
 
-70/100 solved: :desert_island: :desert_island: :desert_island: :desert_island: :desert_island: :desert_island:
-:desert_island: :black_circle: :black_circle: :black_circle:
+80/100 solved: :desert_island: :desert_island: :desert_island: :desert_island: :desert_island: :desert_island:
+:desert_island: :desert_island: :black_circle: :black_circle:
 
 ### Structure Guideline
 
