@@ -24,6 +24,7 @@ internal class SquareRootDigitalExpansionTest {
     fun `correct for all constraints`(n: Int, p: Int, expected: Int) {
         assertEquals(expected, tool.irrationalSquareDigitSum(n, p))
         assertEquals(expected, tool.irrationalSquareDigitSum(n, p, manualRoot = true))
+        assertEquals(expected, tool.irrationalSquareDigitSumImproved(n, p))
     }
 
     @Test
@@ -44,6 +45,10 @@ internal class SquareRootDigitalExpansionTest {
         }
         speeds.add("Manual" to manualTime)
         assertEquals(expected, manualActual)
+        getSpeed(tool::irrationalSquareDigitSumImproved, n, p).run {
+            speeds.add("Improved" to second)
+            assertEquals(expected, first)
+        }
         compareSpeed(speeds)
     }
 }
