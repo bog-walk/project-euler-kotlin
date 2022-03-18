@@ -1,7 +1,6 @@
 package batch1
 
 import util.custom.PyramidTree
-import kotlin.math.max
 
 /**
  * Problem 18: Maximum Path Sum 1
@@ -45,7 +44,7 @@ class MaximumPathSum1 {
     fun maxPathSumDynamic(rows: Int, elements: Array<IntArray>): Int {
         for (row in (rows - 1) downTo 1) {
             for (col in 0 until row) {
-                elements[row-1][col] += max(elements[row][col], elements[row][col+1])
+                elements[row-1][col] += maxOf(elements[row][col], elements[row][col+1])
             }
         }
         return elements[0][0]
