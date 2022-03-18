@@ -6,8 +6,8 @@ import util.tests.compareSpeed
 import util.tests.getSpeed
 import util.tests.getTestResource
 
-internal class PathSum2WaysTest {
-    private val tool = PathSum2Ways()
+internal class PathSum3WaysTest {
+    private val tool = PathSum3Ways()
 
     @Test
     fun `HR problem correct for tiny grid`() {
@@ -17,7 +17,7 @@ internal class PathSum2WaysTest {
             longArrayOf(10, 0, 0),
             longArrayOf(10, 10, 10)
         )
-        val expected = 20L
+        val expected = 10L
         assertEquals(expected, tool.minPathSum(n, grid))
         assertEquals(expected, tool.minPathSumBFS(n, grid))
     }
@@ -32,7 +32,7 @@ internal class PathSum2WaysTest {
             longArrayOf(2, 2, 6, 4, 4),
             longArrayOf(0, 2, 4, 2, 8)
         )
-        val expected = 25L
+        val expected = 16L
         assertEquals(expected, tool.minPathSum(n, grid))
         assertEquals(expected, tool.minPathSumBFS(n, grid))
     }
@@ -47,7 +47,7 @@ internal class PathSum2WaysTest {
             longArrayOf(537, 699, 497, 121, 956),
             longArrayOf(805, 732, 524, 37, 331)
         )
-        val expected = 2427L
+        val expected = 994L
         assertEquals(expected, tool.minPathSum(n, grid))
         assertEquals(expected, tool.minPathSumBFS(n, grid))
     }
@@ -59,7 +59,7 @@ internal class PathSum2WaysTest {
             "src/test/resources/PathSum2to4Ways.txt", lineSplit = ","
         ) { it.toLong() }
         val grid = Array(80) { input[it].toLongArray() }
-        val expected = 427_337L
+        val expected = 260_324L
         val solutions = mapOf(
             "Dynamic" to tool::minPathSum, "BFS" to tool::minPathSumBFS
         )
