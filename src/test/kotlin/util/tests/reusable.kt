@@ -110,6 +110,36 @@ fun compareSpeed(speeds: List<Pair<String, Long>>, precision: Int = 2) {
 }
 
 /**
+ * Transforms content of a test resource file into a 2-dimensional grid of size [gridSize], with
+ * each grid row corresponding to an IntArray.
+ *
+ * @param [lineSplit] characters to use as the delimiter when splitting a line.
+ */
+fun getTestIntGrid(
+    filePath: String,
+    gridSize: Int,
+    lineSplit: String = " "
+): Array<IntArray>{
+    val input = getTestResource(filePath, lineSplit = lineSplit, transformation = String::toInt)
+    return Array(gridSize) { input[it].toIntArray() }
+}
+
+/**
+ * Transforms content of a test resource file into a 2-dimensional grid of size [gridSize], with
+ * each grid row corresponding to an LongArray.
+ *
+ * @param [lineSplit] characters to use as the delimiter when splitting a line.
+ */
+fun getTestLongGrid(
+    filePath: String,
+    gridSize: Int,
+    lineSplit: String = " "
+): Array<LongArray> {
+    val input = getTestResource(filePath, lineSplit = lineSplit, transformation = String::toLong)
+    return Array(gridSize) { input[it].toLongArray() }
+}
+
+/**
  * Retrieves content of a test resource file, with each line returned as an unaltered String.
  *
  * @param [lineTrim] characters to remove from the left and right of each file line.

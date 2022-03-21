@@ -5,30 +5,22 @@ import org.junit.jupiter.api.TestInstance
 import util.custom.intMatrixOf
 import util.tests.compareSpeed
 import util.tests.getSpeed
-import util.tests.getTestResource
+import util.tests.getTestIntGrid
 import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class LargestProductInGridTest {
     private val tool = LargestProductInGrid()
 
-    private val smallGrid: Array<IntArray> = getTestGrid(
+    private val smallGrid: Array<IntArray> = getTestIntGrid(
         "src/test/resources/LargestProductInGrid4By4.txt", 4
     )
-    private val midGrid: Array<IntArray> = getTestGrid(
+    private val midGrid: Array<IntArray> = getTestIntGrid(
         "src/test/resources/LargestProductInGrid6By6.txt", 6
     )
-    private val largeGrid: Array<IntArray> = getTestGrid(
+    private val largeGrid: Array<IntArray> = getTestIntGrid(
         "src/test/resources/LargestProductInGrid20By20.txt", 20
     )
-
-    private fun getTestGrid(filename: String, size: Int): Array<IntArray> {
-        val grid = Array(size) { IntArray(size) }
-        getTestResource(filename, transformation = String::toInt)
-            .map { it.toIntArray() }
-            .forEachIndexed { i, row -> grid[i] = row }
-        return grid
-    }
 
     @Test
     fun `setup correctly`() {

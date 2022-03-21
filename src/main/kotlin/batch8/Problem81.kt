@@ -55,10 +55,10 @@ class PathSum2Ways {
     }
 
     /**
-     * Solution uses breadth-first search via a PriorityQueue that intrinsically stores the
-     * smallest weighted grid element encountered at its head. A step is taken to the right and
-     * down, if either are possible, on each smallest polled element until the bottom-right
-     * corner is found.
+     * Solution uses Dijkstra's algorithm for finding the shortest paths between nodes in a
+     * graph, via a PriorityQueue that intrinsically stores the smallest weighted grid element
+     * encountered at its head. A step is taken to the right and down, if either are possible, on
+     * each smallest polled element until the bottom-right corner is found.
      *
      * This PriorityQueue stores its elements based on the grid element's weight, as described by
      * a Comparator. This means that equivalent grid elements will then be sorted naturally by
@@ -78,12 +78,11 @@ class PathSum2Ways {
      *
      * SPEED (WORSE) 34.34ms for N = 80
      */
-    fun minPathSumBFS(rows: Int, grid: Array<LongArray>): Long {
-        val elements = Array(rows) { grid[it].clone() }
+    fun minPathSumDijkstra(rows: Int, grid: Array<IntArray>): Long {
         val visited = Array(rows) { BooleanArray(rows) }
         val compareByWeight = compareBy<Triple<Int, Int, Long>> { it.third }
         val queue = PriorityQueue(compareByWeight).apply {
-            add(Triple(0, 0, elements[0][0]))
+            add(Triple(0, 0, grid[0][0].toLong()))
         }
         var minSum = 0L
         while (queue.isNotEmpty()) {
@@ -95,10 +94,10 @@ class PathSum2Ways {
             }
             visited[row][col] = true
             if (col + 1 < rows) {
-                queue.add(Triple(row, col + 1, weight + elements[row][col+1]))
+                queue.add(Triple(row, col + 1, weight + grid[row][col+1]))
             }
             if (row + 1 < rows) {
-                queue.add(Triple(row + 1, col, weight + elements[row + 1][col]))
+                queue.add(Triple(row + 1, col, weight + grid[row + 1][col]))
             }
         }
         return minSum

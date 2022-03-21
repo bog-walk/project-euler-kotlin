@@ -50,8 +50,8 @@ class PathSum3Ways {
     }
 
     /**
-     * Solution is identical to the breadth-first search solution used in Problem 81, except
-     * for the following changes:
+     * Solution is identical to the Dijkstra solution used in Problem 81, except for the following
+     * changes:
      *
      *  - All leftmost column elements are added to the PriorityQueue as starters.
      *
@@ -66,12 +66,11 @@ class PathSum3Ways {
      *
      * SPEED (WORSE) 31.32ms for N = 80
      */
-    fun minPathSumBFS(rows: Int, grid: Array<LongArray>): Long {
-        val elements = Array(rows) { grid[it].clone() }
+    fun minPathSumDijkstra(rows: Int, grid: Array<IntArray>): Long {
         val visited = Array(rows) { BooleanArray(rows) }
         val compareByWeight = compareBy<Triple<Int, Int, Long>> { it.third }
         val queue = PriorityQueue(compareByWeight).apply {
-            addAll(List(rows) { Triple(it, 0, elements[it][0]) })
+            addAll(List(rows) { Triple(it, 0, grid[it][0].toLong()) })
         }
         var minSum = 0L
         while (queue.isNotEmpty()) {
@@ -83,13 +82,13 @@ class PathSum3Ways {
             }
             visited[row][col] = true
             if (row - 1 >= 0) {
-                queue.add(Triple(row - 1, col, weight + elements[row - 1][col]))
+                queue.add(Triple(row - 1, col, weight + grid[row - 1][col]))
             }
             if (col + 1 < rows) {
-                queue.add(Triple(row, col + 1, weight + elements[row][col+1]))
+                queue.add(Triple(row, col + 1, weight + grid[row][col+1]))
             }
             if (row + 1 < rows) {
-                queue.add(Triple(row + 1, col, weight + elements[row + 1][col]))
+                queue.add(Triple(row + 1, col, weight + grid[row + 1][col]))
             }
         }
         return minSum

@@ -3,10 +3,7 @@ package util.tests
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import kotlin.system.measureNanoTime
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 internal class ReusableTest {
     @Nested
@@ -159,13 +156,39 @@ internal class ReusableTest {
     }
 
     @Nested
+    @DisplayName("getTestXGrid test suite")
+    inner class GetTestXGrid {
+        @Test
+        fun `getTestIntGrid correct`() {
+            val path = "src/test/kotlin/util/tests/fakeResource"
+            val expectedSize = 5
+            val expectedFirst = intArrayOf(1, 2, 3, 4, 5)
+            val actual = getTestIntGrid(path, expectedSize, ", ")
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedFirst, actual.first())
+            assertIs<IntArray>(actual.first())
+        }
+
+        @Test
+        fun `getTestLongGrid correct`() {
+            val path = "src/test/kotlin/util/tests/fakeResource"
+            val expectedSize = 5
+            val expectedFirst = longArrayOf(1, 2, 3, 4, 5)
+            val actual = getTestLongGrid(path, expectedSize, ", ")
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedFirst, actual.first())
+            assertIs<LongArray>(actual.first())
+        }
+    }
+
+    @Nested
     @DisplayName("getTestResource test suite")
     inner class GetTestResource {
         @Test
         fun `getTestResource correct for default retrieval`() {
             val path = "src/test/kotlin/util/tests/fakeResource"
             val expectedSize = 5
-            val expectedLine = "A, B, C, D, E, F"
+            val expectedLine = "1, 2, 3, 4, 5"
             val resource = getTestResource(path)
             assertEquals(expectedSize, resource.size)
             assertEquals(expectedLine, resource.first())
@@ -176,8 +199,8 @@ internal class ReusableTest {
         fun `getTestResource correct for transformed retrieval`() {
             val path = "src/test/kotlin/util/tests/fakeResource"
             val expectedSize = 5
-            val expectedLine = listOf("a", "b", "c", "d", "e", "f")
-            val resource = getTestResource(path, lineSplit=", ") { it.lowercase() }
+            val expectedLine = listOf("1A", "2A", "3A", "4A", "5A")
+            val resource = getTestResource(path, lineSplit=", ") { it + 'A' }
             assertEquals(expectedSize, resource.size)
             assertEquals(expectedLine, resource.first())
             assertIs<List<String>>(resource.first())
