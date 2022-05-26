@@ -2,6 +2,7 @@ package batch1
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.system.measureNanoTime
@@ -43,7 +44,7 @@ internal class MaximumPathSum1Test {
         )
         val expected = 1074
         val nested = getNestedPyramid(n, *elements)
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::maxPathSumDynamic, n, nested).run {
             speeds.add("Dynamic" to second)
             assertEquals(expected, first)
@@ -52,7 +53,7 @@ internal class MaximumPathSum1Test {
         val customTime = measureNanoTime {
             customActual = tool.maxPathSum(n, *elements)
         }
-        speeds.add("Custom" to customTime)
+        compareSpeed("Custom" to customTime)
         assertEquals(expected, customActual)
         compareSpeed(speeds)
     }

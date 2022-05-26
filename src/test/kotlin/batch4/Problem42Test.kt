@@ -2,6 +2,7 @@ package batch4
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import util.tests.getTestResource
@@ -43,7 +44,7 @@ internal class CodedTriangleNumbersTest {
         val solutions = mapOf(
             "Original" to tool::triangleNumber, "Improved" to tool::triangleNumberImproved
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<Int>()
         for ((name, solution) in solutions) {
             getSpeed(solution, tN).run {

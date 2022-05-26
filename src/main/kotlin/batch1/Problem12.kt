@@ -1,6 +1,6 @@
 package batch1
 
-import util.maths.gaussianSum
+import util.maths.gaussSum
 import util.maths.primeFactors
 import util.maths.primeNumbersOG
 
@@ -55,7 +55,7 @@ class HighlyDivisibleTriangularNumber {
             count = dn1 * dn2
             dn1 = dn2
         }
-        return t.gaussianSum().toInt()
+        return t.gaussSum().toInt()
     }
 
     /**
@@ -94,7 +94,7 @@ class HighlyDivisibleTriangularNumber {
             }
             var nextT = lastT + 1
             do {
-                val triangle = nextT.gaussianSum().toInt()
+                val triangle = nextT.gaussSum().toInt()
                 val dn2 = if (nextT % 2 == 0) {
                     countDivisors(nextT + 1)
                 } else {

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import util.tests.getTestResource
@@ -74,7 +75,7 @@ internal class LargestProductInSeriesTest {
         val k = 4
         val number = this.thousandDigits
         val expected = 5832L
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val solutions = mapOf(
             "Recursive" to tool::largestSeriesProductRecursive,
             "Iterative" to tool::largestSeriesProduct

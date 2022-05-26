@@ -3,6 +3,7 @@ package batch0
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -32,7 +33,7 @@ internal class LargestPrimeFactorTest {
     fun `speed when N has large factors`() {
         val n = 600_851_475_143
         val expected = 6857L
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::largestPrimeFactor, n).run {
             speeds.add("Decomposition" to second)
             assertEquals(expected, first, "Incorrect Decomposition -> $first")
@@ -48,7 +49,7 @@ internal class LargestPrimeFactorTest {
     fun `speed when N has small factors`() {
         val n = 1e12.toLong()
         val expected = 5L
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::largestPrimeFactor, n).run {
             speeds.add("Decomposition" to second)
             assertEquals(expected, first, "Incorrect Decomposition -> $first")

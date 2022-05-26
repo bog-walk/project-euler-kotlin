@@ -1,5 +1,6 @@
 package batch6
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -69,7 +70,7 @@ internal class Magic5GonRingTest {
             "Improved" to tool::magicRingSolutionsImproved,
             "Optimised" to tool::magicRingSolutionsOptimised
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<List<String>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, s).run {

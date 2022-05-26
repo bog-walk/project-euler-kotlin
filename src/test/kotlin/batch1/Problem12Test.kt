@@ -3,6 +3,7 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -49,7 +50,7 @@ internal class HighlyDivisibleTriangularNumberTest {
             "Prime" to tool::firstTriangleOverNUsingPrimes,
             "Optimised" to tool::firstTriangleOverNOptimised
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)

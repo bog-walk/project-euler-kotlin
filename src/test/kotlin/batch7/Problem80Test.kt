@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.system.measureNanoTime
@@ -32,18 +33,18 @@ internal class SquareRootDigitalExpansionTest {
         val n = 100
         val p = 10000
         val expected = 4_048_597
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val builtinActual: Int
         val builtinTime = measureNanoTime {
             builtinActual = tool.irrationalSquareDigitSum(n, p)
         }
-        speeds.add("Built-in" to builtinTime)
+        compareSpeed("Built-in" to builtinTime)
         assertEquals(expected, builtinActual)
         val manualActual: Int
         val manualTime = measureNanoTime {
             manualActual = tool.irrationalSquareDigitSum(n, p, manualRoot = true)
         }
-        speeds.add("Manual" to manualTime)
+        compareSpeed("Manual" to manualTime)
         assertEquals(expected, manualActual)
         getSpeed(tool::irrationalSquareDigitSumImproved, n, p).run {
             speeds.add("Improved" to second)

@@ -1,5 +1,6 @@
 package util.search
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -50,7 +51,7 @@ internal class ReusableTest {
     fun `binarySearch speed`() {
         val nums = List(10_001) { it }
         val target = 9998
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(::binarySearchManual, target, nums).run {
             speeds.add("Manual" to this.second)
             assertTrue { this.first }

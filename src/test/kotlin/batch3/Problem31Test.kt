@@ -3,6 +3,7 @@ package batch3
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -31,7 +32,7 @@ internal class CoinSumsTest {
     fun `countCoinCombos speed for upper constraints`() {
         val n = 100_000
         val expected = 836_633_026
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::countCoinCombosRecursive, n).run {
             speeds.add("Recursive" to second)
             assertEquals(expected, first)

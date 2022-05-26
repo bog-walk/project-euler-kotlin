@@ -1,5 +1,6 @@
 package batch7
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -83,7 +84,7 @@ internal class DigitFactorialChainsTest {
             "Improved" to tool::digitFactorialChainStartersImproved,
             "Optimised" to tool::digitFactorialChainStartersOptimised
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, limit, length).run {
                 speeds.add(name to second)

@@ -1,7 +1,6 @@
 package batch0
 
-import util.maths.gaussianSum
-import kotlin.math.pow
+import util.maths.gaussSum
 
 /**
  * Problem 6: Sum Square Difference
@@ -25,11 +24,9 @@ class SumSquareDifference {
      */
     fun sumSquareDiffBrute(n: Int): Long {
         val range: LongProgression = 1L..n
-        val sumOfSquares = range.reduce { acc, i ->
-            acc + i * i
-        }
-        val squareOfSum = (range.sum().toDouble()).pow(2).toLong()
-        return squareOfSum - sumOfSquares
+        val sumOfRange = range.sum()
+        val sumOfSquares = range.sumOf { it * it }
+        return sumOfRange * sumOfRange - sumOfSquares
     }
 
     /**
@@ -48,8 +45,8 @@ class SumSquareDifference {
      * SPEED (BETTER) 1.70ms for N = 1e4
      */
     fun sumSquareDiff(n: Int): Long {
+        val sumOfRange = n.gaussSum()
         val sumOfSquares: Double = (1.0 * n / 6) * (2 * n + 1) * (n + 1)
-        val squareOfSum: Double = (n.gaussianSum().toDouble()).pow(2)
-        return (squareOfSum - sumOfSquares).toLong()
+        return sumOfRange * sumOfRange - sumOfSquares.toLong()
     }
 }

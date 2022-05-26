@@ -4,7 +4,7 @@ import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * A classic circular buffer implementation of a queue for FIFO management, which uses a bounded
- * blocking queue that is backed by a fixed-sized array.
+ * blocking queue backed by a fixed-sized array.
  */
 class RollingQueue<E>(
     capacity: Int

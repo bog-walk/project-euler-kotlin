@@ -1,5 +1,6 @@
 package batch6
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -43,7 +44,7 @@ internal class PowerfulDigitCountsTest {
         val solutions = mapOf(
             "Brute" to tool::allNDigitNthPowers, "Formula" to tool::allNDigitNthPowersFormula
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution).run {
                 speeds.add(name to second)

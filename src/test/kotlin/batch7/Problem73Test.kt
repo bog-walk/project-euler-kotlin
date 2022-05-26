@@ -3,6 +3,7 @@ package batch7
 import kotlin.test.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -43,7 +44,7 @@ internal class CountingFractionsInARangeTest {
             "Inclusion-Exclusion" to tool::fareyRangeCountIE,
             "Rank" to tool::fareyRangeCountSieve
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, d, a).run {
                 speeds.add(name to second)
@@ -62,7 +63,7 @@ internal class CountingFractionsInARangeTest {
             "Recursive count" to tool::fareyRangeCountRecursive,
             "Iterative count" to tool::fareyRangeCountIterative
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, d, a).run {
                 speeds.add(name to second)
@@ -81,7 +82,7 @@ internal class CountingFractionsInARangeTest {
             "Inclusion-Exclusion" to tool::fareyRangeCountIE,
             "Rank" to tool::fareyRangeCountSieve
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, d, a).run {
                 speeds.add(name to second)

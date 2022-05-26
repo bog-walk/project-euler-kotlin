@@ -1,9 +1,12 @@
 package batch0
 
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
+import util.tests.compareSpeed
+import util.tests.getSpeed
 
 internal class MultiplesOf3Or5Test {
     private val tool = MultiplesOf3Or5()
@@ -31,5 +34,25 @@ internal class MultiplesOf3Or5Test {
         val n = 1e9.toInt()
         val expected = 233_333_333_166_666_668
         assertEquals(expected, tool.sumOfMultiples(n, 3, 5))
+    }
+
+    @Test
+    fun `sumOfMultiples speed`() {
+        val limit = 10_000_000
+        val factor1 = 3
+        val factor2 = 5
+        val expected = 23_333_331_666_668
+        val solutions = mapOf(
+            "Brute" to tool::sumOfMultiplesBrute,
+            "Improved" to tool::sumOfMultiples
+        )
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
+        for ((name, solution) in solutions) {
+            getSpeed(solution, limit, factor1, factor2, warmup = 1, repeat = 10).run {
+                speeds.add(name to second)
+                assertEquals(expected, first)
+            }
+        }
+        compareSpeed(speeds)
     }
 }

@@ -42,7 +42,7 @@ class LargestPalindromeProduct {
     private fun Int.is3DigProduct(): Boolean {
         val range = 101..999
         var distinctPrimes: Set<Long>
-        val primeFactors: List<Long> = primeFactors(this.toLong()).also{
+        val primeFactors: List<Long> = primeFactors(this.toLong()).also {
             distinctPrimes = it.keys
         }.flatMap { (k, v) ->
             List(v) { k }
@@ -68,7 +68,7 @@ class LargestPalindromeProduct {
      * A palindrome of the product of two 3-digit integers must be 6-digits long & one of the
      * integers must have a factor of 11, based on the following algebra:
      *
-     *      P = 100_000x + 10_000y + 1000z + 100z + 100y + x
+     *      P = 100_000x + 10_000y + 1000z + 100z + 10y + x
      *
      *      P = 100_001x + 10_010y + 1100z
      *

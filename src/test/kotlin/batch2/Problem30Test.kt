@@ -1,5 +1,6 @@
 package batch2
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -28,7 +29,7 @@ internal class DigitFifthPowersTest {
         val solutions = mapOf(
             "Brute" to tool::digitNthPowersBrute, "Combinatorics" to tool::digitNthPowers
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)

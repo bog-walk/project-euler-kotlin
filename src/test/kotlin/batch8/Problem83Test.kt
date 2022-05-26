@@ -47,7 +47,7 @@ internal class PathSum4WaysTest {
             "Dijkstra Improved" to tool::minPathSumDijkstraImproved,
             "Dijkstra OG" to tool::minPathSumDijkstra
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, grid).run {
                 speeds.add(name to second)

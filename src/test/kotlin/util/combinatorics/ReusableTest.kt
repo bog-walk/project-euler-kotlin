@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import java.math.BigInteger
@@ -102,7 +103,7 @@ internal class ReusableTest {
             val input = 1..19
             val r = 15
             val expectedSize = 3876
-            val speeds = mutableListOf<Pair<String, Long>>()
+            val speeds = mutableListOf<Pair<String, Benchmark>>()
             getSpeed(::getCombinations, input, r).run {
                 speeds.add("Old" to second)
                 assertEquals(expectedSize, first.size)
@@ -111,7 +112,7 @@ internal class ReusableTest {
             val newTime = measureNanoTime {
                 newActual = combinations(input, r).toList()
             }
-            speeds.add("New" to newTime)
+            compareSpeed("New" to newTime)
             assertEquals(expectedSize, newActual.size)
             compareSpeed(speeds)
         }
@@ -257,7 +258,7 @@ internal class ReusableTest {
             val input = ('0'..'9').toMutableList()
             val r = input.size
             val expectedSize = 3_628_800
-            val speeds = mutableListOf<Pair<String, Long>>()
+            val speeds = mutableListOf<Pair<String, Benchmark>>()
             getSpeed(::getPermutations, input, r).run {
                 speeds.add("Heap algorithm" to second)
                 assertEquals(expectedSize, first.size)

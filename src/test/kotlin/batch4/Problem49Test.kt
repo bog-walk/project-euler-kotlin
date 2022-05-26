@@ -1,5 +1,6 @@
 package batch4
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -63,7 +64,7 @@ internal class PrimePermutationsTest {
         val solutions = mapOf(
             "Original" to tool::primePermSequence, "Improved" to tool::primePermSequenceImproved
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
                 speeds.add(name to second)

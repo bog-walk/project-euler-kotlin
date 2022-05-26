@@ -1,5 +1,6 @@
 package batch5
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -58,7 +59,7 @@ internal class SquareRootConvergentsTest {
             "Manual" to tool::squareRootFractionsManual,
             "Optimised" to tool::squareRootFractions
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<List<Int>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {

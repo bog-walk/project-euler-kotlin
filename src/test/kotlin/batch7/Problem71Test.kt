@@ -1,5 +1,6 @@
 package batch7
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -49,7 +50,7 @@ internal class OrderedFractionsTest {
             "Improved" to tool::leftFareyNeighbourImproved,
             "Optimised" to tool::leftFareyNeighbourOptimised
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, limit, n, d).run {
                 speeds.add(name to second)
@@ -99,7 +100,7 @@ internal class OrderedFractionsTest {
             "Improved" to tool::leftFareyNeighbourImproved,
             "Optimised" to tool::leftFareyNeighbourOptimised
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, limit, n, d).run {
                 speeds.add(name to second)

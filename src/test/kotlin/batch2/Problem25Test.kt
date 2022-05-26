@@ -1,5 +1,6 @@
 package batch2
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.system.measureNanoTime
@@ -45,7 +46,7 @@ internal class NDigitFibonacciNumberTest {
             "Golden formula" to tool::nDigitFibTermGoldenFormula,
             "Golden brute" to tool::nDigitFibTermGoldenBrute
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n).run {
                 speeds.add(name to second)
@@ -56,7 +57,7 @@ internal class NDigitFibonacciNumberTest {
         val bruteTime = measureNanoTime {
             bruteActual = tool.nDigitFibTermsBrute(n)[n - 2]
         }
-        speeds.add("Brute check" to bruteTime)
+        compareSpeed("Brute check" to bruteTime)
         assertEquals(expected, bruteActual, "Incorrect Brute check -> $bruteActual")
         compareSpeed(speeds)
     }
@@ -65,12 +66,12 @@ internal class NDigitFibonacciNumberTest {
     fun `nDigitFibTerm speed for high N`() {
         val n = 5000
         val expected = 23922
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val bruteActual: Int
         val bruteTime = measureNanoTime {
             bruteActual = tool.nDigitFibTermsBrute(n)[n - 2]
         }
-        speeds.add("Brute check" to bruteTime)
+        compareSpeed("Brute check" to bruteTime)
         assertEquals(expected, bruteActual)
         getSpeed(tool::nDigitFibTermGoldenFormula, n).run {
             speeds.add("Golden formula" to second)

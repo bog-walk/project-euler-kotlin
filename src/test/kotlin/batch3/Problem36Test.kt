@@ -3,6 +3,7 @@ package batch3
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.assertEquals
@@ -31,7 +32,7 @@ internal class DoubleBasePalindromesTest {
         val solutions = mapOf(
             "Brute" to tool::sumOfPalindromesBrute, "Improved" to tool::sumOfPalindromes
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<Int>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {

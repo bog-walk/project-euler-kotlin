@@ -6,6 +6,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import util.maths.primeNumbersOG
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -20,7 +21,7 @@ internal class SummationOfPrimesTest {
     @BeforeAll
     fun `setup and speed`() {
         val n = 1e6.toInt()
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::sumOfPrimesQuickDraw, n).run {
             speeds.add("Original" to second)
             allPrimes = first

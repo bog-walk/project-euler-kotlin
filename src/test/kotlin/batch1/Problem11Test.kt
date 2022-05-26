@@ -3,6 +3,7 @@ package batch1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
 import util.custom.intMatrixOf
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import util.tests.getTestIntGrid
@@ -45,7 +46,7 @@ internal class LargestProductInGridTest {
     @Test
     fun `largestProductInGrid speed`() {
         val expected = 70_600_674
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::largestProductInGrid, largeGrid).run {
             speeds.add("All-in-one" to second)
             assertEquals(expected, first, "Incorrect All-in-one -> $first")

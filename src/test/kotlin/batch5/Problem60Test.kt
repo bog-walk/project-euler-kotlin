@@ -1,5 +1,6 @@
 package batch5
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import util.tests.compareSpeed
 import util.tests.getSpeed
@@ -53,7 +54,7 @@ internal class PrimePairSetsTest {
             "Thread" to tool::threadPrimePairSetSum,
             "Coroutine" to tool::concurrentPrimePairSetSum
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
                 speeds.add(name to second)

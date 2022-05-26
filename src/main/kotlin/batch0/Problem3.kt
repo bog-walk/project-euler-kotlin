@@ -14,7 +14,7 @@ import kotlin.math.sqrt
  * Constraints: 10 <= N <= 1e12
  *
  * Fundamental Theorem of Arithmetic: There will only ever be a unique set of prime factors for
- * any number.
+ * any number greater than 1.
  *
  * e.g.: N = 10
  *       prime factors = {2, 5}
@@ -27,15 +27,18 @@ class LargestPrimeFactor {
      * prime factor.
      *
      * SPEED (BETTER for N with small factors) 51.83ms for N = 1e12
-     * SPEED (WORSE for N with large factors) 33.34ms for N = 600_851_475_143
+     * SPEED (BETTER for N with large factors) 10.80ms for N = 600_851_475_143
      */
     fun largestPrimeFactor(n: Long): Long {
         return primeFactors(n).keys.maxOrNull()!!
     }
 
     /**
-     * SPEED (WORSE for N with small factors) 256.15ms for N = 1e12
-     * SPEED (BETTER for N with large factors) 24.54ms for N = 600_851_475_143
+     * Identical to the optimised primeFactorsOG() algorithm but uses recursion instead of
+     * storing the entire prime factorisation map.
+     *
+     * SPEED (WORSE for N with small factors) 194.56ms for N = 1e12
+     * SPEED (WORSE for N with large factors) 15.34ms for N = 600_851_475_143
      */
     fun largestPrimeFactorRecursive(n: Long, largest: Long = 2L): Long {
         val maxFactor = sqrt(n.toDouble()).toLong()

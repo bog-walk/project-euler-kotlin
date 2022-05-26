@@ -3,6 +3,7 @@ package batch0
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -24,6 +25,7 @@ internal class EvenFibonacciTest {
         "4_000_000, 4_613_732"
     )
     fun `sumOfEvenFibs correct`(n: Long, expected: Long) {
+        assertEquals(expected, tool.sumOfEvenFibsNaive(n))
         assertEquals(expected, tool.sumOfEvenFibsBrute(n))
         assertEquals(expected, tool.sumOfEvenFibsRolling(n))
         assertEquals(expected, tool.sumOfEvenFibsFormula(n))
@@ -34,13 +36,14 @@ internal class EvenFibonacciTest {
         val n = 4e16.toLong()
         val expected = 49_597_426_547_377_748
         val solutions = mapOf(
+            "Naive" to tool::sumOfEvenFibsNaive,
             "Brute" to tool::sumOfEvenFibsBrute,
             "Formula" to tool::sumOfEvenFibsFormula,
             "Custom" to tool::sumOfEvenFibsRolling
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, warmup = 1, repeat = 1000).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }

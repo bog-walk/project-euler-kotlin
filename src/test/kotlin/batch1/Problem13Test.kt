@@ -2,6 +2,7 @@ package batch1
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import util.tests.getTestResource
@@ -58,7 +59,7 @@ internal class LargeSumTest {
         val solutions = mapOf(
             "Manual" to tool::addInReverse, "BigInteger" to tool::sliceSum
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<String>()
         for ((name, solution) in solutions) {
             getSpeed(solution, hundredFiftyDigs).run {
@@ -75,7 +76,7 @@ internal class LargeSumTest {
         val solutions = mapOf(
             "Manual" to tool::addInReverse, "BigInteger" to tool::sliceSum
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<String>()
         for ((name, solution) in solutions) {
             getSpeed(solution, thousandFiftyDigs).run {

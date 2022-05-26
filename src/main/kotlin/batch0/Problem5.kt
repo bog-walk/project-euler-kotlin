@@ -22,6 +22,8 @@ import kotlin.math.sqrt
 
 class SmallestMultiple {
     /**
+     * The solution below needs to be removed as top-level function now uses BigInteger.
+     *
      * Uses top-level helper to repeatedly calculate the lcm of 2 values (via reduce()), starting
      * from the largest and stepping backwards until the middle of the range, as the smaller half
      * of a range will already be factors of the larger half.

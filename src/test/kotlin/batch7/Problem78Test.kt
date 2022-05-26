@@ -1,5 +1,6 @@
 package batch7
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -25,7 +26,7 @@ internal class CoinPartitionsTest {
     fun `HR problem speed for lower constraints`() {
         val n = 1000
         val expected = 709_496_666
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::coinPileCombos, n).run {
             speeds.add("Dynamic" to second)
             assertEquals(expected, first[n])

@@ -1,5 +1,6 @@
 package batch2
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -37,7 +38,7 @@ internal class LexicographicPermutationsTest {
         val input = "0123456789"
         val permutation = 999_999L // the millionth permutation
         val expected = "2783915460"
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::lexicographicPerm, permutation, input).run {
             speeds.add("Original" to second)
             assertEquals(expected, first, "Incorrect Original -> $first")

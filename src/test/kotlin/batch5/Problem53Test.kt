@@ -1,5 +1,6 @@
 package batch5
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -47,7 +48,7 @@ internal class CombinatoricSelectionsTest {
             "Original" to tool::countLargeCombinatorics,
             "Improved" to tool::countLargeCombinatoricsImproved
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
                 speeds.add(name to second)

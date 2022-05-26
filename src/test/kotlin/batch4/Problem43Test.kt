@@ -1,5 +1,6 @@
 package batch4
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.Test
@@ -27,7 +28,7 @@ internal class SubstringDivisibilityTest {
             "Windowed" to tool::sumOfPandigitalSubstrings,
             "Improved" to tool::sumOfPandigitalSubstringsImproved
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n). run {
                 speeds.add(name to second)

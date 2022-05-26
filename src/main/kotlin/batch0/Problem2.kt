@@ -22,7 +22,7 @@ class EvenFibonacci {
      * prior are needed to accumulate sum. Provides an easier alternative to using an array or
      * multiple variables as it handles value reassignment & swapping within the class.
      *
-     * SPEED (WORST): 32.16ms for N = 4e16
+     * SPEED (WORST): 6.3e+04ns for N = 4e16
      */
     fun sumOfEvenFibsRolling(n: Long): Long {
         var sum = 0L
@@ -37,22 +37,42 @@ class EvenFibonacci {
     }
 
     /**
+     * Brute iteration over all Fibonacci terms using the formula:
+     *
+     *      F_n = F_{n-2} + F_{n-1}
+     *
+     * SPEED (BETTER): 1867ns for N = 4e16
+     */
+    fun sumOfEvenFibsNaive(n: Long): Long {
+        var sum = 0L
+        var prev2 = 1L
+        var prev1 = 2L
+        while (prev1 < n) {
+            if (prev1 and 1 == 0L) sum += prev1
+            val nextFib = prev1 + prev2
+            prev2 = prev1
+            prev1 = nextFib
+        }
+        return sum
+    }
+
+    /**
      * Sums every 3rd term in the sequence starting with 2, based on the observed pattern that
      * every 3rd Fibonacci number after 2 is even. This occurs because the sequence begins with 2
      * odd numbers, the sum of which must be even, then the sum of an odd and even number, twice,
      * will produce 2 odd numbers, etc...
      *
-     * SPEED (BETTER) 82700ns for N = 4e16
+     * SPEED (BETTER) 1848ns for N = 4e16
      */
     fun sumOfEvenFibsBrute(n: Long): Long {
         var sum = 0L
-        var prev1 = 1L
-        var nextFib = 2L
-        while (nextFib < n) {
-            sum += nextFib
-            val prev2 = prev1 + nextFib
-            prev1 = prev2 + nextFib
-            nextFib = prev2 + prev1
+        var prev = 1L
+        var evenFib = 2L
+        while (evenFib < n) {
+            sum += evenFib
+            val next = prev + evenFib
+            prev = next + evenFib
+            evenFib = next + prev
         }
         return sum
     }
@@ -60,15 +80,15 @@ class EvenFibonacci {
     /**
      * Sums every 3rd term in the sequence starting with 2, using the formula:
      *
-     *      F(n) = 4F(n - 3) + F(n - 6)
+     *      F_n = F_{n-6} + 4F_{n-3}
      *
-     * SPEED (BEST) 25400ns for N = 4e16
+     * SPEED (BEST) 1237ns for N = 4e16
      */
     fun sumOfEvenFibsFormula(n: Long): Long {
         var sum = 10L
-        val evenFibs = longArrayOf(2, 8) // F(3), F(6)
+        val evenFibs = longArrayOf(2, 8) // [F(3), F(6)]
         while (true) {
-            val nextEvenFib = 4 * evenFibs[1] + evenFibs[0]
+            val nextEvenFib = evenFibs[0] + 4 * evenFibs[1]
             if (nextEvenFib >= n) break
             sum += nextEvenFib
             evenFibs[0] = evenFibs[1]
@@ -77,4 +97,3 @@ class EvenFibonacci {
         return sum
     }
 }
-

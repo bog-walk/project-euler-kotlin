@@ -8,20 +8,23 @@ import kotlin.math.log10
 import kotlin.math.sqrt
 
 /**
- * Calculates the sum of the first [this] natural numbers.
+ * Calculates the sum of the first [this] natural numbers, based on the formula:
  *
- * Conversion of very large Floats to Longs in this formula can lead to large rounding
+ *      {n}Sigma{k=1} k = n * (n + 1) / 2
+ *
+ * Conversion of very large Doubles to Longs in this formula can lead to large rounding
  * losses, so Integer division by 2 is replaced with a single bitwise right shift,
- * as n >> 1 = n/(2^1).
+ * as n >> 1 = n / (2^1).
  */
-fun Int.gaussianSum(): Long  = 1L * this * (this + 1) shr 1
+fun Int.gaussSum(): Long  = 1L * this * (this + 1) shr 1
 
 /**
- * Recursive calculation of the greatest common divisor of [n1] and [n2].
+ * Recursive calculation of the greatest common divisor of [n1] and [n2] using the Euclidean
+ * algorithm.
  *
- * gcd(x, y) = gcd(|x*y|, |x|); where |x| >= |y|
+ *      gcd(x, y) = gcd(|y % x|, |x|); where |y| >= |x|
  *
- * gcd(x, 0) = gcd(0, x) = |x|
+ *      gcd(x, 0) = gcd(0, x) = |x|
  */
 fun gcd(n1: Long, n2: Long): Long {
     val x = abs(n1)
@@ -61,17 +64,17 @@ fun isCoPrime(x: Int, y: Int): Boolean = gcd(x.toLong(), y.toLong()) == 1L
  *
  * Derivation solution is based on the formula:
  *
- * n(2n - 1) = hN, in quadratic form becomes:
+ *      n(2n - 1) = hN, in quadratic form becomes:
  *
- * 0 = 2n^2 - n - hN, with a, b, c = 2, -1, -hN
+ *      0 = 2n^2 - n - hN, with a, b, c = 2, -1, -hN
  *
  * putting these values in the quadratic formula becomes:
  *
- * n = (1 +/- sqrt(1 + 8hN)) / 4
+ *      n = (1 +/- sqrt(1 + 8hN)) / 4
  *
  * so the inverse function, positive solution becomes:
  *
- * n = (1 + sqrt(1 + 8h_n)) / 4
+ *      n = (1 + sqrt(1 + 8h_n)) / 4
  *
  * @return  If hN is the nth hexagonal, or null
  */
@@ -85,17 +88,17 @@ fun Long.isHexagonalNumber(): Int? {
  *
  * Derivation solution is based on the formula:
  *
- * n(3n - 1)/2 = pN, in quadratic form becomes:
+ *      n(3n - 1)/2 = pN, in quadratic form becomes:
  *
- * 0 = 3n^2 - n - 2pN, with a, b, c = 3, -1, (-2pN)
+ *      0 = 3n^2 - n - 2pN, with a, b, c = 3, -1, (-2pN)
  *
  * putting these values in the quadratic formula becomes:
  *
- * n = (1 +/- sqrt(1 + 24pN))/6
+ *      n = (1 +/- sqrt(1 + 24pN))/6
  *
  * so the inverse function, positive solution becomes:
  *
- * n = (1 + sqrt(1 + 24pN))/6
+ *      n = (1 + sqrt(1 + 24pN))/6
  */
 fun Long.isPentagonalNumber(): Int? {
     val n = (1 + sqrt(1 + 24.0 * this)) / 6.0
@@ -232,17 +235,17 @@ internal fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boole
  *
  * Derivation solution is based on the formula:
  *
- * n(n + 1)/2 = tN, in quadratic form becomes:
+ *      n(n + 1)/2 = tN, in quadratic form becomes:
  *
- * 0 = n^2 + n - 2tN, with a, b, c = 1, 1, (-2tN)
+ *      0 = n^2 + n - 2tN, with a, b, c = 1, 1, (-2tN)
  *
  * putting these values in the quadratic formula becomes:
  *
- * n = (-1 +/- sqrt(1 + 8tN))/2
+ *      n = (-1 +/- sqrt(1 + 8tN))/2
  *
  * so the inverse function, positive solution becomes:
  *
- * n = (sqrt(1 + 8tN) - 1)/2
+ *      n = (sqrt(1 + 8tN) - 1)/2
  */
 fun Long.isTriangularNumber(): Int? {
     val n = 0.5 * (sqrt(1 + 8.0 * this) - 1)
@@ -252,19 +255,19 @@ fun Long.isTriangularNumber(): Int? {
 /**
  * Calculates the least common multiple of a variable amount of [n].
  *
- * lcm(x, y) = |x * y| / gcd(x, y)
+ *      lcm(x, y) = |x * y| / gcd(x, y)
  *
  * The original solution kept [n] as Long but consistently underperformed compared to the current
- * solution that converts all [n] to BigInteger before reducing.
+ * solution that converts all [n] to BigInteger before reducing, to leverage built-in methods.
  *
  * SPEED 1.86ms VS 31.58ms for 2-element varargs with 4-digit result
  *
  * SPEED 1.33ms VS 33.15ms for 9-element varargs with 12-digit result
  *
- * @throws IllegalArgumentException if any [n] = 0.
+ * @throws IllegalArgumentException if any [n] == 0.
  */
 fun lcm(vararg n: Long): Long {
-    require(n.all { it != 0L }) { "Parameter cannot be 0" }
+    require(n.all { it != 0L }) { "Argument cannot be 0" }
     val nBI = n.map(BigInteger::valueOf)
     return nBI.reduce { acc, num -> acc.lcm(num) }.longValueExact()
 }
@@ -272,7 +275,7 @@ fun lcm(vararg n: Long): Long {
 /**
  * Calculates the least common multiple of 2 BigIntegers.
  *
- * Function extracted from the more general lcm() that accepts a variable amount of Long
+ * Function extracted from the more general lcm() above that accepts a variable amount of Long
  * arguments, to allow solution sets to use the formula directly.
  */
 fun BigInteger.lcm(other: BigInteger): BigInteger {
@@ -308,17 +311,20 @@ fun powerDigitSum(base: Int, exp: Int): Int {
 }
 
 /**
- * Prime decomposition using Sieve of Eratosthenes algorithm.
+ * Prime decomposition divides out all prime factors using an optimised algorithm.
  *
- * Every prime number after 2 will be odd and there can be at most 1 prime factor greater than
- * sqrt([n]), which would be [n] itself if [n] is a prime.
+ * Every prime number after 2 will be odd and there can be at most 1 prime factor
+ * greater than sqrt([n]), which would be [n] itself if [n] is a prime.
  *
  * e.g. N = 12 returns {2=2, 3=1} -> 2^2 * 3^1 = 12
+ *
+ * SPEED (WORSE for N with small factors) 106.17ms for N = 1e12
+ * SPEED (WORSE for N with large factors) 120.70ms for N = 600_851_475_143
  *
  * @return map of prime factors (keys) and their exponents (values).
  * @throws IllegalArgumentException if [n] <= 1.
  */
-fun primeFactors(n: Long): Map<Long, Int> {
+fun primeFactorsOG(n: Long): Map<Long, Int> {
     require(n > 1) { "Must provide a natural number greater than 1" }
     var num = n
     val primes = mutableMapOf<Long, Int>()
@@ -327,6 +333,36 @@ fun primeFactors(n: Long): Map<Long, Int> {
     factors.forEach { factor ->
         while (num % factor == 0L) {
             primes[factor] = primes.getOrDefault(factor, 0) + 1
+            num /= factor
+        }
+    }
+    if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
+    return primes
+}
+
+/**
+ * Prime decomposition using Sieve of Eratosthenes algorithm to only divide out prime factors.
+ *
+ * Other than changing the value of the factors list, the algorithms are identical.
+ *
+ * This version will be used in future solutions.
+ *
+ * SPEED (BETTER for N with small factors) 53.28ms for N = 1e12
+ * SPEED (BETTER for N with large factors) 62.08ms for N = 600_851_475_143
+ *
+ * @return map of prime factors (keys) and their exponents (values).
+ * @throws IllegalArgumentException if [n] <= 1.
+ */
+fun primeFactors(n: Long): Map<Long, Int> {
+    require(n > 1) { "Must provide a natural number greater than 1" }
+    if (n == 2L) return mapOf(2L to 1)
+    var num = n
+    val primes = mutableMapOf<Long, Int>()
+    val maxFactor = sqrt(num.toDouble()).toInt()
+    val factors = primeNumbers(maxFactor)
+    factors.forEach { factor ->
+        while (num % factor == 0L) {
+            primes[1L * factor] = primes.getOrDefault(1L * factor, 0) + 1
             num /= factor
         }
     }

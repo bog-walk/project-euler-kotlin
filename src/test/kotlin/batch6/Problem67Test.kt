@@ -1,5 +1,6 @@
 package batch6
 
+import util.tests.Benchmark
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import util.tests.compareSpeed
@@ -20,7 +21,7 @@ internal class MaximumPathSum2Test {
         val elements = input.flatten().toIntArray()
         val pyramid = input.map { it.toIntArray() }.toTypedArray()
 
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::maxPathSumDynamic, n, pyramid).run {
             speeds.add("Dynamic" to second)
             assertEquals(expected, first)
@@ -29,7 +30,7 @@ internal class MaximumPathSum2Test {
         val customTime = measureNanoTime {
             customActual = tool.maxPathSum(n, *elements)
         }
-        speeds.add("Custom" to customTime)
+        compareSpeed("Custom" to customTime)
         assertEquals(expected, customActual)
         compareSpeed(speeds)
     }
@@ -44,7 +45,7 @@ internal class MaximumPathSum2Test {
         val elements = input.flatten().toIntArray()
         val pyramid = input.map { it.toIntArray() }.toTypedArray()
 
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::maxPathSumDynamic, n, pyramid).run {
             speeds.add("Dynamic" to second)
             assertEquals(expected, first)
@@ -53,7 +54,7 @@ internal class MaximumPathSum2Test {
         val customTime = measureNanoTime {
             customActual = tool.maxPathSum(n, *elements)
         }
-        speeds.add("Custom" to customTime)
+        compareSpeed("Custom" to customTime)
         assertEquals(expected, customActual)
         compareSpeed(speeds)
     }

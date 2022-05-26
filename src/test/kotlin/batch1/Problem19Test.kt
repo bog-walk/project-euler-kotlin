@@ -110,27 +110,25 @@ internal class CountingSundaysTest {
         val month = 1
         val day = 1
         val expected = 1720
-        val speeds = mutableListOf<Pair<String, Long>>()
         val results = mutableListOf<Int>()
         val ogActual: Int
         val ogTime = measureNanoTime {
             ogActual = tool.countSundayFirsts(startY, month, day, endY, month, day)
         }
-        speeds.add("Original" to ogTime)
+        compareSpeed("Original" to ogTime)
         results.add(ogActual)
         val zellerActual: Int
         val zellerTime = measureNanoTime {
             zellerActual = tool.countSundayFirstsZeller(startY, month, day, endY, month)
         }
-        speeds.add("Zeller's" to zellerTime)
+        compareSpeed("Zeller's" to zellerTime)
         results.add(zellerActual)
         val libActual: Int
         val libTime = measureNanoTime {
             libActual = tool.countSundayFirstsLibrary(startY, month, day, endY, month, day)
         }
-        speeds.add("Library" to libTime)
+        compareSpeed("Library" to libTime)
         results.add(libActual)
-        compareSpeed(speeds)
         assertTrue { results.all { expected == it } }
     }
 }

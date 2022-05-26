@@ -17,7 +17,7 @@ internal class ReusableTest {
         "100, 5050", "2234, 2_496_495"
     )
     fun `gaussian sum correct`(n: Int, expected: Long) {
-        assertEquals(expected, n.gaussianSum())
+        assertEquals(expected, n.gaussSum())
     }
 
     @ParameterizedTest(name="gcd({0}, {1}) = {2}")
@@ -304,6 +304,10 @@ internal class ReusableTest {
                 listOf(2), listOf(2, 2, 3), listOf(2, 2, 5, 5), listOf(3, 3, 3, 37)
             )
             nums.forEachIndexed { i, n ->
+                val primeFactorsOG = primeFactorsOG(n).flatMap { (prime, exp) ->
+                    List(exp) { prime }
+                }
+                assertEquals(expected[i], primeFactorsOG)
                 val primeFactors = primeFactors(n).flatMap { (prime, exp) ->
                     List(exp) { prime }
                 }
@@ -313,7 +317,9 @@ internal class ReusableTest {
 
         @Test
         fun `primeFactors throws exception with invalid input`() {
+            assertThrows<IllegalArgumentException> { primeFactorsOG(1L) }
             assertThrows<IllegalArgumentException> { primeFactors(1L) }
+            assertThrows<IllegalArgumentException> { primeFactorsOG(-2L) }
             assertThrows<IllegalArgumentException> { primeFactors(-2L) }
         }
     }

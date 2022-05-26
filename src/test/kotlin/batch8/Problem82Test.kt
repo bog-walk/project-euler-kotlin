@@ -47,7 +47,7 @@ internal class PathSum3WaysTest {
         val longGrid = getTestLongGrid(resource, n, ",")
         val intGrid = getTestIntGrid(resource, n, ",")
         val expected = 260_324L
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         getSpeed(tool::minPathSum, n, longGrid).run {
             speeds.add("Dynamic" to second)
             assertEquals(expected, first)

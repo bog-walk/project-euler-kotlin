@@ -1,5 +1,6 @@
 package batch3
 
+import util.tests.Benchmark
 import util.tests.compareSpeed
 import util.tests.getSpeed
 import kotlin.test.*
@@ -73,7 +74,7 @@ internal class DigitCancellingFractionsTest {
         val solutions = mapOf(
             "Brute" to tool::findNonTrivialsBrute, "Optimised" to tool::findNonTrivials
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         val results = mutableListOf<List<Pair<Int, Int>>>()
         for((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
@@ -142,7 +143,7 @@ internal class DigitCancellingFractionsTest {
         val solutions = mapOf(
             "Brute" to tool::sumOfNonTrivialsBrute, "GCD" to tool::sumOfNonTrivialsGCD
         )
-        val speeds = mutableListOf<Pair<String, Long>>()
+        val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, n, k).run {
                 speeds.add(name to second)
