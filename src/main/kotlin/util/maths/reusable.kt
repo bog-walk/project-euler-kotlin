@@ -311,15 +311,25 @@ fun powerDigitSum(base: Int, exp: Int): Int {
 }
 
 /**
- * Prime decomposition divides out all prime factors using an optimised algorithm.
+ * Prime decomposition repeatedly divides out all prime factors using an optimised Direct Search
+ * Factorisation algorithm.
  *
  * Every prime number after 2 will be odd and there can be at most 1 prime factor
- * greater than sqrt([n]), which would be [n] itself if [n] is a prime.
+ * greater than sqrt([n]), which would be [n] itself if [n] is a prime. This is based on all
+ * cofactors having been already tested following the formula:
+ *
+ *      n / floor(sqrt(n) + 1) < sqrt(n)
  *
  * e.g. N = 12 returns {2=2, 3=1} -> 2^2 * 3^1 = 12
  *
- * SPEED (WORSE for N with small factors) 106.17ms for N = 1e12
- * SPEED (WORSE for N with large factors) 120.70ms for N = 600_851_475_143
+ * SPEED (WORSE for N with small factors) 59.05ms for N = 1e12
+ * SPEED (WORSE for N with large factors) 41.10ms for N = 600_851_475_143
+ *
+ * If Sieve of Eratosthenes algorithm is used to generate the factors, the execution time is
+ * improved:
+ *
+ * SPEED (BETTER for N with small factors) 14.36ms for N = 1e12
+ * SPEED (BETTER for N with large factors) 10.19ms for N = 600_851_475_143
  *
  * @return map of prime factors (keys) and their exponents (values).
  * @throws IllegalArgumentException if [n] <= 1.
@@ -341,39 +351,37 @@ fun primeFactorsOG(n: Long): Map<Long, Int> {
 }
 
 /**
- * Prime decomposition using Sieve of Eratosthenes algorithm to only divide out prime factors.
- *
- * Other than changing the value of the factors list, the algorithms are identical.
+ * Prime decomposition repeatedly divides out all prime factors using a Direct Search
+ * Factorisation algorithm without any optimisation.
  *
  * This version will be used in future solutions.
  *
- * SPEED (BETTER for N with small factors) 53.28ms for N = 1e12
- * SPEED (BETTER for N with large factors) 62.08ms for N = 600_851_475_143
+ * SPEED (BEST for N with small factors) 5742ns for N = 1e12
+ * SPEED (BEST for N with large factors) 5.3e+04ns for N = 600_851_475_143
  *
  * @return map of prime factors (keys) and their exponents (values).
  * @throws IllegalArgumentException if [n] <= 1.
  */
 fun primeFactors(n: Long): Map<Long, Int> {
     require(n > 1) { "Must provide a natural number greater than 1" }
-    if (n == 2L) return mapOf(2L to 1)
     var num = n
     val primes = mutableMapOf<Long, Int>()
-    val maxFactor = sqrt(num.toDouble()).toInt()
-    val factors = primeNumbers(maxFactor)
-    factors.forEach { factor ->
-        while (num % factor == 0L) {
+    var factor = 2L
+    while (factor * factor <= num) {
+        while (num % factor == 0L && num != factor) {
             primes[1L * factor] = primes.getOrDefault(1L * factor, 0) + 1
             num /= factor
         }
+        factor++
     }
-    if (num > 2) primes[num] = primes.getOrDefault(num, 0) + 1
+    if (num > 1) primes[num] = primes.getOrDefault(num, 0) + 1
     return primes
 }
 
 /**
  * Sieve of Eratosthenes algorithm outputs all prime numbers less than or equal to [n].
  *
- * SPEED (WORSE) 28.75ms for N = 1e5
+ * SPEED (WORSE) 19.87ms for N = 1e6
  */
 fun primeNumbersOG(n: Int): List<Int> {
     if (n < 2) return emptyList()
@@ -382,7 +390,7 @@ fun primeNumbersOG(n: Int): List<Int> {
     for (p in 3..(sqrt(1.0 * n).toInt()) step 2) {
         if (boolMask[p - 2]) {
             if (p * p > n) break
-            // mark all multiples (composites of the divisors) that are >= the square of p as false
+            // mark all multiples (composites of the divisors) that are >= p squared as false
             for (m in (p * p)..n step 2 * p) {
                 boolMask[m - 2] = false
             }
@@ -400,7 +408,7 @@ fun primeNumbersOG(n: Int): List<Int> {
  *
  * This version will be used in future solutions.
  *
- * SPEED (BETTER) 7.46ms for N = 1e5
+ * SPEED (BETTER) 12.32ms for N = 1e6
  */
 fun primeNumbers(n: Int): List<Int> {
     if (n < 2) return emptyList()
@@ -411,7 +419,7 @@ fun primeNumbers(n: Int): List<Int> {
     for (i in 1..(sqrt(1.0 * n).toInt() / 2)) {
         if (boolMask[i]) {
             // j = next index at which multiple of odd prime exists
-            var j = i * 2 * (i + 1)
+            var j = 2 * i * (i + 1)
             while (j <= oddSieve) {
                 boolMask[j] = false
                 j += 2 * i + 1

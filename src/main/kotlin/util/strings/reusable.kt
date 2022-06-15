@@ -23,25 +23,12 @@ fun BigInteger.digitCount(): Int {
 }
 
 /**
- * SPEED (WORST) 11.62ms for 18-digit N
+ * SPEED (WORST) 5548ns for 19-digit N
  */
 internal fun String.isPalindromeBuiltIn() = this == this.reversed()
 
 /**
- * SPEED (BETTER) 3.16ms for 18-digit N
- */
-internal fun String.isPalindromeManual(): Boolean {
-    if (length == 1) return true
-    val mid = lastIndex / 2
-    val range = if (length % 2 == 1) (0 until mid) else (0..mid)
-    for (i in range) {
-        if (this[i] != this[lastIndex - i]) return false
-    }
-    return true
-}
-
-/**
- * SPEED (BETTER) 49900ns for 18-digit N
+ * SPEED (BETTER) 1458ns for 19-digit N
  */
 internal fun String.isPalindromeNumber(): Boolean {
     if (length == 1) return true
@@ -55,16 +42,27 @@ internal fun String.isPalindromeNumber(): Boolean {
 }
 
 /**
- * This recursive version will be used in future solutions.
- *
- * SPEED (BEST) 46000ns for 18-digit N
+ * SPEED (BETTER) 2931ns for 19-digit N
  */
-fun String.isPalindrome(): Boolean {
+internal fun String.isPalindromeRecursive(): Boolean {
     return when {
         length < 2 -> true
-        first() == last() -> substring(1, lastIndex).isPalindrome()
-        else -> false
+        first() != last() -> false
+        else -> substring(1, lastIndex).isPalindromeRecursive()
     }
+}
+
+/**
+ * This manual version will be used in future solutions.
+ *
+ * SPEED (BEST) 573ns for 19-digit N
+ */
+fun String.isPalindrome(): Boolean {
+    if (length == 1) return true
+    for (i in 0 until length / 2) {
+        if (this[i] != this[lastIndex - i]) return false
+    }
+    return true
 }
 
 /**

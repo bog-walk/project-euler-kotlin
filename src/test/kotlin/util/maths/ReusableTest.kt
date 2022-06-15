@@ -299,9 +299,10 @@ internal class ReusableTest {
     inner class Primefactors {
         @Test
         fun `primeFactors correct`() {
-            val nums = listOf<Long>(2, 12, 100, 999)
+            val nums = listOf<Long>(2, 3, 4, 12, 100, 999)
             val expected = listOf<List<Long>>(
-                listOf(2), listOf(2, 2, 3), listOf(2, 2, 5, 5), listOf(3, 3, 3, 37)
+                listOf(2), listOf(3), listOf(2, 2), listOf(2, 2, 3),
+                listOf(2, 2, 5, 5), listOf(3, 3, 3, 37)
             )
             nums.forEachIndexed { i, n ->
                 val primeFactorsOG = primeFactorsOG(n).flatMap { (prime, exp) ->

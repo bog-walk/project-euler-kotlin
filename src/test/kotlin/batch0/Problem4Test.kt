@@ -22,6 +22,8 @@ internal class LargestPalindromeProductTest {
     )
     fun `largestPalindromeProduct correct`(n: Int, expected: Int) {
         assertEquals(expected, tool.largestPalindromeProductBrute(n))
+        assertEquals(expected, tool.largestPalindromeProductBruteBackwards(n))
+        assertEquals(expected, tool.largestPalindromeProductAlt(n))
         assertEquals(expected, tool.largestPalindromeProduct(n))
     }
 
@@ -31,11 +33,13 @@ internal class LargestPalindromeProductTest {
         val expected = 906_609
         val solutions = mapOf(
             "Brute" to tool::largestPalindromeProductBrute,
+            "Brute Backwards" to tool::largestPalindromeProductBruteBackwards,
+            "Valid Palindrome" to tool::largestPalindromeProductAlt,
             "Improved" to tool::largestPalindromeProduct
         )
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, repeat = 1000).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }

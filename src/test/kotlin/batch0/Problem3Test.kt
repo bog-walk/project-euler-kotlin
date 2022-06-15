@@ -26,6 +26,7 @@ internal class LargestPrimeFactorTest {
     )
     fun `largestPrimeFactor correct`(n: Long, expected: Long) {
         assertEquals(expected, tool.largestPrimeFactor(n))
+        assertEquals(expected, tool.largestPrimeFactorSimple(n))
         assertEquals(expected, tool.largestPrimeFactorRecursive(n))
     }
 
@@ -34,11 +35,15 @@ internal class LargestPrimeFactorTest {
         val n = 600_851_475_143
         val expected = 6857L
         val speeds = mutableListOf<Pair<String, Benchmark>>()
-        getSpeed(tool::largestPrimeFactor, n).run {
+        getSpeed(tool::largestPrimeFactor, n, warmup = 1, repeat = 100).run {
             speeds.add("Decomposition" to second)
             assertEquals(expected, first, "Incorrect Decomposition -> $first")
         }
-        getSpeed(tool::largestPrimeFactorRecursive, n).run {
+        getSpeed(tool::largestPrimeFactorSimple, n, warmup = 1, repeat = 100).run {
+            speeds.add("Simplified" to second)
+            assertEquals(expected, first, "Incorrect Simplified -> $first")
+        }
+        getSpeed(tool::largestPrimeFactorRecursive, n, warmup = 1, repeat = 100).run {
             speeds.add("Recursive" to second)
             assertEquals(expected, first, "Incorrect Recursive -> $first")
         }
@@ -50,11 +55,15 @@ internal class LargestPrimeFactorTest {
         val n = 1e12.toLong()
         val expected = 5L
         val speeds = mutableListOf<Pair<String, Benchmark>>()
-        getSpeed(tool::largestPrimeFactor, n).run {
+        getSpeed(tool::largestPrimeFactor, n, warmup = 1, repeat = 100).run {
             speeds.add("Decomposition" to second)
             assertEquals(expected, first, "Incorrect Decomposition -> $first")
         }
-        getSpeed(tool::largestPrimeFactorRecursive, n).run {
+        getSpeed(tool::largestPrimeFactorSimple, n, warmup = 1, repeat = 100).run {
+            speeds.add("Simplified" to second)
+            assertEquals(expected, first, "Incorrect Simplified -> $first")
+        }
+        getSpeed(tool::largestPrimeFactorRecursive, n, warmup = 1, repeat = 100).run {
             speeds.add("Recursive" to second)
             assertEquals(expected, first, "Incorrect Recursive -> $first")
         }

@@ -18,7 +18,7 @@ internal class ReusableTest {
             val nums = listOf("5", "22", "303", "9119")
             nums.forEach { n ->
                 assertTrue { n.isPalindromeBuiltIn() }
-                assertTrue { n.isPalindromeManual() }
+                assertTrue { n.isPalindromeRecursive() }
                 assertTrue { n.isPalindromeNumber() }
                 assertTrue { n.isPalindrome() }
             }
@@ -29,7 +29,7 @@ internal class ReusableTest {
             val nums = listOf("10", "523", "8018", "124521")
             nums.forEach { n ->
                 assertFalse { n.isPalindromeBuiltIn() }
-                assertFalse { n.isPalindromeManual() }
+                assertFalse { n.isPalindromeRecursive() }
                 assertFalse { n.isPalindromeNumber() }
                 assertFalse { n.isPalindrome() }
             }
