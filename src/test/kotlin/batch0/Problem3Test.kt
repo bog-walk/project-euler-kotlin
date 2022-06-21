@@ -20,7 +20,7 @@ internal class LargestPrimeFactorTest {
         // mid constraints
         "48, 3", "147, 7", "330, 11",
         // larger mid constraints
-        "13195, 29", "200_000, 5", "600851475143, 6857",
+        "13195, 29", "200_000, 5",
         // large prime numbers, including Euler's
         "7919, 7919", "2_147_483_647, 2_147_483_647"
     )

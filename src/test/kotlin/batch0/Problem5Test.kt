@@ -37,7 +37,7 @@ internal class SmallestMultipleTest {
         )
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, repeat = 100).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }

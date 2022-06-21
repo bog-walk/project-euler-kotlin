@@ -260,9 +260,16 @@ fun Long.isTriangularNumber(): Int? {
  * The original solution kept [n] as Long but consistently underperformed compared to the current
  * solution that converts all [n] to BigInteger before reducing, to leverage built-in methods.
  *
- * SPEED 1.86ms VS 31.58ms for 2-element varargs with 4-digit result
+ * The BigInteger class has built-in gcd() with optimum performance, as it uses the Euclidean
+ * algorithm initially along with MutableBigInteger instances to avoid frequent memory
+ * allocations, then switches to binary gcd algorithm at smaller values to increase speed.
  *
- * SPEED 1.33ms VS 33.15ms for 9-element varargs with 12-digit result
+ * SPEED 3.2e+04ns VS 6.8e+04ns for 3-element varargs with 3-digit result
+ *
+ * SPEED 1.01ms VS 7.34ms for 9-element (3-digit integers) varargs with 18-digit result
+ *
+ * Original solution has the worst time with a larger variation, whereas this solution has the worst
+ * time more tight between 1.20-1.40ms.
  *
  * @throws IllegalArgumentException if any [n] == 0.
  */

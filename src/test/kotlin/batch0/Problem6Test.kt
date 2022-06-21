@@ -21,6 +21,7 @@ internal class SumSquareDifferenceTest {
         "2256, 6_477_756_566_600", "7000, 600_307_154_415_500"
     )
     fun `sumSquareDiff correct`(n: Int, expected: Long) {
+        assertEquals(expected, tool.sumSquareDiffBruteOG(n))
         assertEquals(expected, tool.sumSquareDiffBrute(n))
         assertEquals(expected, tool.sumSquareDiff(n))
     }
@@ -30,12 +31,13 @@ internal class SumSquareDifferenceTest {
         val n = 1e4.toInt()
         val expected = 2_500_166_641_665_000
         val solutions = mapOf(
-            "Brute" to tool::sumSquareDiffBrute,
+            "Brute OG" to tool::sumSquareDiffBruteOG,
+            "Brute Alt" to tool::sumSquareDiffBrute,
             "Improved" to tool::sumSquareDiff
         )
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, repeat = 10).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }
