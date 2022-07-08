@@ -3,7 +3,6 @@ package batch0
 import util.maths.gcd
 import util.maths.lcm
 import util.maths.primeNumbers
-import util.maths.primeNumbersOG
 import kotlin.math.abs
 import kotlin.math.log2
 import kotlin.math.pow
