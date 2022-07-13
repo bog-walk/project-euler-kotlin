@@ -4,7 +4,6 @@ import dev.bogwalk.util.tests.Benchmark
 import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
 import dev.bogwalk.util.tests.getTestIntGrid
-import util.tests.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

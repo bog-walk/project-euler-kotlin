@@ -22,7 +22,7 @@ import dev.bogwalk.util.custom.MonopolyGame
  *
  * If a player starts on GO & adds the scores of 2 6-sided dice to advance clockwise, without any
  * further rules, they would expect to visit each square with equal probability of 2.5%. However,
- * landing on G2J sends the player to JAIL, as would picking the 1 jail card in the CC and CH
+ * landing on G2J sends the player to JAIL, as would picking the 1 jail card in both the CC and CH
  * piles. A player is also sent to jail if they roll 3 doubles in a row. The only CC cards that
  * involve movement (2/16) either end at GO or JAIL. The 10/16 CH cards cause the following
  * movements: GO, JAIL, C1, E3, H2, R1, next R, next R, next U, back 3 squares.
@@ -49,15 +49,19 @@ class MonopolyOdds {
      * class). The higher the amount of sample rounds, the closer towards a deterministic result
      * the solution will get.
      *
-     * @return indices of the most popular squares in descending order, represented as a string.
+     * While this solution fails for certain higher constraint cases, the returned top squares
+     * are usually correct, just not placed in the correct order due to small differences in
+     * double values. e.g. N = 6, K = 5 returns "1024002519" instead of "1024001925".
+     *
+     * @return indices of the most popular squares in descending order, represented as a
+     * modal string.
      */
-    fun monteCarloOdds(n: Int, k: Int, rounds: Int = 4_000_000): String {
-        val game = MonopolyGame(n)
+    fun monteCarloOdds(n: Int, k: Int, rounds: Int = 5_000_000): String {
+        val game = MonopolyGame(n, doublesRule = false)
         repeat(rounds) {
             game.play()
         }
-        val odds = game.getOdds(rounds).take(k)
-        return odds.joinToString("") { it.first }
+        return game.getTopSquares(k).first
     }
 
     /**
@@ -81,7 +85,7 @@ class MonopolyOdds {
      *
      *      with each matrix row being a probability vector with a row sum of 1.
      *
-     * The product of subsequent matrices describes the transition along time intervals, such that:
+     * The product of subsequent matrices describes the transition along time-intervals, such that:
      *
      *      the (i, j)th position of P_t * P_t+1 * ... * P_t+k ->
      *
@@ -94,71 +98,31 @@ class MonopolyOdds {
         val matrix = Array(40) { DoubleArray(40) }
         val rollStats = getDiceProbability(n)
         for (square in 0 until 40) {
-            when (square) {
-                30 -> matrix[30][10] = 1.0 // G2J
-                7, 22, 36 -> matrix[square].adjustForChance(square)
-                2, 17, 33 -> matrix[square].adjustForCommunityChest(square)
-                else -> {
-                    for ((i, prob) in rollStats.withIndex()) {
-                        if (i < 2) continue
-                        when (val nextSquare = (square + i) % 40) {
-                            30 -> {
-                                matrix[square][10] += prob
-                            }
-                            7, 22, 36 -> matrix[square].adjustForChance(nextSquare, prob)
-                            2, 17, 33 -> matrix[square].adjustForCommunityChest(nextSquare, prob)
-                            else -> {
-                                matrix[square][nextSquare] += prob
-                            }
-                        }
+            for ((i, prob) in rollStats.withIndex()) {
+                if (i < 2) continue
+                when (val nextSquare = (square + i) % 40) {
+                    30 -> matrix[square][10] += prob
+                    7, 22, 36 -> matrix[square].adjustForChance(nextSquare, prob)
+                    2, 17, 33 -> matrix[square].adjustForCommunityChest(nextSquare, prob)
+                    else -> {
+                        matrix[square][nextSquare] += prob
                     }
                 }
             }
-            if (square < 2) {
-                println(matrix[square].contentToString())
-            }
         }
+
         // flip columns to rows for easier access
         val transposed = matrix.transpose()
         // initialise with the probability of landing on square 0 (GO) after 0 rolls being 1.0
-        var odds = DoubleArray(40).apply { this[0] = 1.0 }
-        repeat(40) { // 3 dice rolls
-            val current = DoubleArray(40) { odds.product(transposed[it]) }
-            odds = current.clone()
+        var odds = List(40) { if (it == 0) 1.0 else 0.0 }
+        repeat(40) {
+            odds = List(40) { r -> odds.product(transposed[r]) }
         }
-        val popularSquares = odds.mapIndexed { square, prob ->
+
+        val topSquares = odds.mapIndexed { square, prob ->
             square.toString().padStart(2, '0') to prob
         }.sortedByDescending { it.second }.take(k)
-        return popularSquares.joinToString("") { it.first }
-    }
-
-    private fun DoubleArray.adjustForChance(square: Int, rollProb: Double = 1.0) {
-        this[square] += rollProb * 3 / 8 // stay on CH
-        // move to (GO, R1, JAIL, C1, E3, H2, back 3)
-        for (i in listOf(0, 5, 10, 11, 24, 39, square - 3)) {
-            this[i] += (rollProb * 1 / 16)
-        }
-        when (square) {
-            7 -> {
-                this[15] += rollProb * 1 / 8 // next R = R2
-                this[12] += rollProb * 1 / 16 // next U = U1
-            }
-            22 -> {
-                this[25] += rollProb * 1 / 8 // next R = R3
-                this[28] += rollProb * 1 / 16 // next U = U2
-            }
-            36 -> {
-                this[5] += rollProb * 1 / 8 // next R = R1
-                this[12] += rollProb * 1 / 16 // next U = U1
-            }
-        }
-    }
-
-    private fun DoubleArray.adjustForCommunityChest(square: Int, rollProb: Double = 1.0) {
-        this[square] += rollProb * 7 / 8 // stay on CC
-        for (i in listOf(0, 10)) { // move to (GO, JAIL)
-            this[i] += (rollProb * 1 / 16)
-        }
+        return topSquares.joinToString("") { it.first }
     }
 
     private fun getDiceProbability(sides: Int): List<Double> {
@@ -173,33 +137,44 @@ class MonopolyOdds {
         return probabilities.map { it / outcomes }
     }
 
-    fun Array<DoubleArray>.multiply(other: Array<DoubleArray>): Array<DoubleArray> {
-        val result = Array(size) { DoubleArray(size) }
-        val cols = transpose()
-        for (row in indices) {
-            for (col in indices) {
-                result[row][col] = this[row].product(cols[col])
+    private fun DoubleArray.adjustForChance(square: Int, rollProb: Double) {
+        this[square] += rollProb * 3 / 8 // stay on CH
+        // move to (GO, R1, JAIL, C1, E3, H2)
+        for (i in listOf(0, 5, 10, 11, 24, 39)) {
+            this[i] += rollProb / 16
+        }
+        when (square) {
+            7 -> {
+                this[15] += rollProb / 8 // next R = R2
+                this[12] += rollProb / 16 // next U = U1
+                this[square-3] += rollProb / 16 // move back 3
+            }
+            22 -> {
+                this[25] += rollProb / 8 // next R = R3
+                this[28] += rollProb / 16 // next U = U2
+                this[square-3] += rollProb / 16 // move back 3
+            }
+            36 -> {
+                this[5] += rollProb / 8 // next R = R1
+                this[12] += rollProb / 16 // next U = U1
+                // move back 3 lands on CC3
+                this.adjustForCommunityChest(33, rollProb / 16)
             }
         }
-        return result
     }
 
-    private fun Array<DoubleArray>.transpose(): Array<DoubleArray> {
-        val transposed = Array(size) { DoubleArray(size) }
-        for (i in indices) {
-            for (j in indices) {
-                transposed[j][i] = this[i][j]
-            }
+    private fun DoubleArray.adjustForCommunityChest(square: Int, rollProb: Double) {
+        this[square] += rollProb * 7 / 8 // stay on CC
+        for (i in listOf(0, 10)) { // move to (GO, JAIL)
+            this[i] += rollProb / 16
         }
-        return transposed
     }
 
-    private fun DoubleArray.product(other: DoubleArray): Double {
+    private fun Array<DoubleArray>.transpose(): List<List<Double>> {
+        return List(size) { r -> List(size) { c -> this[c][r] } }
+    }
+
+    private fun List<Double>.product(other: List<Double>): Double {
         return this.zip(other) { x, y -> x * y }.sum()
     }
-}
-
-fun main() {
-    val tool = MonopolyOdds()
-    println(tool.markovChainOdds(6, 3))
 }
