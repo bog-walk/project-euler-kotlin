@@ -97,6 +97,9 @@ class CuboidRoute {
      * Note that brute force shows highest m = 1414 for M = 4e5, so max of 1e6 chosen to ensure
      * no combinations are missed.
      *
+     * Note that the list of single counts is identical to sequence A143714.
+     * @see <a href=">https://oeis.org/A143714">Sequence A143714</a>
+     *
      * @return array of possible cuboid combinations for every index = M.
      */
     fun cuboidCountsQuickDraw(): LongArray {
