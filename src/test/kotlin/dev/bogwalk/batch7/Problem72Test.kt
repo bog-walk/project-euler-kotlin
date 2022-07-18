@@ -7,10 +7,18 @@ import org.junit.jupiter.params.provider.CsvSource
 import dev.bogwalk.util.tests.Benchmark
 import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class CountingFractionsTest {
     private val tool = CountingFractions()
-    private val allFareyLengths = tool.generateAllFareyLengths(1_000_000)
+    private lateinit var allFareyLengths: LongArray
+
+    @BeforeAll
+    fun setup() {
+        allFareyLengths = tool.generateAllFareyLengths(1_000_000)
+    }
 
     @ParameterizedTest(name="N = {0}")
     @CsvSource(
@@ -38,13 +46,13 @@ internal class CountingFractionsTest {
         )
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, repeat = 10).run {
                 speeds.add(name to second)
                 assertEquals(expected, first)
             }
         }
         getSpeed(tool::generateAllFareyLengths, n).run {
-            speeds.add("Quick pick" to second)
+            speeds.add("Quick draw" to second)
             assertEquals(expected, first[n])
         }
         compareSpeed(speeds)

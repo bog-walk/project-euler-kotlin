@@ -46,7 +46,7 @@ class CountingFractions {
      * N.B. This solution does not count left & right ancestors of F(1), namely {0/1, 1/0}, so
      * these should be removed from the resulting length.
      *
-     * SPEED (WORST) 74.07ms for N = 1e6
+     * SPEED (WORST) 67.85ms for N = 1e6
      */
     fun fareySequenceLengthFormula(order: Int): Long {
         val fCache = LongArray(order + 1).apply {
@@ -92,7 +92,7 @@ class CountingFractions {
      *
      *      {m}Pi{k=0}(Phi(n2^k)) = (1 + {m}Pi{k=1}(2^(k-1)) * Phi(n) = 2^m * Phi(n)
      *
-     * SPEED (BEST) 19.10ms for N = 1e6
+     * SPEED (BEST) 14.11ms for N = 1e6
      */
     fun fareySequenceLengthSieve(limit: Int): Long {
         val sieveLimit = (sqrt(1.0 * limit).toInt() - 1) / 2
@@ -150,7 +150,7 @@ class CountingFractions {
      *
      *      F(n).size = F(n-1).size + phi(n)
      *
-     * SPEED (BETTER) 64.55ms for N = 1e6
+     * SPEED (BETTER) 60.13ms for N = 1e6
      *
      * @return array of Farey sequence lengths for every index = order N.
      */
