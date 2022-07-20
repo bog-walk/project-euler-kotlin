@@ -15,7 +15,7 @@ internal class CountingRectanglesTest {
         // mid constraints
         "100, 16", "333, 30", "1000, 56",
         // upper constraints
-        "12000, 178", "1000000, 1632"
+        "12000, 178", "1_000_000, 1632"
     )
     fun `HR problem correct for all constraints`(target: Int, expected: Int) {
         assertEquals(expected, tool.findClosestContainingArea(target))

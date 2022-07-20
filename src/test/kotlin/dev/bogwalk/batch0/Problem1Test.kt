@@ -9,7 +9,7 @@ import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
 
 internal class MultiplesOf3Or5Test {
-    private val tool = dev.bogwalk.batch0.MultiplesOf3Or5()
+    private val tool = MultiplesOf3Or5()
 
     @ParameterizedTest(name="N={0}, K1={1}, K2={2}, Sum={3}")
     @CsvSource(

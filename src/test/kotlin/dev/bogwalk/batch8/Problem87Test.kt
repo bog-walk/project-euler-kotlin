@@ -13,7 +13,7 @@ internal class PrimePowerTriplesTest {
 
     @BeforeAll
     fun setup() {
-        val limit = 100_000_000
+        val limit = 10_000_000
         allCounts = tool.allPrimePowerTripleCounts(limit)
     }
 
@@ -22,9 +22,9 @@ internal class PrimePowerTriplesTest {
         // lower constraints
         "1, 0", "2, 0", "10, 0", "50, 4", "100, 10", "212, 24", "499, 53",
         // mid constraints
-        "1000, 98", "8888, 634", "10000, 683", "40000, 2229",
+        "1000, 98", "8888, 634", "10_000, 683", "40_000, 2229",
         // upper constraints
-        "1000000, 33616", "10000000, 256629", "50000000, 1097343", "100000000, 2037066"
+        "1_000_000, 33616", "10_000_000, 256_629", "50_000_000, 1_097_343"
     )
     fun `correct for all constraints`(n: Int, expected: Int) {
         assertEquals(expected, allCounts[n])

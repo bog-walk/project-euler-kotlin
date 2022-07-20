@@ -76,7 +76,7 @@ fun isCoPrime(x: Int, y: Int): Boolean = gcd(x.toLong(), y.toLong()) == 1L
  *
  *      n = (1 + sqrt(1 + 8h_n)) / 4
  *
- * @return  If hN is the nth hexagonal, or null
+ * @return  if hN is the nth hexagonal, or null
  */
 fun Long.isHexagonalNumber(): Int? {
     val n = 0.25 * (1 + sqrt(1 + 8.0 * this))
@@ -130,12 +130,12 @@ fun Int.isPrime(): Boolean {
         this % 2 == 0 -> false // 2 is the only even prime
         this < 9 -> true // 4, 6, & 8 already excluded
         this % 3 == 0 -> false
-        // primes > (k=3) are of the form 6k(+/-1) (i.e. they are never multiples of 3)
+        // primes > 3 are of the form 6k(+/-1) (i.e. they are never multiples of 3)
         else -> {
             // n can only have 1 prime factor > sqrt(n): n itself!
-            val max = floor(sqrt(1.0 * this))
+            val max = sqrt(1.0 * this).toInt()
             var step = 5 // as multiples of prime 5 have not been assessed yet
-            // 11, 13, 17, 19, & 23 will all bypass n loop
+            // 11, 13, 17, 19, & 23 will all bypass this loop
             while (step <= max) {
                 if (this % step == 0 || this % (step + 2) == 0) return false
                 step += 6

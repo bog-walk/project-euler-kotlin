@@ -25,7 +25,7 @@ internal class CuboidRouteTest {
         // lower constraints
         "1, 0", "2, 0", "3, 2", "10, 14", "99, 1975", "100, 2060",
         // mid constraints
-        "1999, 1226406", "5612, 10848941"
+        "1999, 1_226_406", "5612, 10_848_941"
     )
     fun `HR problem correct for lower and mid constraints`(m: Int, expected: Long) {
         assertEquals(expected, tool.countDistinctCuboids(m))
