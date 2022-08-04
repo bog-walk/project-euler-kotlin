@@ -42,6 +42,8 @@ class PrimePowerTriples {
             }
         }
         var count = 0
+        // could be done with runningFold() but access would have to change to how many < index
+        // as initial value takes first 0-index slot
         return triple.map { valid -> if (valid) ++count else count }
     }
 }

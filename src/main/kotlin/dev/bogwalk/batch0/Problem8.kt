@@ -28,9 +28,9 @@ class LargestProductInSeries {
             else -> {
                 maxOf(
                     // first substring with k-adjacent digits
-                    largestSeriesProduct(number.take(k), k, k),
+                    largestSeriesProductRecursive(number.take(k), k, k),
                     // original string minus the first digit
-                    largestSeriesProduct(number.drop(1), n - 1, k)
+                    largestSeriesProductRecursive(number.drop(1), n - 1, k)
                 )
             }
         }

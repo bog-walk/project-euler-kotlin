@@ -20,11 +20,11 @@ internal class The10001stPrimeTest {
     @CsvSource(
         // lower constraints
         "1, 2", "2, 3", "3, 5", "4, 7", "5, 11", "6, 13",
-        // normal values
+        // lower mid constraints
         "20, 71", "62, 293", "99, 523", "101, 547", "173, 1031",
-        // large values
+        // upper mid constraints
         "250, 1583", "289, 1879", "919, 7193", "1000, 7919", "1284, 10499",
-        // higher constraints
+        // upper constraints
         "5000, 48611", "7777, 79357", "10_000, 104_729", "10_001, 104_743"
     )
     fun `getNthPrime correct`(n: Int, expected: Int) {

@@ -23,5 +23,10 @@ algorithms, string processing, and test automation.
 
 ## :handshake: Sibling Repository
 
-While this is the original solution set, another project repository has been created to practise Python :snake: :
+While this is the original solution set, other project repositories have been created:
+
+To practise Python :snake:
 - [Project Euler __ Python](https://github.com/bog-walk/project-euler-python)
+
+As well as C++ :zap:
+- - [Project Euler __ C++](https://github.com/bog-walk/project-euler-cpp)

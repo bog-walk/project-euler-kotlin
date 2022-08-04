@@ -1,6 +1,5 @@
 package dev.bogwalk.util.maths
 
-import dev.bogwalk.util.maths.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows
@@ -297,7 +296,7 @@ internal class ReusableTest {
 
     @Nested
     @DisplayName("primeFactors test suite")
-    inner class Primefactors {
+    inner class PrimeFactors {
         @Test
         fun `primeFactors correct`() {
             val nums = listOf<Long>(2, 3, 4, 12, 100, 999)
@@ -329,6 +328,13 @@ internal class ReusableTest {
     @Nested
     @DisplayName("primeNumbers test suite")
     inner class PrimeNumbers {
+        @Test
+        fun `primeNumbers returns emptyList when N == 1`() {
+            val n = 1
+            assertTrue { primeNumbersOG(n).isEmpty() }
+            assertTrue { primeNumbers(n).isEmpty() }
+        }
+
         @Test
         fun `primeNumbers correct with small N`() {
             val n = 30

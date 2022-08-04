@@ -1,7 +1,5 @@
 package dev.bogwalk.util.search
 
-import dev.bogwalk.util.search.binarySearch
-import dev.bogwalk.util.search.binarySearchManual
 import dev.bogwalk.util.tests.Benchmark
 import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed

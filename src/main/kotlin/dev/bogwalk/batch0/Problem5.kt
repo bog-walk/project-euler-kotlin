@@ -27,7 +27,7 @@ class SmallestMultiple {
      * stepping backwards until the middle of the range, as the smaller half of a range will
      * already be factors of the larger half.
      *
-     * SPEED (BETTER) 1.3e+05ns for N = 40
+     * SPEED (BETTER) 4.6e+04ns for N = 40
      */
     fun lcmOfRange(n: Int): Long {
         val rangeMax = n.toLong()
@@ -40,7 +40,7 @@ class SmallestMultiple {
      * Solution mimics the one above but uses top-level helper that leverages BigInteger and its
      * built-in methods instead of Long.
      *
-     * SPEED (WORST) 4.1e+05ns for N = 40
+     * SPEED (WORST) 1.2e+05ns for N = 40
      */
     fun lcmOfRangeBI(n: Int): Long {
         val rangeMax = n.toLong()
@@ -65,16 +65,18 @@ class SmallestMultiple {
      *
      * This is an adaptation of the prime factorisation method for calculating the LCM.
      *
-     * SPEED (BEST) 6.6e+04ns for N = 40
+     * SPEED (BEST) 1.9e+04ns for N = 40
      */
     fun lcmOfRangeUsingPrimes(n: Int): Long {
         var lcm = 1L
         val primes = primeNumbers(n)
         for (prime in primes) {
-            val exponent = if (prime * prime <= n) {
-                (log2(n.toDouble()) / log2(prime.toDouble())).toInt()
-            } else 1
-            lcm *= (prime.toDouble().pow(exponent)).toLong()
+            lcm *= if (prime * prime <= n) {
+                val exponent = (log2(n.toDouble()) / log2(prime.toDouble())).toInt()
+                (prime.toDouble().pow(exponent)).toLong()
+            } else {
+                prime.toLong()
+            }
         }
         return lcm
     }

@@ -154,7 +154,7 @@ internal class ReusableTest {
     inner class GetTestXGrid {
         @Test
         fun `getTestIntGrid correct`() {
-            val path = "src/test/kotlin/util/tests/fakeResource"
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedFirst = intArrayOf(1, 2, 3, 4, 5)
             val actual = getTestIntGrid(path, expectedSize, ", ")
@@ -165,7 +165,7 @@ internal class ReusableTest {
 
         @Test
         fun `getTestLongGrid correct`() {
-            val path = "src/test/kotlin/util/tests/fakeResource"
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedFirst = longArrayOf(1, 2, 3, 4, 5)
             val actual = getTestLongGrid(path, expectedSize, ", ")
@@ -180,7 +180,7 @@ internal class ReusableTest {
     inner class GetTestResource {
         @Test
         fun `getTestResource correct for default retrieval`() {
-            val path = "src/test/kotlin/util/tests/fakeResource"
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedLine = "1, 2, 3, 4, 5"
             val resource = getTestResource(path)
@@ -191,7 +191,7 @@ internal class ReusableTest {
 
         @Test
         fun `getTestResource correct for transformed retrieval`() {
-            val path = "src/test/kotlin/util/tests/fakeResource"
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedLine = listOf("1A", "2A", "3A", "4A", "5A")
             val resource = getTestResource(path, lineSplit=", ") { it + 'A' }

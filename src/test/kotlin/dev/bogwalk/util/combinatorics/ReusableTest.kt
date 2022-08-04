@@ -1,6 +1,5 @@
 package dev.bogwalk.util.combinatorics
 
-import dev.bogwalk.util.combinatorics.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.assertThrows

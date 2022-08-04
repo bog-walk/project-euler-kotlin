@@ -58,7 +58,6 @@ internal fun String.isPalindromeRecursive(): Boolean {
  * SPEED (BEST) 573ns for 19-digit N
  */
 fun String.isPalindrome(): Boolean {
-    if (length == 1) return true
     for (i in 0 until length / 2) {
         if (this[i] != this[lastIndex - i]) return false
     }

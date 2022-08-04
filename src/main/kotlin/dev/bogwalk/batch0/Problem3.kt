@@ -1,6 +1,6 @@
 package dev.bogwalk.batch0
 
-import dev.bogwalk.util.maths.primeFactors
+import dev.bogwalk.util.maths.primeFactorsOG
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -23,14 +23,14 @@ import kotlin.math.sqrt
 
 class LargestPrimeFactor {
     /**
-     * Uses prime decomposition via the Sieve of Eratosthenes algorithm to return the largest
+     * Uses prime decomposition via trial division with some optimisations to return the largest
      * prime factor.
      *
      * SPEED (BETTER for N with small factors) 14.72ms for N = 1e12
      * SPEED (BETTER for N with large factors) 10.79ms for N = 600_851_475_143
      */
     fun largestPrimeFactor(n: Long): Long {
-        return primeFactors(n).keys.maxOrNull()!!
+        return primeFactorsOG(n).keys.maxOrNull()!!
     }
 
     /**

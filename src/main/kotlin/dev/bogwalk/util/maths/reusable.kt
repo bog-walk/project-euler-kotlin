@@ -376,7 +376,7 @@ fun primeFactors(n: Long): Map<Long, Int> {
     var factor = 2L
     while (factor * factor <= num) {
         while (num % factor == 0L && num != factor) {
-            primes[1L * factor] = primes.getOrDefault(1L * factor, 0) + 1
+            primes[factor] = primes.getOrDefault(factor, 0) + 1
             num /= factor
         }
         factor++
@@ -391,7 +391,6 @@ fun primeFactors(n: Long): Map<Long, Int> {
  * SPEED (WORSE) 19.87ms for N = 1e6
  */
 fun primeNumbersOG(n: Int): List<Int> {
-    if (n < 2) return emptyList()
     // create mask representing [2, max], with all even numbers except 2 (index 0) marked false
     val boolMask = BooleanArray(n - 1) { !(it != 0 && it % 2 == 0) }
     for (p in 3..(sqrt(1.0 * n).toInt()) step 2) {

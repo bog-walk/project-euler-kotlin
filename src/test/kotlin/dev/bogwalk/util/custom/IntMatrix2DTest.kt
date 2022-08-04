@@ -1,8 +1,5 @@
 package dev.bogwalk.util.custom
 
-import dev.bogwalk.util.custom.IntMatrix2D
-import dev.bogwalk.util.custom.intMatrixOf
-import dev.bogwalk.util.custom.product
 import org.junit.jupiter.api.Assertions.*
 import kotlin.test.Test
 import kotlin.test.assertContentEquals

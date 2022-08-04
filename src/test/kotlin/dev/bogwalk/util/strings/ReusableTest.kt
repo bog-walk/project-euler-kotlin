@@ -1,6 +1,5 @@
 package dev.bogwalk.util.strings
 
-import dev.bogwalk.util.strings.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,7 +15,7 @@ internal class ReusableTest {
     inner class IsPalindrome {
         @Test
         fun `isPalindrome returns true for palindromes`() {
-            val nums = listOf("5", "22", "303", "9119")
+            val nums = listOf("0", "5", "22", "303", "9119")
             nums.forEach { n ->
                 assertTrue { n.isPalindromeBuiltIn() }
                 assertTrue { n.isPalindromeRecursive() }
