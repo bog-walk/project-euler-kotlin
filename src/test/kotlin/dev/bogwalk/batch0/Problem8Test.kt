@@ -81,7 +81,7 @@ internal class LargestProductInSeriesTest {
             "Iterative" to tool::largestSeriesProduct
         )
         for ((name, solution) in solutions) {
-            getSpeed(solution, number, n, k).run {
+            getSpeed(solution, number, n, k, repeat = 100).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }

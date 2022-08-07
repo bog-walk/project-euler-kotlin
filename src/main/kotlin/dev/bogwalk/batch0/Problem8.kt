@@ -17,8 +17,8 @@ package dev.bogwalk.batch0
 
 class LargestProductInSeries {
     /**
-     * SPEED (WORSE) 7.4e5ns for N = 1000, K = 4
-     * SPEED (BETTER) 4.3e5ns for N = 1000, K = 13
+     * SPEED (WORSE) 5.8e+05ns for N = 1000, K = 4
+     * SPEED (WORSE) 8.6e+05ns for N = 1000, K = 13
      */
     fun largestSeriesProductRecursive(number: String, n: Int, k: Int): Long {
         return when {
@@ -28,7 +28,7 @@ class LargestProductInSeries {
             else -> {
                 maxOf(
                     // first substring with k-adjacent digits
-                    largestSeriesProductRecursive(number.take(k), k, k),
+                    stringProduct(number.take(k)),
                     // original string minus the first digit
                     largestSeriesProductRecursive(number.drop(1), n - 1, k)
                 )
@@ -37,13 +37,14 @@ class LargestProductInSeries {
     }
 
     /**
-     * SPEED (BETTER) 4.9e5ns for N = 1000, K = 4
-     * SPEED (WORSE) 6.8e5ns for N = 1000, K = 13
+     * SPEED (BETTER) 2.5e+05ns for N = 1000, K = 4
+     * SPEED (BETTER) 2.3e+05ns for N = 1000, K = 13
      */
     fun largestSeriesProduct(number: String, n: Int, k: Int): Long {
-        return when (n) {
-            1 -> number.toLong()
-            k -> stringProduct(number)
+        return when {
+            n == 1 -> number.toLong()
+            k == 1 -> number.maxOf { it.digitToInt() }.toLong()
+            n == k -> stringProduct(number)
             else -> {
                 var largest = 0L
                 for (i in 0..n - k) {
@@ -65,6 +66,6 @@ class LargestProductInSeries {
             } else {
                 acc * ch.digitToInt()
             }
-        }
+       }
     }
 }
