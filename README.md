@@ -29,4 +29,4 @@ To practise Python :snake:
 - [Project Euler __ Python](https://github.com/bog-walk/project-euler-python)
 
 As well as C++ :zap:
-- - [Project Euler __ C++](https://github.com/bog-walk/project-euler-cpp)
+- [Project Euler __ C++](https://github.com/bog-walk/project-euler-cpp)
