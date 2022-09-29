@@ -69,7 +69,9 @@ internal class SpecialPythagoreanTripletTest {
         // lower constraints
         "12, 60",
         // mid constraints
-        "90, 21060", "1000, 31_875_000"
+        "90, 21060", "1000, 31_875_000",
+        // upper constraints
+        "3000, 937_500_000"
     )
     fun `maxTripletProduct correct`(n: Int, expected: Int) {
         val solutions = listOf(

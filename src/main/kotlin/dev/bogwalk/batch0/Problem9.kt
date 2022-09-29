@@ -36,8 +36,8 @@ class SpecialPythagoreanTriplet {
     /**
      * Solution iterates through values of c and b with some limits:
      *
-     * - Set {3,4,5} being the smallest existing triplet, means c >= 5 and can be
-     * at most [n]/(2 - 1).
+     * - c > [n]/3  and can be at most ([n]/2) - 1 (latter proved if c is replaced by its
+     * Pythagorean equation -> sqrt(a^2 + b^2) < a + b).
      *
      * - b cannot be <= a.
      *
@@ -45,20 +45,24 @@ class SpecialPythagoreanTriplet {
      * triplet must be even as the sum of evens is an even number and the sum of 2 odds is
      * an even number as well.
      *
-     * SPEED (WORST) 4.55ms for N = 3000
+     * SPEED (WORST) 2.03ms for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
      */
     fun maxTripletBruteBC(n: Int): Triple<Int, Int, Int>? {
         if (n % 2 != 0) return null
         var maxTriplet: Triple<Int, Int, Int>? = null
-        outer@for (c in (n / 2 - 1) downTo 5) {
+        nextC@for (c in (n / 2 - 1) downTo (n / 3 + 1)) {
             val diff = n - c
-            for (b in (c - 1) downTo (diff / 2)) {
+            nextB@for (b in (c - 1) downTo (diff / 2)) {
                 val a = diff - b
-                if (b <= a) continue@outer
+                if (b <= a) continue@nextC
+                if (a * b % 12 != 0) continue@nextB
                 if (hypot(a.toDouble(), b.toDouble()) == c.toDouble()) {
-                    maxTriplet = Triple(a, b, c)
+                    val current = Triple(a, b, c)
+                    if (maxTriplet == null || current.product() > maxTriplet.product()) {
+                        maxTriplet = current
+                    }
                     break
                 }
             }
@@ -69,7 +73,7 @@ class SpecialPythagoreanTriplet {
      * Solution iterates through values of a only based on:
      *
      * - Set {3,4,5} being the smallest existing triplet, so a must be >= 3 and can be
-     * at most [n]/(3 - 1).
+     * at most ([n]/3) - 1. Based on a < b and a < c, so 2a < b + c -> 3a < a + b + c.
      *
      * - Inserting c = [n] - a - b into the formula a^2 + b^2 = c^2 reduces to:
      *
@@ -84,7 +88,7 @@ class SpecialPythagoreanTriplet {
      * triplet must be even as the sum of evens is an even number and the sum of 2 odds is
      * an even number as well.
      *
-     * SPEED (BETTER) 5.9e4ns for N = 3000
+     * SPEED (BETTER) 4.8e4ns for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
      */
@@ -93,8 +97,9 @@ class SpecialPythagoreanTriplet {
         var maxTriplet: Triple<Int, Int, Int>? = null
         for (a in (n / 3 - 1) downTo 3) {
             val b = n * (n - 2 * a) / (2 * (n - a))
+            if (a >= b || a * b % 12 != 0) continue
             val c = n - a - b
-            if (a < b && hypot(a.toDouble(), b.toDouble()) == c.toDouble()) {
+            if (hypot(a.toDouble(), b.toDouble()) == c.toDouble()) {
                 maxTriplet = Triple(a, b, c)
                 break
             }
@@ -106,17 +111,14 @@ class SpecialPythagoreanTriplet {
      * Solution optimised based on:
      *
      * - All Pythagorean triplets can be reduced to a primitive one by dividing out the
-     * gcd(a,b,c) = d, such that:
+     * gcd(a,b,c) = d, and inserting Euclid's formula equations for each side, such that:
      *
-     *          a + b + c = 2m(m + n) * d, with n > m > 0.
+     *          a + b + c = 2m(m + n) * d, with m > n > 0.
      *
-     * - A triplet is primitive if m XOR n is even and gcd(m,n) = 1. The latter occurs because
-     * gdc(a,b) = gcd(b,c) = gcd(c,a) = 1.
+     * - A triplet is primitive if only 1 of m or n is even and gcd(m,n) = 1. The latter
+     * occurs because gdc(a,b) = gcd(b,c) = gcd(c,a) = 1.
      *
-     * - Exhaustive search shows that the first maximum triplet found will be the only solution,
-     * so the loop can be broken early.
-     *
-     * SPEED (BEST): 3.4e4ns for N = 3000
+     * SPEED (BEST): 3.5e4ns for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
      */
@@ -125,19 +127,20 @@ class SpecialPythagoreanTriplet {
         var maxTriplet: Triple<Int, Int, Int>? = null
         val limit = num / 2
         val mMax = ceil(sqrt(1.0 * limit)).toInt()
-        outer@for (m in 2 until mMax) {
-            if (limit % m == 0) {
-                // find even divisor m (> 1) of num/2
+        for (m in 2 until mMax) {
+            if (limit % m == 0) { // found even divisor m (> 1) of num/2
+                // find opposite parity divisor k (= m + n) of num/2m
+                var k = if (m % 2 == 1) m + 2 else m + 1
                 var kMax = limit / m
                 while (kMax % 2 == 0) {
-                    // find odd divisor k (= m + n) of num/2m
                     kMax /= 2
                 }
-                var k = if (m % 2 == 1) m + 2 else m + 1
                 while (k < 2 * m && k <= kMax) {
                     if (kMax % k == 0 && isCoPrime(k, m)) {
-                        maxTriplet = pythagoreanTriplet(m, k - m, limit / (k * m))
-                        break@outer
+                        val current = pythagoreanTriplet(m, k - m, limit / (k * m))
+                        if (maxTriplet == null || current.product() > maxTriplet.product()) {
+                            maxTriplet = current
+                        }
                     }
                     k += 2
                 }

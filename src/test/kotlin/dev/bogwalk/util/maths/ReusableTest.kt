@@ -376,7 +376,7 @@ internal class ReusableTest {
         @Test
         fun `pythagoreanTriplet throws exception with invalid input`() {
             val d = 1
-            val arguments = listOf(1 to 0, 1 to 10, 5 to 3, 9 to 3)
+            val arguments = listOf(1 to 0, 1 to 10, 2 to 2, 5 to 3, 9 to 3)
             arguments.forEach { (m, n) ->
                 assertThrows<IllegalArgumentException> { pythagoreanTriplet(m, n, d) }
             }

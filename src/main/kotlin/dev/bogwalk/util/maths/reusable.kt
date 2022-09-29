@@ -442,12 +442,12 @@ fun primeNumbers(n: Int): List<Int> {
  *
  * All triplets originate from a primitive one by multiplying them by d = gcd(a,b,c).
  *
- * @throws IllegalArgumentException if arguments do not follow [m] > [n] > 0, or if both are odd,
- * or if they are not co-prime, i.e. gcd(m, n) != 1.
+ * @throws IllegalArgumentException if arguments do not follow [m] > [n] > 0, or if not exactly
+ * one is even, or if they are not co-prime, i.e. gcd(m, n) != 1.
  */
 fun pythagoreanTriplet(m: Int, n: Int, d: Int): Triple<Int, Int, Int> {
     require(n in 1 until m) { "Positive integers assumed to be m > n > 0" }
-    require(!(m % 2 == 1 && n % 2 == 1)) { "Both integers cannot be odd" }
+    require((m % 2 == 0) xor (n % 2 == 0)) { "Integers must be opposite parity" }
     require(isCoPrime(m, n)) { "Positive integers must be co-prime" }
     val a = (m * m - n * n) * d
     val b = 2 * m * n * d
