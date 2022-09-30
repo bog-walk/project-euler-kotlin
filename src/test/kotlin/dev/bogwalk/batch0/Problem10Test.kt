@@ -15,8 +15,8 @@ import kotlin.test.assertContentEquals
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class SummationOfPrimesTest {
     private val tool = SummationOfPrimes()
-    private lateinit var allPrimes: List<Long>
-    private lateinit var allPrimesOpt: List<Long>
+    private lateinit var allPrimes: LongArray
+    private lateinit var allPrimesOpt: LongArray
 
     @BeforeAll
     fun `setup and speed`() {
