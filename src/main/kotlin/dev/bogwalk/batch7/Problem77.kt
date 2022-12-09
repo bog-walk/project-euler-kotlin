@@ -38,7 +38,7 @@ class PrimeSummations {
      * be achieved, either using coins of different values (Batch 3 - Problem 31) or using
      * combinations of lesser value positive integers (Batch 7 - Problem 76).
      *
-     * @return LongArray of prime partitions (mod 1e9 + 7) of all N <= limit, with index == N.
+     * @return LongArray of prime partitions of all N <= limit, with index == N.
      */
     fun allPrimeSumCombos(n: Int): LongArray {
         val primeCombosBySum = LongArray(n + 1).apply { this[0] = 1L }

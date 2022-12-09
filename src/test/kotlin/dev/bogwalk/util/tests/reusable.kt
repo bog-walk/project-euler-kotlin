@@ -196,13 +196,14 @@ fun getTestResource(
     filePath: String,
     lineTrim: CharArray = charArrayOf(' ', '\n')
 ): List<String> {
-    val resource = mutableListOf<String>()
-    File(filePath).useLines { lines ->
-        lines.forEach { line ->
-            resource.add(line.trim(*lineTrim))
-        }
+    //val resource = mutableListOf<String>()
+    return File(filePath).useLines { lines ->
+        lines.map { line ->
+            //resource.add(line.trim(*lineTrim))
+            line.trim(*lineTrim)
+        }.toList()
     }
-    return resource
+    //return resource
 }
 
 /**
@@ -213,18 +214,21 @@ fun getTestResource(
  * @param [transformation] transformation function that takes either an entire line as an
  * argument or, if split, individual elements in a line.
  */
-fun <R : Any> getTestResource(
+fun <R> getTestResource(
     filePath: String,
     lineTrim: CharArray = charArrayOf(' ', '\n'),
     lineSplit: String = " ",
     transformation: (String) -> R
 ): List<List<R>> {
-    val resource = mutableListOf<List<R>>()
-    File(filePath).useLines { lines ->
-        lines.forEach { line ->
-            val transformed = line.trim(*lineTrim).split(lineSplit).map(transformation)
-            resource.add(transformed)
-        }
+    //val resource = mutableListOf<List<R>>()
+    return File(filePath).useLines { lines ->
+        //lines.forEach { line ->
+            //val transformed = line.trim(*lineTrim).split(lineSplit).map(transformation)
+            //resource.add(transformed)
+        //}
+        lines.map { line ->
+            line.trim(*lineTrim).split(lineSplit).map(transformation)
+        }.toList()
     }
-    return resource
+    //return resource
 }

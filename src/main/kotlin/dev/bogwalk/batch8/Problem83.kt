@@ -22,13 +22,8 @@ import java.util.PriorityQueue
 
 class PathSum4Ways {
     /**
-     * Solution is identical to the Dijkstra solution used above & also in Problem 81, except
-     * extra steps (left & up) are added to the PriorityQueue, instead of using an adjacency matrix.
-     *
-     * N.B. The nested arrays have to be cloned, otherwise they will reference and alter the
-     * original array, causing errors when testing a single grid with multiple solutions. An
-     * alternative would be to provide the grid as a List<MutableList<Long>> & process as such or
-     * cast to a 2D array.
+     * Solution is identical to the Dijkstra solution used in Problems 81 and 82, except extra
+     * steps (left & up) are added to the PriorityQueue, instead of using an adjacency matrix.
      *
      * SPEED (WORSE) 109.45ms for N = 80
      */
@@ -95,7 +90,7 @@ class PathSum4Ways {
             }
             visited[row][col] = true
             for ((adjR, adjC, adjW) in adjacents[row][col]) {
-                if (!visited[adjR][adjC] && weight != Long.MAX_VALUE) {
+                if (!visited[adjR][adjC]) {
                     queue.add(Triple(adjR, adjC, weight + adjW))
                 }
             }

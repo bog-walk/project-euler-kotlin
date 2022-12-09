@@ -43,10 +43,10 @@ class PathSum2Ways {
                     if (col == 0) continue // no need to alter starter
                     elements[row][col] += elements[row][col-1]
                 } else {
-                    if (col == 0) {
-                        elements[row][col] += elements[row-1][col]
+                    elements[row][col] += if (col == 0) {
+                        elements[row-1][col]
                     } else {
-                        elements[row][col] += minOf(elements[row-1][col], elements[row][col-1])
+                        minOf(elements[row-1][col], elements[row][col-1])
                     }
                 }
             }
@@ -70,11 +70,6 @@ class PathSum2Ways {
      * but its value is identical with the sum at grid[2][1], which is prioritised as being lesser
      * because it's column value is smaller. This could be avoided by adding .thenByDescending
      * comparators to account for the other 2 components, but this increases the execution time ~4x.
-     *
-     * N.B. The nested arrays have to be cloned, otherwise they will reference and alter the
-     * original array, causing errors when testing a single grid with multiple solutions. An
-     * alternative would be to provide the grid as a List<MutableList<Long>> & process as such or
-     * cast to a 2D array.
      *
      * SPEED (WORSE) 34.34ms for N = 80
      */

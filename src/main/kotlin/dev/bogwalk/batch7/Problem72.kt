@@ -78,7 +78,7 @@ class CountingFractions {
      *
      *      Phi(n) = n * Pi(1 - (1/p)), with p being distinct prime factors of n.
      *
-     *      if prime factorisation means n = Pi(p_i^a_i), the above formula becomes:
+     *      If prime factorisation means n = Pi(p_i^a_i), the above formula becomes:
      *
      *      Phi(n) = Pi((p_i - 1) * p_i^(a_i - 1))
      *
@@ -90,7 +90,7 @@ class CountingFractions {
      * Only odd numbers are included in the sieve, as all even numbers are handled together based
      * on the following where k > 0 and n is odd:
      *
-     *      {m}Pi{k=0}(Phi(n2^k)) = (1 + {m}Pi{k=1}(2^(k-1)) * Phi(n) = 2^m * Phi(n)
+     *      {m}Pi{k=0}(Phi(n2^k)) = (1 + {m}Pi{k=1}(2^(k-1)) * Phi(n) = 2^m * Phi(n))
      *
      * SPEED (BEST) 14.11ms for N = 1e6
      */

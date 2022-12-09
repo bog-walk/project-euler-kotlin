@@ -62,17 +62,13 @@ class SquareRootDigitalExpansion {
      *
      *  - The square root of a number is only calculated using the manual Babylonian method if
      *  the number is prime. Otherwise, it is calculated using the product of the cached square
-     *  roots of its prime factors.
-     *
-     *  - To allow potential rounding errors from this multiplication, the precision of each
-     *  cached BigDecimal root is set to exceed [p]. This means the String version of the
-     *  calculated root has to be truncated to the requested size before summing the digits.
+     *  roots of its prime factors. Any potential rounding errors from this multiplication will
+     *  be offset by the precision of each cached BigDecimal root being set to exceed [p].
      *
      * SPEED (BEST for Manual sqrt) 735.63ms for N = 100, P = 1e4
      */
     fun irrationalSquareDigitSumImproved(n: Int, p: Int): Int {
         val allRoots = Array<BigDecimal>(n + 1) { BigDecimal.ZERO }
-        // set precision in excess to account for potential future multiplication rounding errors
         val rules = MathContext(p + 10, RoundingMode.FLOOR)
         var total = 0
         for (num in 2..n) {

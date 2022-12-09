@@ -55,12 +55,10 @@ class AlmostEquilateralTriangles {
             val a = side.toBigDecimal()
             val inner = semiP * (semiP - a) * (semiP - a) * (semiP - (a + toggle.toBigDecimal()))
             val area = inner.sqrt(MathContext(20, RoundingMode.HALF_UP))
-            if (area * area == inner) {
-                validPerimeter = perimeter
+            validPerimeter = if (area * area == inner) {
                 toggle *= -1
-            } else {
-                validPerimeter = 0
-            }
+                perimeter
+            } else 0
         }
 
         return sum

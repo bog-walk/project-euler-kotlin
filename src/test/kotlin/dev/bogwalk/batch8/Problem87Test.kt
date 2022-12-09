@@ -13,7 +13,7 @@ internal class PrimePowerTriplesTest {
 
     @BeforeAll
     fun setup() {
-        val limit = 10_000_000
+        val limit = 50_000_000
         allCounts = tool.allPrimePowerTripleCounts(limit)
     }
 

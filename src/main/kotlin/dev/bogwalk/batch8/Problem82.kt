@@ -59,11 +59,6 @@ class PathSum3Ways {
      *
      *  - An extra upwards step is added to the queue, if possible.
      *
-     * N.B. The nested arrays have to be cloned, otherwise they will reference and alter the
-     * original array, causing errors when testing a single grid with multiple solutions. An
-     * alternative would be to provide the grid as a List<MutableList<Long>> & process as such or
-     * cast to a 2D array.
-     *
      * SPEED (WORSE) 31.32ms for N = 80
      */
     fun minPathSumDijkstra(rows: Int, grid: Array<IntArray>): Long {

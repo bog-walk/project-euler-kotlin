@@ -64,28 +64,26 @@ class ArithmeticExpressions {
             } else {
                 for (i in 0 until digits.lastIndex) {
                     for (j in i+1..digits.lastIndex) {
-                        val newDigits = digits.toMutableList().apply {
-                            removeAt(j)
-                            removeAt(i)
-                        }
-                        val x = digits[i]
-                        val y = digits[j]
+                        val newDigits = digits.toMutableList()
+                        val y = newDigits.removeAt(j)
+                        val x = newDigits.removeAt(i)
                         // commutative operators
                         newDigits.add(x + y)
+                        val lastI = newDigits.lastIndex
                         evaluateExpression(newDigits)
-                        newDigits.replaceLast(x * y)
+                        newDigits[lastI] = x * y
                         evaluateExpression(newDigits)
                         // non-commutative operators
-                        newDigits.replaceLast(x - y)
+                        newDigits[lastI] = x - y
                         evaluateExpression(newDigits)
-                        newDigits.replaceLast(y - x)
+                        newDigits[lastI] = y - x
                         evaluateExpression(newDigits)
                         if (y != 0.0) {
-                            newDigits.replaceLast(x / y)
+                            newDigits[lastI] = x / y
                             evaluateExpression(newDigits)
                         }
                         if (x != 0.0) {
-                            newDigits.replaceLast(y / x)
+                            newDigits[lastI] = y / x
                             evaluateExpression(newDigits)
                         }
                     }
@@ -117,26 +115,24 @@ class ArithmeticExpressions {
             } else {
                 for (i in 0 until digits.lastIndex) {
                     for (j in i+1..digits.lastIndex) {
-                        val newDigits = digits.toMutableList().apply {
-                            removeAt(j)
-                            removeAt(i)
-                        }
-                        val x = digits[i]
-                        val y = digits[j]
+                        val newDigits = digits.toMutableList()
+                        val y = newDigits.removeAt(j)
+                        val x = newDigits.removeAt(i)
                         newDigits.add(x + y)
+                        val lastI = newDigits.lastIndex
                         evaluateExpression(newDigits)
-                        newDigits.replaceLast(x * y)
+                        newDigits[lastI] = x * y
                         evaluateExpression(newDigits)
-                        newDigits.replaceLast(x - y)
+                        newDigits[lastI] = x - y
                         evaluateExpression(newDigits)
-                        newDigits.replaceLast(y - x)
+                        newDigits[lastI] = y - x
                         evaluateExpression(newDigits)
                         if (y != Fraction()) {
-                            newDigits.replaceLast(x / y)
+                            newDigits[lastI] = x / y
                             evaluateExpression(newDigits)
                         }
                         if (x != Fraction()) {
-                            newDigits.replaceLast(y / x)
+                            newDigits[lastI] = y / x
                             evaluateExpression(newDigits)
                         }
                     }
@@ -146,11 +142,6 @@ class ArithmeticExpressions {
 
         evaluateExpression(digits.map { Fraction(it) })
         return expressed.indexOfFirst { !it }
-    }
-
-    private fun <T> MutableList<T>.replaceLast(element: T) {
-        removeLast()
-        add(element)
     }
 
     /**

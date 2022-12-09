@@ -181,7 +181,7 @@ class OrderedFractions {
      *      ax + by = gcd(a, b)
      *
      * @return triple of (gcd, x, y).
-     * @throws IllegalArgumentException if either [n1] or [n2] are less than 0.
+     * @throws IllegalArgumentException if either [n1] or [n2] is less than 0.
      */
     private fun extendedGCD(n1: Long, n2: Long): Triple<Long, Long, Long> {
         require(n1 >= 0 && n2 >= 0) { "Inputs should not be negative" }

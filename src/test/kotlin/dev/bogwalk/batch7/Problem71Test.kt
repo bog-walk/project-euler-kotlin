@@ -111,11 +111,11 @@ internal class OrderedFractionsTest {
     }
 
     @Test
-    fun `PR problem correct`() {
+    fun `PE problem correct`() {
         val limit = 1_000_000L
         val n = 3L
         val d = 7L
-        val expected = 428_570L to 999_997L // only numerator required for PR problem
+        val expected = 428_570L to 999_997L // only numerator required for PE problem
         assertEquals(expected, tool.leftFareyNeighbour(limit, n, d))
     }
 }

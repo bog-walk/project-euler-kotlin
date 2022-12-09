@@ -17,7 +17,7 @@ internal class PathSum4WaysTest {
         val grid = getTestIntGrid(resource, n, ",")
         val expected = 20L
         assertEquals(expected, tool.minPathSumDijkstraImproved(n, grid))
-        assertEquals(expected, tool.minPathSumDijkstra(n, grid))
+        //assertEquals(expected, tool.minPathSumDijkstra(n, grid))
     }
 
     @Test
@@ -27,7 +27,7 @@ internal class PathSum4WaysTest {
         val grid = getTestIntGrid(resource, n, ",")
         val expected = 25L
         assertEquals(expected, tool.minPathSumDijkstraImproved(n, grid))
-        assertEquals(expected, tool.minPathSumDijkstra(n, grid))
+        //assertEquals(expected, tool.minPathSumDijkstra(n, grid))
     }
 
     @Test
@@ -37,7 +37,7 @@ internal class PathSum4WaysTest {
         val grid = getTestIntGrid(resource, n, ",")
         val expected = 2297L
         assertEquals(expected, tool.minPathSumDijkstraImproved(n, grid))
-        assertEquals(expected, tool.minPathSumDijkstra(n, grid))
+        //assertEquals(expected, tool.minPathSumDijkstra(n, grid))
     }
 
     @Test

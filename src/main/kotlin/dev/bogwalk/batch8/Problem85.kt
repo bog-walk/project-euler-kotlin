@@ -40,7 +40,7 @@ class CountingRectangles {
      */
     fun findClosestContainingArea(target: Int): Int {
         var closest = Int.MAX_VALUE to 0  // delta to area
-        for (x in 1..sqrt(1.0 * target).toInt() + 1) {
+        for (x in 1..sqrt(1.0 * target).toInt()) {
             var y = x
             var count = 0
             while (count < target) {

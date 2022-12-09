@@ -29,7 +29,7 @@ class CoinPartitions {
 
     /**
      * Solution is identical to the bottom-up approach used in Batch 7 - Problem 76 (and is
-     * similar to solutions for Problem 31 & 77).
+     * similar to solutions for Problems 31 & 77).
      *
      * SPEED (WORSE) 15.43ms for N = 1e3
      * This solution does not scale at all well for N > 1e3.

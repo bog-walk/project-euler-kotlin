@@ -45,6 +45,8 @@ class SpecialPythagoreanTriplet {
      * triplet must be even as the sum of evens is an even number and the sum of 2 odds is
      * an even number as well.
      *
+     * - The product of the 2 non-hypotenuse sides (a, b) must be divisible by 12.
+     *
      * SPEED (WORST) 2.03ms for N = 3000
      *
      * @return triple(a, b, c) if one exists, or null.
@@ -87,6 +89,8 @@ class SpecialPythagoreanTriplet {
      * - Triplet elements must either be all evens OR 2 odds with 1 even. Therefore, the sum of a
      * triplet must be even as the sum of evens is an even number and the sum of 2 odds is
      * an even number as well.
+     *
+     * - The product of the 2 non-hypotenuse sides (a, b) must be divisible by 12.
      *
      * SPEED (BETTER) 4.8e4ns for N = 3000
      *

@@ -44,7 +44,7 @@ class CountingFractionsInARange {
     fun fareyRangeCountRecursive(d: Int, a: Int): Long = countMediants(d, a + 1, a)
 
     /**
-     * Recursively count all mediants between a lower and upper bound until the calculated
+     * Recursively counts all mediants between a lower and upper bound until the calculated
      * denominator exceeds [d]. Each new mediant will replace both the lower and upper bounds in
      * different recursive calls.
      */

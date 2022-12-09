@@ -35,7 +35,7 @@ class DigitFactorialChains {
     // pre-calculation of all digit factorials to increase performance
     private val factorials = List(10) { it.factorial().intValueExact() }
     // store all special case numbers that either loop to themselves (factorions) or to others
-    private val loopNums = listOf(145, 169, 871, 872, 1454, 40585, 45361, 45362, 363601)
+    private val loopNums = listOf(145, 169, 871, 872, 1454, 40_585, 45_361, 45_362, 363_601)
     // pre-generate the id of these special case numbers
     private val loopPerms = loopNums.map { permutationID(it.toLong()).joinToString("") }
 
@@ -43,26 +43,26 @@ class DigitFactorialChains {
      * Solution based on the following:
      *
      *  - 1! & 2! will cause an infinite loop with themselves. The only non-single digit factorions
-     *  are: 145 and 40585.
+     *  are: 145 and 40_585.
      *
      *  - If a chain encounters an element in the 3 aforementioned loops or a factorion, it will
      *  become stuck & the search can be broken early without waiting for a repeated element to
      *  be found.
      *
      *  - A starter will also be discarded early if it has not encountered a loop but has
-     *  exceeded the requested length.
+     *  exceeded the requested [length].
      *
      *  - A cache of permutationID(n) to chain length is created to reduce digit factorial sum
      *  calculations of every starter <= [limit].
      *
      *  - Getting the permutation of a number & checking it against the class variables of
      *  special case numbers prevents wrong results caused by permutations that don't actually
-     *  start loops. e.g. 27 -> 5042 -> 147 -> 5065 -> 961 -> {363601 -> loop}. 961 has the same
+     *  start loops. e.g. 27 -> 5042 -> 147 -> 5065 -> 961 -> {363_601 -> loop}. 961 has the same
      *  id as 169 but technically does not start the loop, so the count must be incremented.
      *
      *  - All new chain elements (less than [limit] & up until a loop element is encountered) are
-     *  stored so that they can be cached with a count using backtracking. e.g. 69 -> 363600 ->
-     *  loop element = count 5; so cache[id(363600)] = 4 & cache[id(69)] = 5.
+     *  stored so that they can be cached with a count using backtracking. e.g. 69 -> 363_600 ->
+     *  loop element = count 5; so cache[id(363_600)] = 4 & cache[id(69)] = 5.
      *
      *  SPEED (WORSE) 1.41s for N = 1e6, L = 10
      */
@@ -143,9 +143,9 @@ class DigitFactorialChains {
                 cache[permId] = chain.size
             }
             val valid = when (n) {
-                145, 40585 -> length == 1
-                169, 1454, 363601 -> length == 3
-                871, 872, 45361, 45362 -> length == 2
+                145, 40_585 -> length == 1
+                169, 1454, 363_601 -> length == 3
+                871, 872, 45_361, 45_362 -> length == 2
                 else -> cache[permId] == length
             }
             if (valid) starters.add(n)
