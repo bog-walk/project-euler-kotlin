@@ -30,7 +30,7 @@ class CubicPermutations {
         val cubePerms = mutableMapOf<String, List<Long>>()
         for (num in 345 until n) {
             val cube = 1L * num * num * num
-            val cubeID = permutationID(cube).joinToString("")
+            val cubeID = permutationID(cube)
             cubePerms[cubeID] = cubePerms.getOrDefault(cubeID, emptyList()) + cube
         }
         return cubePerms.values.filter { perms -> perms.size == k }
@@ -55,7 +55,7 @@ class CubicPermutations {
         var currentDigits = 0
         while (currentDigits <= maxDigits) {
             val cube = num * num * num
-            val cubeID = permutationID(cube).joinToString("")
+            val cubeID = permutationID(cube)
             cubePerms[cubeID] = cubePerms.getOrDefault(cubeID, emptyList()) + cube
             if (longestID == "0" && cubePerms[cubeID]?.size == 5) {
                 longestID = cubeID

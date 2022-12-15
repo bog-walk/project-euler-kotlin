@@ -10,10 +10,7 @@ import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
 import java.math.BigInteger
 import kotlin.system.measureNanoTime
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 internal class ReusableTest {
     @Nested
@@ -271,41 +268,105 @@ internal class ReusableTest {
         }
     }
 
-    @Test
-    fun `permutationID correct when less than 9 duplicates of a digit exist`() {
-        val nums = listOf<Long>(
-            1487, 2214, 999, 15, 148_748_178_147, 1_000_000_000
-        )
-        val expected = listOf(
-            intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1), intArrayOf(0, 1, 2, 0, 1),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 3), intArrayOf(0, 1, 0, 0, 0, 1),
-            intArrayOf(0, 3, 0, 0, 3, 0, 0, 3, 3), intArrayOf(9, 1)
-        )
-        for ((i, n) in nums.withIndex()) {
-            assertContentEquals(expected[i], permutationID(n))
+    @Nested
+    @DisplayName("permutationID test suite")
+    inner class PermutationID {
+        @Test
+        fun `permutationID correct when less than 10 duplicates of a digit exist`() {
+            val nums = listOf<Long>(
+                1487, 2214, 999, 15, 148_748_178_147, 1_000_000_000
+            )
+            val expectedOG = listOf(
+                intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1), intArrayOf(0, 1, 2, 0, 1),
+                intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 3), intArrayOf(0, 1, 0, 0, 0, 1),
+                intArrayOf(0, 3, 0, 0, 3, 0, 0, 3, 3), intArrayOf(9, 1)
+            )
+            val expected = listOf(
+                "4563468304", "66064", "206158430208", "1048592", "13690404912", "25"
+            )
+            for ((i, n) in nums.withIndex()) {
+                assertContentEquals(expectedOG[i], permutationIDOG(n))
+                assertEquals(expected[i], permutationID(n))
+            }
         }
-    }
 
-    @Test
-    fun `permutationID correct when more than 9 duplicates of a digit exist`() {
-        val nums = listOf(
-            1_000_000_000_000, 31_111_111_111, 999_999_999_999
-        )
-        val expected = listOf(
-            intArrayOf(12, 1), intArrayOf(0, 10, 0, 1),
-            intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 12)
-        )
-        for ((i, n) in nums.withIndex()) {
-            assertContentEquals(expected[i], permutationID(n))
+        @Test
+        fun `permutationID correct when between 10 and 15 duplicates of a digit exist`() {
+            val nums = listOf(
+                1_000_000_000_000, 31_111_111_111, 999_999_999_999
+            )
+            val expectedOG = listOf(
+                intArrayOf(12, 1), intArrayOf(0, 10, 0, 1),
+                intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 12)
+            )
+            val expected = listOf("28", "4256", "824633720832")
+            for ((i, n) in nums.withIndex()) {
+                assertContentEquals(expectedOG[i], permutationIDOG(n))
+                assertEquals(expected[i], permutationID(n))
+            }
         }
-    }
 
-    @Test
-    fun `permutationID static for permutations of the same number`() {
-        val nums = listOf<Long>(1487, 4871, 8714, 7814, 1748)
-        val expected = intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1)
-        for (n in nums) {
-            assertContentEquals(expected, permutationID(n))
+        @Test
+        fun `permutationIDOG correct when 16 or more duplicates of a digit exist`() {
+            val nums = listOf(
+                10_000_000_000_000_000, 222_222_222_222_222_222
+            )
+            val expectedOG = listOf(
+                intArrayOf(16, 1), intArrayOf(0, 0, 18)
+            )
+            for ((n, e) in nums.zip(expectedOG)) {
+                assertContentEquals(e, permutationIDOG(n))
+            }
+        }
+
+        @Test
+        fun `permutationID static for permutations of the same number`() {
+            val nums = listOf<Long>(1487, 4871, 8714, 7814, 1748)
+            val expectedOG = intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1)
+            val expected = "4563468304"
+            for (n in nums) {
+                assertContentEquals(expectedOG, permutationIDOG(n))
+                assertEquals(expected, permutationID(n))
+            }
+        }
+
+        @Test
+        fun `permutationIDOG fails if compared using certain String joins`() {
+            val a = 1_000_000_000_000
+            val b = 1012L
+
+            assertTrue {
+                permutationIDOG(a).joinToString("") ==  permutationIDOG(b).joinToString("")
+            }
+            assertFalse { permutationID(a) ==  permutationID(b) }
+        }
+
+        @Test
+        fun `permutationID bitwise fails when 16 duplicates of a digit exist`() {
+            val a = 2_222_222_222_222_222
+            val b = 3L
+
+            assertTrue { permutationID(a) ==  permutationID(b) }
+            assertFalse {
+                permutationIDOG(a).joinToString("") ==  permutationIDOG(b).joinToString("")
+            }
+        }
+
+        @Test
+        fun `speed comparison when N is at max value`() {
+            val n = Long.MAX_VALUE
+            val expectedOG = intArrayOf(2, 0, 3, 3, 1, 2, 1, 4, 2, 1)
+            val expected = "78402106114"
+            val speeds = mutableListOf<Pair<String, Benchmark>>()
+            getSpeed(::permutationIDOG, n).run {
+                speeds.add("OG IntArray" to second)
+                assertContentEquals(expectedOG, first)
+            }
+            getSpeed(::permutationID, n).run {
+                speeds.add("Alternate Bitwise" to second)
+                assertEquals(expected, first)
+            }
+            compareSpeed(speeds)
         }
     }
 

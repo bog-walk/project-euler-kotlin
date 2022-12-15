@@ -136,12 +136,12 @@ class SquareDigitChains {
      * Similar to the brute force method but attempts to cache starters based on the premise that
      * all permutations of an unhappy number will also be unhappy.
      *
-     * SPEED (WORST) 5.13s for K = 7
+     * SPEED (WORSE) 2.96s for K = 7
      */
     fun countSDChainsPerm(k: Int): Int {
         val cache = mutableMapOf(
-            permutationID(1L).joinToString("") to 1,
-            permutationID(89L).joinToString("") to 89
+            permutationID(1L) to 1,
+            permutationID(89L) to 89
         )
         var count = 0
 
@@ -149,7 +149,7 @@ class SquareDigitChains {
         var starter = BigInteger.TWO
         while (starter < limit) {
             var number = digitSquaredSum(starter.toString())
-            val starterPermID = permutationID(number.toLong()).joinToString("")
+            val starterPermID = permutationID(number.toLong())
             if (starterPermID in cache.keys) {
                 if (cache[starterPermID] == 89) {
                     count++
@@ -158,7 +158,7 @@ class SquareDigitChains {
             } else {
                 while (number != 1 && number != 89) {
                     number = digitSquaredSum(number.toString())
-                    val nPermID = permutationID(number.toLong()).joinToString("")
+                    val nPermID = permutationID(number.toLong())
                     if (nPermID in cache.keys) {
                         number = cache[nPermID]!!
                         if (number == 89) {
@@ -195,40 +195,34 @@ class SquareDigitChains {
         for (length in 1..k) {
             v = IntArray(9) { if (it == 8) length else 0 }
             d = IntArray(9) { (if (it > 7) k else v[it+1]) - v[it] }
-            println("v=${v.contentToString()}\nd=${d.contentToString()}")
             val sum = (1..9).sumOf { d[it-1] * it * it }
             if (isHappy(sum)) {
                 val p = digits.reduce { acc, pI -> acc * d[pI.intValueExact()-1].factorial() }
                 val toAdd = (factor / p / v[0].factorial()).intValueExact()
                 count += toAdd
                 count %= modulo
-                //println("$count -> ${d.contentToString()}")
             }
         }
         for (i in 8 downTo 1) {
             v = IntArray(9) { if (it >= i-1) 1 else 0 }
             d = IntArray(9) { (if (it > 7) k else v[it+1]) - v[it] }
-            println("v=${v.contentToString()}\nd=${d.contentToString()}")
             var sum = (1..9).sumOf { d[it-1] * it * it }
             if (isHappy(sum)) {
                 val p = digits.reduce { acc, pI -> acc * d[pI.intValueExact()-1].factorial() }
                 val toAdd = (factor / p / v[0].factorial()).intValueExact()
                 count += toAdd
                 count %= modulo
-                //println("$count -> ${d.contentToString()}")
             }
             for (j in 9 downTo i) {
                 for (length in 2..k) {
                     v[j-1] = length
                     d = IntArray(9) { (if (it > 7) k else v[it+1]) - v[it] }
-                    println("v=${v.contentToString()}\nd=${d.contentToString()}")
                     sum = (1..9).sumOf { d[it-1] * it * it }
                     if (isHappy(sum)) {
                         val p = digits.reduce { acc, pI -> acc * d[pI.intValueExact()-1].factorial() }
                         val toAdd = (factor / p / v[0].factorial()).intValueExact()
                         count += toAdd
                         count %= modulo
-                        //println("$count -> ${d.contentToString()}")
                     }
                 }
             }

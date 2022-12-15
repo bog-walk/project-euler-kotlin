@@ -196,16 +196,65 @@ fun <T: Any> permutations(elements: Iterable<T>, r: Int = -1) = sequence {
  * N.B. An alternative hash key would be the sorted string cast of the number, using
  * num.toString().toList().sorted().joinToString("").
  * e.g. 1487 -> "1478", 2023 -> "0223".
+ *
+ * N.N.B. Permutation ID results should be compared using contents of the IntArray, as comparing
+ * joined String representations, may lead to errors; e.g. 1_000_000_000_000 has the same String
+ * ID ("121") as 1012.
+ *
+ * This solution will only be used in future solutions if arguments are expected to be greater
+ * than 15-digits long or performance is not a concern.
+ *
+ * SPEED (WORSE) 30.59ms for N = Long.MAX_VALUE
+ *
+ * @param [n] Number may have digits that are duplicated any number of times.
  */
-fun permutationID(n: Long): IntArray {
+internal fun permutationIDOG(n: Long): IntArray {
     var perm = n
     val permID = IntArray(n.toString().maxOf { it }.digitToInt() + 1)
     while (perm > 0) {
         val digit = (perm % 10).toInt()
-        permID[digit] += 1
+        permID[digit]++
         perm /= 10
     }
     return permID
+}
+
+/**
+ * Generates a hash key based on the amount of repeated digits, represented as a String.
+ *
+ * Instead of storing digits counts in an array, a bitwise left shift accumulates a Long value
+ * that is unique, based on the fact that a left arithmetic shift by x is equivalent to
+ * multiplying by 2^x, such that:
+ *
+ *      1 << x * d == (2^x)^d,
+ *      with x equal 4, since 2^4 is the first to exceed a single-digit value.
+ *
+ * If 2 is used, 2222222222222222 will have the same hash as 3333 (i.e. 256) because
+ * (16 * (2^2)^2) == (4 * 4^3).
+ * If 3 is used, 22222222 will have the same hash as 3 (i.e. 512) because
+ * (8 * (2^3)^2) == (1 * 8^3).
+ *
+ * This means that the following solution cannot allow a digit to occur 16 times,
+ * e.g. 2222222222222222 will have the same hash as 3 (i.e. 4096) because
+ * (16 * (2^4)^2) == (1 * 16^3).
+ *
+ * This solution will be preferentially used in future solutions when speed is necessary and
+ * arguments are not expected to be greater than 15-digits long.
+ *
+ * SPEED (BETTER) 1.8e+04ns for N = Long.MAX_VALUE
+ *
+ * @param [n] Number should not be greater than 15-digits long to ensure duplicates of 16 digits
+ * are not present.
+ */
+fun permutationID(n: Long): String {
+    var perm = n
+    var permID = 0L
+    while (perm > 0) {
+        val digit = (perm % 10).toInt()
+        permID += 1L shl 4 * digit
+        perm /= 10
+    }
+    return permID.toString()
 }
 
 /**

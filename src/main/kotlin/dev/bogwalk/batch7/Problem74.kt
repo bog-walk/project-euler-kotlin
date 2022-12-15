@@ -37,7 +37,7 @@ class DigitFactorialChains {
     // store all special case numbers that either loop to themselves (factorions) or to others
     private val loopNums = listOf(145, 169, 871, 872, 1454, 40_585, 45_361, 45_362, 363_601)
     // pre-generate the id of these special case numbers
-    private val loopPerms = loopNums.map { permutationID(it.toLong()).joinToString("") }
+    private val loopPerms = loopNums.map { permutationID(it.toLong()) }
 
     /**
      * Solution based on the following:
@@ -64,13 +64,13 @@ class DigitFactorialChains {
      *  stored so that they can be cached with a count using backtracking. e.g. 69 -> 363_600 ->
      *  loop element = count 5; so cache[id(363_600)] = 4 & cache[id(69)] = 5.
      *
-     *  SPEED (WORSE) 1.41s for N = 1e6, L = 10
+     *  SPEED (WORSE) 563.13ms for N = 1e6, L = 10
      */
     fun digitFactorialChainStarters(limit: Int, length: Int): List<Int> {
         val starters = mutableListOf<Int>()
         val cache = mutableMapOf<String, Int>().apply {
-            this[permutationID(1L).joinToString("")] = 1
-            this[permutationID(2L).joinToString("")] = 1
+            this[permutationID(1L)] = 1
+            this[permutationID(2L)] = 1
             this[loopPerms[0]] = 1
             this[loopPerms[1]] = 3
             this[loopPerms[2]] = 2
@@ -82,7 +82,7 @@ class DigitFactorialChains {
             this[loopPerms[8]] = 3
         }
         nextStarter@for (n in 0..limit) {
-            var permID = permutationID(n.toLong()).joinToString("")
+            var permID = permutationID(n.toLong())
             if (permID in cache.keys) {
                 var cachedLength = cache.getOrDefault(permID, 0)
                 if (permID in loopPerms && n !in loopNums) cachedLength++
@@ -94,7 +94,7 @@ class DigitFactorialChains {
             var prev = n
             while (true) {
                 prev = prev.toString().sumOf { ch -> factorials[ch.digitToInt()] }
-                permID = permutationID(prev.toLong()).joinToString("")
+                permID = permutationID(prev.toLong())
                 if (permID in cache.keys) {
                     count += cache.getOrDefault(permID, 0)
                     if (permID in loopPerms && prev !in loopNums) count++
@@ -123,7 +123,7 @@ class DigitFactorialChains {
      * This forces the cache to have to store the special case number count values already falsely
      * incremented & to catch these special cases again before checking final count length.
      *
-     * SPEED (BETTER) 855.24ms for N = 1e6, L = 10
+     * SPEED (BETTER) 409.48ms for N = 1e6, L = 10
      */
     fun digitFactorialChainStartersImproved(limit: Int, length: Int): List<Int> {
         val starters = mutableListOf<Int>()
@@ -133,7 +133,7 @@ class DigitFactorialChains {
             this[loopPerms[5]] = 2 // 40585
         }
         for (n in 0..limit) {
-            val permId = permutationID(n.toLong()).joinToString("")
+            val permId = permutationID(n.toLong())
             if (permId !in cache.keys) {
                 val chain = mutableSetOf<Int>()
                 var prev = n
@@ -164,13 +164,13 @@ class DigitFactorialChains {
      * for all 1e6 starters & multiple test cases can be picked by simply filtering the list
      * stored at index [length] - 1.
      *
-     * SPEED (BETTER) 529.66ms for N = 1e6, L = 10
+     * SPEED (BETTER) 430.76ms for N = 1e6, L = 10
      */
     fun digitFactorialChainStartersOptimised(limit: Int, length: Int): List<Int> {
         val starters = mutableListOf<Int>()
         val cache = mutableMapOf<String, Int>().apply {
-            this[permutationID(1L).joinToString("")] = 1
-            this[permutationID(2L).joinToString("")] = 1
+            this[permutationID(1L)] = 1
+            this[permutationID(2L)] = 1
             this[loopPerms[0]] = 1
             this[loopPerms[1]] = 3
             this[loopPerms[2]] = 2
@@ -182,13 +182,13 @@ class DigitFactorialChains {
             this[loopPerms[8]] = 3
         }
         nextStarter@for (n in 0..limit) {
-            val nPermID = permutationID(n.toLong()).joinToString("")
+            val nPermID = permutationID(n.toLong())
             if (nPermID !in cache.keys) {
                 var count = 1
                 var prev = n
                 while (true) {
                     prev = prev.toString().sumOf { ch -> factorials[ch.digitToInt()] }
-                    val permID = permutationID(prev.toLong()).joinToString("")
+                    val permID = permutationID(prev.toLong())
                     if (permID in cache.keys) {
                         count += cache.getOrDefault(permID, 0)
                         if (permID in loopPerms && prev !in loopNums) count++

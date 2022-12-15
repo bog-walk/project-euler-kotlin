@@ -51,7 +51,7 @@ class TotientPermutation {
      * 3 prime factors. This n is captured in the alternative solution below, without adding a
      * special case clause, but is a slower solution.
      *
-     * SPEED (BETTER) 2.23s for N = 1e7
+     * SPEED (BETTER) 690.93ms for N = 1e7
      */
     fun totientPermutation(limit: Int): Int {
         if (limit in 2818..2991) return 2817
@@ -68,8 +68,7 @@ class TotientPermutation {
                 val ratio = 1.0 * n / phi
                 if (
                     ratio < minPerm.second &&
-                    permutationID(n.toLong()).joinToString("") ==
-                    permutationID(phi.toLong()).joinToString("")
+                    permutationID(n.toLong()) == permutationID(phi.toLong())
                 ) {
                     minPerm = n to ratio
                 }
@@ -84,7 +83,7 @@ class TotientPermutation {
      * the increasingly reducing totient count becomes too small to satisfy the current minimum
      * ratio.
      *
-     * SPEED (WORSE) 3.17s for N = 1e7
+     * SPEED (WORSE) 2.99s for N = 1e7
      */
     fun totientPermutationRobust(limit: Int): Int {
         val primes = primeNumbers(limit)
@@ -119,8 +118,7 @@ class TotientPermutation {
             val ratio = phi?.let { 1.0 * n / it } ?: continue
             if (
                 ratio < minPerm.second &&
-                permutationID(n.toLong()).joinToString("") ==
-                permutationID(phi.toLong()).joinToString("")
+                permutationID(n.toLong()) == permutationID(phi.toLong())
             ) {
                 minPerm = n to ratio
             }

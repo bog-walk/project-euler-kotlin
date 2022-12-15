@@ -69,7 +69,7 @@ class PrimePermutations {
      * Pre-generating all primes with same number of digits also eliminates the need to check for
      * primality.
      *
-     * SPEED (BETTER) 1.47s for N = 1e6, K = 3
+     * SPEED (BETTER) 1.13s for N = 1e6, K = 3
      */
     fun primePermSequenceImproved(n: Int, k: Int): List<String> {
         val limit = (10.0).pow(n.toString().length).toInt() - 1
@@ -78,7 +78,7 @@ class PrimePermutations {
         val sequences = mutableListOf<List<Int>>()
         for (prime in primes) {
             if (prime < 1117) continue
-            val permID = permutationID(prime.toLong()).joinToString("")
+            val permID = permutationID(prime.toLong())
             primePerms[permID] = primePerms.getOrDefault(permID, listOf()) + prime
         }
         for (perms in primePerms.values) {
