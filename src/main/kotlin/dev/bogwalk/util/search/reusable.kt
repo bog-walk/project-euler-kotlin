@@ -14,7 +14,8 @@ internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<
     var low = 0
     var high = collection.size - 1
     while (low <= high) {
-        val middle = (low + high) / 2
+        // avoids integer overflow in large collections with large indices
+        val middle = low + (high - low) / 2
         val found = collection[middle]
         if (found == target) return true
         if (found < target) {
@@ -32,7 +33,7 @@ internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<
  * The function has extra functionality that can be used, e.g. defining the given list to a
  * smaller search range, or including a comparator. It normally returns the index position of the
  * target, if found; otherwise its inverse index (i.e. the position at which the element should
- * be inserted to maintain a sorted collection.
+ * be inserted to maintain a sorted collection).
  *
  * This version will be preferentially used in all solutions.
  *

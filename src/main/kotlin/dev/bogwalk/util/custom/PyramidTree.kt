@@ -4,7 +4,7 @@ package dev.bogwalk.util.custom
  * A Node for the following PyramidTree class.
  *
  * A Node stores an integer value, as well as a reference to its 2 children, if it is not a leaf
- * node. Its sole method, draw_node(), allows all Nodes in a PyramidTree to be drawn recursively.
+ * node. Its sole method, draw(), allows all Nodes in a PyramidTree to be drawn recursively.
  */
 class PyramidNode(
     val value: Int,

@@ -58,8 +58,8 @@ fun <T: Any> combinations(elements: Iterable<T>, r: Int) = sequence {
     val n = input.size
     if (r == 0 || r > n) return@sequence
     val indices = (0 until r).toMutableList()
-    yield(List(r) { input[indices[it]] })
     while (true) {
+        yield(List(r) { input[indices[it]] })
         var i = r - 1
         while (i >= 0) {
             if (indices[i] != i + n - r) break
@@ -69,7 +69,6 @@ fun <T: Any> combinations(elements: Iterable<T>, r: Int) = sequence {
         for (j in i + 1 until r) {
             indices[j] = indices[j-1] + 1
         }
-        yield(List(r) { input[indices[it]] })
     }
 }
 
@@ -92,15 +91,14 @@ fun <T: Any> combinationsWithReplacement(elements: Iterable<T>, r: Int) = sequen
     val n = input.size
     if (r == 0 || n == 0) return@sequence
     var indices = List(r) { 0 }
-    yield(List(r) { input[indices[it]] })
     while (true) {
+        yield(List(r) { input[indices[it]] })
         var i = r - 1
         while (i >= 0) {
             if (indices[i] != n - 1) break
             if (i-- == 0) return@sequence
         }
         indices = indices.slice(0 until i) + List(r - i) { indices[i] + 1 }
-        yield(List(r) { input[indices[it]] })
     }
 }
 

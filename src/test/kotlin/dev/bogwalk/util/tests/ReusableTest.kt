@@ -2,6 +2,8 @@ package dev.bogwalk.util.tests
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.assertThrows
+import java.io.FileNotFoundException
 import kotlin.system.measureNanoTime
 import kotlin.test.*
 
@@ -150,32 +152,6 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("getTestXGrid test suite")
-    inner class GetTestXGrid {
-        @Test
-        fun `getTestIntGrid correct`() {
-            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
-            val expectedSize = 5
-            val expectedFirst = intArrayOf(1, 2, 3, 4, 5)
-            val actual = getTestIntGrid(path, expectedSize, ", ")
-            assertEquals(expectedSize, actual.size)
-            assertContentEquals(expectedFirst, actual.first())
-            assertIs<IntArray>(actual.first())
-        }
-
-        @Test
-        fun `getTestLongGrid correct`() {
-            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
-            val expectedSize = 5
-            val expectedFirst = longArrayOf(1, 2, 3, 4, 5)
-            val actual = getTestLongGrid(path, expectedSize, ", ")
-            assertEquals(expectedSize, actual.size)
-            assertContentEquals(expectedFirst, actual.first())
-            assertIs<LongArray>(actual.first())
-        }
-    }
-
-    @Nested
     @DisplayName("getTestResource test suite")
     inner class GetTestResource {
         @Test
@@ -198,6 +174,39 @@ internal class ReusableTest {
             assertEquals(expectedSize, resource.size)
             assertEquals(expectedLine, resource.first())
             assertIs<List<String>>(resource.first())
+        }
+
+        @Test
+        fun `getTestResource throws exception if file not found`() {
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/notReal.txt"
+
+            assertThrows<FileNotFoundException> { getTestResource(path) }
+        }
+    }
+
+    @Nested
+    @DisplayName("getTestXGrid test suite")
+    inner class GetTestXGrid {
+        @Test
+        fun `getTestIntGrid correct`() {
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
+            val expectedSize = 5
+            val expectedFirst = intArrayOf(1, 2, 3, 4, 5)
+            val actual = getTestIntGrid(path, expectedSize, ", ")
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedFirst, actual.first())
+            assertIs<IntArray>(actual.first())
+        }
+
+        @Test
+        fun `getTestLongGrid correct`() {
+            val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
+            val expectedSize = 5
+            val expectedFirst = longArrayOf(1, 2, 3, 4, 5)
+            val actual = getTestLongGrid(path, expectedSize, ", ")
+            assertEquals(expectedSize, actual.size)
+            assertContentEquals(expectedFirst, actual.first())
+            assertIs<LongArray>(actual.first())
         }
     }
 }

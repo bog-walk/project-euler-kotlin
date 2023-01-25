@@ -167,7 +167,7 @@ fun getTestIntGrid(
     filePath: String,
     gridSize: Int,
     lineSplit: String = " "
-): Array<IntArray>{
+): Array<IntArray> {
     val input = getTestResource(filePath, lineSplit = lineSplit, transformation = String::toInt)
     return Array(gridSize) { input[it].toIntArray() }
 }
@@ -196,14 +196,11 @@ fun getTestResource(
     filePath: String,
     lineTrim: CharArray = charArrayOf(' ', '\n')
 ): List<String> {
-    //val resource = mutableListOf<String>()
     return File(filePath).useLines { lines ->
         lines.map { line ->
-            //resource.add(line.trim(*lineTrim))
             line.trim(*lineTrim)
         }.toList()
     }
-    //return resource
 }
 
 /**
@@ -220,15 +217,9 @@ fun <R> getTestResource(
     lineSplit: String = " ",
     transformation: (String) -> R
 ): List<List<R>> {
-    //val resource = mutableListOf<List<R>>()
     return File(filePath).useLines { lines ->
-        //lines.forEach { line ->
-            //val transformed = line.trim(*lineTrim).split(lineSplit).map(transformation)
-            //resource.add(transformed)
-        //}
         lines.map { line ->
             line.trim(*lineTrim).split(lineSplit).map(transformation)
         }.toList()
     }
-    //return resource
 }
