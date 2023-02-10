@@ -18,7 +18,7 @@ internal class AmicableNumbersTest {
         // third pair (2620, 2924)
         "5000, 8442",
         // upper constraints
-        "10_000, 31626", "40000, 115_818", "100_000, 852_810"
+        "10_000, 31626", "40_000, 115_818", "100_000, 852_810"
     )
     fun `sumAmicablePairs correct`(n: Int, expected: Int) {
         assertEquals(expected, tool.sumAmicablePairs(n))

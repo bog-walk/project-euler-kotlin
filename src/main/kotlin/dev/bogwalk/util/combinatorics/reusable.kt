@@ -21,7 +21,7 @@ fun binomialCoefficient(n: Int, k: Int): BigInteger {
  * SPEED (EQUAL) 23.8ms for N = 9, r = 6
  * SPEED (WORSE) 485.19ms for N = 19, r = 15
  */
-internal fun  <T: Any> getCombinations(elements: Iterable<T>, r: Int): List<List<T>> {
+private fun  <T: Any> getCombinations(elements: Iterable<T>, r: Int): List<List<T>> {
     if (r == 1) return elements.map { listOf(it) }
     val input = elements.toList()
     if (r > input.size || r == 0) return emptyList()
@@ -106,7 +106,7 @@ fun <T: Any> combinationsWithReplacement(elements: Iterable<T>, r: Int) = sequen
  * Heap's Algorithm to generate all [size]! permutations of a list of [size] characters with
  * minimal movement, so returned list is not necessarily sorted. This is unlike the solution
  * below that returns an already sorted order of permutations & is flexible enough to accept a
- * size smaller than the size of elements available, as well elements other than CharSequence.
+ * size smaller than the size of elements available, as well as elements other than CharSequence.
  *
  * Initially k = [size], then recursively k decrements and each step generates k! permutations that
  * end with the same [size] - k elements. Each step modifies the initial k - 1 elements with a
@@ -116,7 +116,7 @@ fun <T: Any> combinationsWithReplacement(elements: Iterable<T>, r: Int) = sequen
  *
  * @throws OutOfMemoryError if [size] > 10, consider using an iterative approach instead.
  */
-internal fun getPermutations(
+private fun getPermutations(
     chars: MutableList<Char>,
     size: Int,
     perms: MutableList<String> = mutableListOf()
@@ -199,8 +199,8 @@ fun <T: Any> permutations(elements: Iterable<T>, r: Int = -1) = sequence {
  * joined String representations, may lead to errors; e.g. 1_000_000_000_000 has the same String
  * ID ("121") as 1012.
  *
- * This solution will only be used in future solutions if arguments are expected to be greater
- * than 15-digits long or performance is not a concern.
+ * This solution would only be used if arguments were expected to consistently be greater than
+ * 15-digits long or performance was not a concern.
  *
  * SPEED (WORSE) 30.59ms for N = Long.MAX_VALUE
  *

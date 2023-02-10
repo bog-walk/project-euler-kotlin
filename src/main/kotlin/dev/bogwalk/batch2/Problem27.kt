@@ -1,7 +1,7 @@
 package dev.bogwalk.batch2
 
 import dev.bogwalk.util.maths.isPrime
-import dev.bogwalk.util.maths.primeNumbersOG
+import dev.bogwalk.util.maths.primeNumbers
 
 /**
  * Problem 27: Quadratic Primes
@@ -39,7 +39,7 @@ class QuadraticPrimes {
      */
     fun quadPrimeCoeff(maxN: Int): Triple<Int, Int, Int> {
         var bestQuadratic = Triple(0, 0, 0)
-        val primes = primeNumbersOG(maxN)
+        val primes = primeNumbers(maxN)
         val lowestA = if (maxN % 2 == 0) -maxN - 1 else -maxN - 2
         // a will only be even if b == 2, so loop through odd values only & adjust later
         for (a in lowestA until maxN step 2) {

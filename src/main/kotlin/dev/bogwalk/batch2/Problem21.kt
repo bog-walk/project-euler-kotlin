@@ -1,6 +1,6 @@
 package dev.bogwalk.batch2
 
-import dev.bogwalk.util.maths.sumProperDivisorsOG
+import dev.bogwalk.util.maths.sumProperDivisors
 
 /**
  * Problem 21: Amicable Numbers
@@ -31,9 +31,9 @@ class AmicableNumbers {
     fun sumAmicablePairs(n: Int): Int {
         val amicableNums = mutableListOf<Int>()
         for (x in 2 until n) {
-            val y = sumProperDivisorsOG(x)
+            val y = sumProperDivisors(x)
             // the partner of a newly explored amicable number must be larger
-            if (y > x && sumProperDivisorsOG(y) == x) {
+            if (y > x && sumProperDivisors(y) == x) {
                 amicableNums.add(x)
                 // account for possibility that only 1 of the amicable pair may be under N
                 if (y < n) {

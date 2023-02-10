@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import dev.bogwalk.util.maths.primeNumbersOG
+import dev.bogwalk.util.maths.primeNumbers
 import dev.bogwalk.util.tests.Benchmark
 import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
@@ -48,7 +48,7 @@ internal class SummationOfPrimesTest {
         "300_000, 3_709_507_114", "1_000_000, 37_550_402_023"
     )
     fun `sumOfPrimes correct`(n: Int, expected: Long) {
-        assertEquals(expected, primeNumbersOG(n).sumOf { it.toLong() })
+        assertEquals(expected, primeNumbers(n).sumOf { it.toLong() })
         assertEquals(expected, allPrimes[n])
         assertEquals(expected, allPrimesOpt[n])
     }

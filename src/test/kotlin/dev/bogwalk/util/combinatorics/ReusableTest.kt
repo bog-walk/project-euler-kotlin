@@ -9,12 +9,11 @@ import dev.bogwalk.util.tests.Benchmark
 import dev.bogwalk.util.tests.compareSpeed
 import dev.bogwalk.util.tests.getSpeed
 import java.math.BigInteger
-import kotlin.system.measureNanoTime
 import kotlin.test.*
 
 internal class ReusableTest {
     @Nested
-    @DisplayName("binomial coefficient test suite")
+    @DisplayName("binomial coefficient() test suite")
     inner class BinomialCoefficient {
         @ParameterizedTest(name="{0}_C_{1} = {2}")
         @CsvSource(
@@ -27,61 +26,52 @@ internal class ReusableTest {
             // larger values
             "30, 18, 86493225", "100, 40, 13746234145802811501267369720"
         )
-        fun `binomial coefficient correct with valid input`(n: Int, k: Int, expected: String) {
+        fun `correct with valid input`(n: Int, k: Int, expected: String) {
             assertEquals(BigInteger(expected), binomialCoefficient(n, k))
         }
 
         @Test
-        fun `binomial coefficient throws exception with invalid input`() {
+        fun `throws exception with invalid input`() {
             assertThrows<IllegalArgumentException> { binomialCoefficient(5, -1) }
             assertThrows<IllegalArgumentException> { binomialCoefficient(-10, 2) }
         }
     }
 
     @Nested
-    @DisplayName("combinations test suite")
+    @DisplayName("combinations() test suite")
     inner class Combinations {
         @Test
-        fun `combinations returns empty list if r greater than n or r equal 0`() {
+        fun `returns empty list if r greater than n or r equal 0`() {
             val input = "ABCD".toList()
             var r = 5
             assertTrue { combinations(input, r).toList().isEmpty() }
-            assertTrue { getCombinations(input, r).toList().isEmpty() }
+
             r = 0
             assertTrue { combinations(input, r).toList().isEmpty() }
-            assertTrue { getCombinations(input, r).toList().isEmpty() }
         }
 
         @Test
-        fun `combinations returns 1 combo if n equal 1`() {
+        fun `returns 1 combo if n equal 1`() {
             val input = "A".toList()
             val r = 1
             val expected = listOf("A")
             assertContentEquals(
                 expected, combinations(input, r).map { it.joinToString("") }.toList()
             )
-            assertContentEquals(
-                expected,
-                getCombinations(input, r).map { it.joinToString("") }.toList()
-            )
         }
 
         @Test
-        fun `combinations correct for small-sized string`() {
+        fun `correct for small-sized string`() {
             val input = "ABCD".toList()
             val r = 2
             val expected = listOf("AB", "AC", "AD", "BC", "BD", "CD")
             assertContentEquals(
                 expected, combinations(input, r).map { it.joinToString("") }.toList()
             )
-            assertContentEquals(
-                expected,
-                getCombinations(input, r).map { it.joinToString("") }.toList()
-            )
         }
 
         @Test
-        fun `combinations correct for small-sized range`() {
+        fun `correct for small-sized range`() {
             val input = 0..3
             val r = 3
             val expected = listOf(12, 13, 23, 123)
@@ -89,37 +79,14 @@ internal class ReusableTest {
                 expected,
                 combinations(input, r).map { it.joinToString("").toInt() }.toList()
             )
-            assertContentEquals(
-                expected,
-                getCombinations(input, r).map { it.joinToString("").toInt() }.toList()
-            )
-        }
-
-        @Test
-        fun `speed comparison for large-sized range`() {
-            val input = 1..19
-            val r = 15
-            val expectedSize = 3876
-            val speeds = mutableListOf<Pair<String, Benchmark>>()
-            getSpeed(::getCombinations, input, r).run {
-                speeds.add("Old" to second)
-                assertEquals(expectedSize, first.size)
-            }
-            val newActual: List<List<Int>>
-            val newTime = measureNanoTime {
-                newActual = combinations(input, r).toList()
-            }
-            compareSpeed("New" to newTime)
-            assertEquals(expectedSize, newActual.size)
-            compareSpeed(speeds)
         }
     }
 
     @Nested
-    @DisplayName("combinations with replacement test suite")
+    @DisplayName("combinationsWithReplacement() test suite")
     inner class CombinationsWithReplacement {
         @Test
-        fun `combinations returns empty list if either n or r equal 0`() {
+        fun `returns empty list if either n or r equal 0`() {
             var input = "ABCD".toList()
             var r = 0
             assertTrue { combinationsWithReplacement(input, r).toList().isEmpty() }
@@ -129,7 +96,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `combinationsWR correct when r greater than n`() {
+        fun `correct when r greater than n`() {
             val input = "AB".toList()
             val r = 4
             val expected = listOf("AAAA", "AAAB", "AABB", "ABBB", "BBBB")
@@ -140,7 +107,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `combinations returns 1 combo if n equal 1`() {
+        fun `returns 1 combo if n equal 1`() {
             val input = "A".toList()
             val r = 1
             val expected = listOf("A")
@@ -151,7 +118,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `combinations correct for small-sized string`() {
+        fun `correct for small-sized string`() {
             val input = "ABCD".toList()
             val r = 2
             val expected = listOf("AA", "AB", "AC", "AD", "BB", "BC", "BD", "CC", "CD", "DD")
@@ -162,7 +129,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `combinations correct for small-sized range`() {
+        fun `correct for small-sized range`() {
             val input = 0..3
             val r = 3
             val expectedSize = 20
@@ -170,7 +137,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `combinations correct for large-sized range`() {
+        fun `correct for large-sized range`() {
             val input = 1..9
             val r = 6
             val expectedSize = 3003
@@ -179,10 +146,10 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("permutations test suite")
+    @DisplayName("permutations() test suite")
     inner class Permutations {
         @Test
-        fun `permutations returns empty list if r greater than n or r equal 0`() {
+        fun `returns empty list if r greater than n or r equal 0`() {
             val input = "ABC".toList()
             var r = 5
             assertTrue { permutations(input.toMutableList(), r).toList().isEmpty() }
@@ -191,16 +158,12 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `both permutations correct with small-sized list & n equal r`() {
+        fun `correct with small-sized list & n equal r`() {
             val chars = listOf(listOf('0'), listOf('0', '1'), listOf('0', '1', '2'))
             val expected = listOf(
                 listOf("0"), listOf("01", "10"), listOf("012", "021", "102", "120", "201", "210")
             )
             for ((i, input) in chars.withIndex()) {
-                assertContentEquals(
-                    expected[i],
-                    getPermutations(input.toMutableList(), i + 1).sorted()
-                )
                 assertContentEquals(
                     expected[i],
                     permutations(input).map { it.joinToString("") }.toList()
@@ -209,18 +172,16 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `both permutations correct with large-sized list & n equal r`() {
+        fun `correct with large-sized list & n equal r`() {
             val chars = ('0'..'9').toMutableList()
             val factorials = listOf(24, 120, 720, 5040, 40320, 362_880)
             for (n in 4..9) {
-                val perms = getPermutations(chars.subList(0, n), n)
-                assertEquals(factorials[n - 4], perms.size)
                 assertEquals(factorials[n - 4], permutations(chars.subList(0, n)).toList().size)
             }
         }
 
         @Test
-        fun `permutations correct & already sorted for large-sized range`() {
+        fun `correct & already sorted for large-sized range`() {
             val input = 1..9
             val r = 6
             val expectedSize = 60480
@@ -237,7 +198,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutations correct for input with greater than 10 elements`() {
+        fun `correct for input with greater than 10 elements`() {
             val input = 'A'..'P'
             val r = 5
             val expectedSize = 524_160
@@ -249,30 +210,13 @@ internal class ReusableTest {
                 perms.takeLast(5).map { it.joinToString("") }
             )
         }
-
-        @Test
-        fun `speed comparison when r equal n`() {
-            val input = ('0'..'9').toMutableList()
-            val r = input.size
-            val expectedSize = 3_628_800
-            val speeds = mutableListOf<Pair<String, Benchmark>>()
-            getSpeed(::getPermutations, input, r).run {
-                speeds.add("Heap algorithm" to second)
-                assertEquals(expectedSize, first.size)
-            }
-            getSpeed(::permutations, input, r).run {
-                speeds.add("Python algorithm" to second)
-                assertEquals(expectedSize, first.toList().size)
-            }
-            compareSpeed(speeds)
-        }
     }
 
     @Nested
-    @DisplayName("permutationID test suite")
+    @DisplayName("permutationID() test suite")
     inner class PermutationID {
         @Test
-        fun `permutationID correct when less than 10 duplicates of a digit exist`() {
+        fun `both correct when less than 10 duplicates of a digit exist`() {
             val nums = listOf<Long>(
                 1487, 2214, 999, 15, 148_748_178_147, 1_000_000_000
             )
@@ -291,7 +235,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutationID correct when between 10 and 15 duplicates of a digit exist`() {
+        fun `both correct when between 10 and 15 duplicates of a digit exist`() {
             val nums = listOf(
                 1_000_000_000_000, 31_111_111_111, 999_999_999_999
             )
@@ -307,7 +251,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutationIDOG correct when 16 or more duplicates of a digit exist`() {
+        fun `permutationIDOG() correct when 16 or more duplicates of a digit exist`() {
             val nums = listOf(
                 10_000_000_000_000_000, 222_222_222_222_222_222
             )
@@ -320,7 +264,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutationID static for permutations of the same number`() {
+        fun `both static for permutations of the same number`() {
             val nums = listOf<Long>(1487, 4871, 8714, 7814, 1748)
             val expectedOG = intArrayOf(0, 1, 0, 0, 1, 0, 0, 1, 1)
             val expected = "4563468304"
@@ -331,7 +275,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutationIDOG fails if compared using certain String joins`() {
+        fun `permutationIDOG() fails if compared using certain String joins`() {
             val a = 1_000_000_000_000
             val b = 1012L
 
@@ -342,7 +286,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `permutationID bitwise fails when 16 duplicates of a digit exist`() {
+        fun `permutationID() bitwise fails when 16 duplicates of a digit exist`() {
             val a = 2_222_222_222_222_222
             val b = 3L
 
@@ -371,15 +315,16 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("product test suite")
+    @DisplayName("product() test suite")
     inner class Product {
         @Test
-        fun `product returns empty list if empty iterables provided`() {
+        fun `returns empty list if empty iterables provided`() {
             assertTrue { product(emptyList(), emptyList()).toList().isEmpty() }
+            assertTrue { product("AB".toList(), emptyList()).toList().isEmpty() }
         }
 
         @Test
-        fun `product returns 1 product if single iterable with single element provided`() {
+        fun `returns 1 product if single iterable with single element provided`() {
             val input = "A".toList()
             val expected = listOf("A")
             assertContentEquals(
@@ -388,7 +333,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for small-sized single iterable`() {
+        fun `correct for small-sized single iterable`() {
             val input = "ABC".toList()
             val expected = listOf("A", "B","C")
             assertContentEquals(
@@ -397,7 +342,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for 2 small-sized iterables of different lengths`() {
+        fun `correct for 2 small-sized iterables of different lengths`() {
             val input1 = "ABCD".toList()
             val input2 = "xy".toList()
             val expected = listOf("Ax", "Ay", "Bx", "By", "Cx", "Cy", "Dx", "Dy")
@@ -408,7 +353,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for multiple small-sized iterables`() {
+        fun `correct for multiple small-sized iterables`() {
             val inputs = arrayOf(0..2, 1..3, 5..8)
             val expectedSize = 36
             val expectedHead = listOf(15, 16, 17,  18, 25, 26)
@@ -420,7 +365,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for 2 large-sized iterables`() {
+        fun `correct for 2 large-sized iterables`() {
             val inputs = arrayOf('A'..'P', '1'..'9')
             val expectedSize = 144
             val expectedHead = listOf(
@@ -436,7 +381,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for 1 iterable when repeat greater than 1`() {
+        fun `correct for 1 iterable when repeat greater than 1`() {
             val input = 0..2
             val repeat = 2
             val expected = listOf(
@@ -447,7 +392,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `product correct for 2 iterables when repeat greater than 1`() {
+        fun `correct for 2 iterables when repeat greater than 1`() {
             val input1 = "ab".toList()
             val input2 = "cd".toList()
             val repeat = 3

@@ -9,10 +9,10 @@ import kotlin.test.*
 
 internal class ReusableTest {
     @Nested
-    @DisplayName("compareSpeed test suite")
+    @DisplayName("compareSpeed() test suite")
     inner class CompareSpeed {
         @Test
-        fun `compareSpeed correct with zero argument functions`() {
+        fun `correct with zero argument functions`() {
             val solutions = mapOf(
                 "SleepA" to ::sleepA, "SleepB" to ::sleepB,
                 "SleepC" to ::sleepC, "SleepD" to ::sleepD
@@ -28,7 +28,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed normal zero args`() {
+        fun `correct with normal zero args`() {
             val solutions = mapOf(
                 "SleepA" to ::sleepA, "SleepB" to ::sleepB, "SleepC" to ::sleepC, "SleepD" to ::sleepD
             )
@@ -43,7 +43,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed correct with single argument functions`() {
+        fun `correct with single argument functions`() {
             val n = 3
             val expected = 900
             val solutions = mapOf(
@@ -60,7 +60,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed normal one arg`() {
+        fun `correct with normal one arg`() {
             val n = 3
             val expected = 900
             val solutions = mapOf(
@@ -77,7 +77,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed correct with variable argument functions`() {
+        fun `correct with variable argument functions`() {
             val n = 3
             val expected = 900
             val results = mutableListOf<Int>()
@@ -99,7 +99,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed normal multiple args`() {
+        fun `correct with normal multiple args`() {
             val n = 3
             val expected = 900
             val results = mutableListOf<Int>()
@@ -119,7 +119,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed correct with warmup and multiple repetitions`() {
+        fun `correct with warmup and multiple repetitions`() {
             val solutions = mapOf(
                 "SleepB" to ::sleepB, "SleepC" to ::sleepC, "SleepD" to ::sleepD
             )
@@ -134,7 +134,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `compareSpeed normal multiple repetitions`() {
+        fun `correct with normal multiple repetitions`() {
             val solutions = mapOf(
                 "SleepB" to ::sleepB, "SleepC" to ::sleepC, "SleepD" to ::sleepD
             )
@@ -152,10 +152,10 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("getTestResource test suite")
+    @DisplayName("getTestResource() test suite")
     inner class GetTestResource {
         @Test
-        fun `getTestResource correct for default retrieval`() {
+        fun `correct for default retrieval`() {
             val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedLine = "1, 2, 3, 4, 5"
@@ -166,7 +166,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `getTestResource correct for transformed retrieval`() {
+        fun `correct for transformed retrieval`() {
             val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedLine = listOf("1A", "2A", "3A", "4A", "5A")
@@ -177,7 +177,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `getTestResource throws exception if file not found`() {
+        fun `throws exception if file not found`() {
             val path = "src/test/kotlin/dev/bogwalk/util/tests/notReal.txt"
 
             assertThrows<FileNotFoundException> { getTestResource(path) }
@@ -185,10 +185,10 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("getTestXGrid test suite")
+    @DisplayName("getTestGrid() test suite")
     inner class GetTestXGrid {
         @Test
-        fun `getTestIntGrid correct`() {
+        fun `getTestIntGrid() correct`() {
             val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedFirst = intArrayOf(1, 2, 3, 4, 5)
@@ -199,7 +199,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `getTestLongGrid correct`() {
+        fun `getTestLongGrid() correct`() {
             val path = "src/test/kotlin/dev/bogwalk/util/tests/fakeResource.txt"
             val expectedSize = 5
             val expectedFirst = longArrayOf(1, 2, 3, 4, 5)

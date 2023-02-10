@@ -44,7 +44,7 @@ internal class LargestExponentialTest {
             "894483 504959", "619415 518874"
         )
         val k = 7
-        val expected = 895447 to 504922
+        val expected = 895_447 to 504_922
         assertEquals(expected, tool.kSmallestExponential(inputs, k))
         assertEquals(expected, tool.kSmallestExponentialAlt(inputs, k))
     }
@@ -56,7 +56,7 @@ internal class LargestExponentialTest {
         val solutions = mapOf(
             "Original" to tool::kSmallestExponential, "Alt" to tool::kSmallestExponentialAlt
         )
-        val expected = 895447 to 504922
+        val expected = 895_447 to 504_922
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
             getSpeed(solution, inputs, k).run {
@@ -69,7 +69,7 @@ internal class LargestExponentialTest {
 
     @Test
     fun `PE problem correct`() {
-        val expected = Triple(895447, 504922, 709)
+        val expected = Triple(895_447, 504_922, 709)
         val actual = tool.largestExponential(resource)
         assertEquals(expected, actual)
     }

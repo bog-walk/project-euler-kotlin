@@ -22,7 +22,7 @@ internal class SuDokuTest {
     private lateinit var initialState: List<String>
 
     @BeforeAll
-    fun setup() {
+    fun setUp() {
         assertDoesNotThrow {
             puzzle = SuDokuGame(input)
             initialState = puzzle.getGrid()
@@ -39,8 +39,8 @@ internal class SuDokuTest {
     @Test
     fun `puzzle sets up correctly`() {
 
-        assertEquals("207013068", initialState.first())
-        assertEquals("700300006", initialState.last())
+        assertEquals(input.first(), initialState.first())
+        assertEquals(input.last(), initialState.last())
     }
 
     @Test

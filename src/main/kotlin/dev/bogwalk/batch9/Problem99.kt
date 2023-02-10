@@ -37,7 +37,7 @@ class LargestExponential {
          *
          *      a^(x * y) == (a^x)^y
          *
-         * e.g. 2^350 and 5^150 == (2^7)^50 and (5^3)^50; 2^7 (128) > 5^3 (125), so 2^350 has teh
+         * e.g. 2^350 and 5^150 == (2^7)^50 and (5^3)^50; 2^7 (128) > 5^3 (125), so 2^350 has the
          * greater value. This only works if the gcd is assured to be greater than 1.
          */
         override operator fun compareTo(other: Exponential): Int {

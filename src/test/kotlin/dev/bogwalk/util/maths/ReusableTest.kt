@@ -16,7 +16,7 @@ internal class ReusableTest {
         // normal values
         "100, 5050", "2234, 2_496_495"
     )
-    fun `gaussian sum correct`(n: Int, expected: Long) {
+    fun `gaussSum() correct`(n: Int, expected: Long) {
         assertEquals(expected, n.gaussSum())
     }
 
@@ -31,12 +31,12 @@ internal class ReusableTest {
         // negative values
         "-100, 10, 10", "-60, -366, 6"
     )
-    fun `greatest common divisor correct`(x: Long, y: Long, expected: Long) {
+    fun `gcd() correct`(x: Long, y: Long, expected: Long) {
         assertEquals(expected, gcd(x, y))
     }
 
     @Nested
-    @DisplayName("factorial test suite")
+    @DisplayName("factorial() test suite")
     inner class Factorial {
         @ParameterizedTest(name="{0}! = {1}")
         @CsvSource(
@@ -45,21 +45,21 @@ internal class ReusableTest {
             // normal values
             "10, 3_628_800"
         )
-        fun `factorial correct with valid input`(n: Int, expected: Long) {
+        fun `correct with valid input`(n: Int, expected: Long) {
             assertEquals(expected.toBigInteger(), n.factorial())
         }
 
         @Test
-        fun `factorial throws exception with invalid input`() {
+        fun `throws exception with invalid input`() {
             assertThrows<IllegalArgumentException> { (-5).factorial() }
         }
     }
 
     @Nested
-    @DisplayName("isCoPrime test suite")
+    @DisplayName("isCoPrime() test suite")
     inner class IsCoPrime {
         @Test
-        fun `isCoPrime returns true for coprime pairs`() {
+        fun `returns true for coprime pairs`() {
             val pairs = listOf(
                 1 to 2, 2 to 3, 3 to 5, 4 to 7, 4 to 9, 5 to 7, 5 to 9, 11 to 13,
                 14 to 15, 17 to 19, 29 to 31, 3 to 67, 99 to 100, 34 to 79, 54 to 67
@@ -70,7 +70,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `isCoPrime returns false for non-coprime pairs`() {
+        fun `returns false for non-coprime pairs`() {
             val pairs = listOf(
                 3 to 12, 4 to 18, 5 to 5, 6 to 10, 24 to 57, 13 to 117, 99 to 102
             )
@@ -81,10 +81,10 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("isHexagonal test suite")
+    @DisplayName("isHexagonal() test suite")
     inner class IsHexagonal {
         @Test
-        fun `isHexagonal correct with hexagonal numbers`() {
+        fun `correct with hexagonal numbers`() {
             val nums = listOf<Long>(1, 6, 15, 28, 45, 325, 703, 1326)
             val expected = listOf(1, 2, 3, 4, 5, 13, 19, 26)
             nums.forEachIndexed { i, n ->
@@ -93,7 +93,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `isHexagonal returns null with non-hexagonal numbers`() {
+        fun `returns null with non-hexagonal numbers`() {
             val nums = listOf<Long>(2, 23, 100, 313, 691, 1111)
             nums.forEach { n ->
                 assertNull(n.isHexagonalNumber())
@@ -102,10 +102,10 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("isPentagonal test suite")
+    @DisplayName("isPentagonal() test suite")
     inner class IsPentagonal {
         @Test
-        fun `isPentagonal correct with pentagonal numbers`() {
+        fun `correct with pentagonal numbers`() {
             val nums = listOf<Long>(1, 5, 12, 22, 35, 247, 532, 1001)
             val expected = listOf(1, 2, 3, 4, 5, 13, 19, 26)
             nums.forEachIndexed { i, n ->
@@ -114,7 +114,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `isPentagonal returns null with non-pentagonal numbers`() {
+        fun `returns null with non-pentagonal numbers`() {
             val nums = listOf<Long>(2, 23, 100, 313, 691, 1111)
             nums.forEach { n ->
                 assertNull(n.isPentagonalNumber())
@@ -123,70 +123,64 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("isPrime test suite")
+    @DisplayName("isPrime() test suite")
     inner class IsPrime {
         @Test
-        fun `isPrime both return true with small primes`() {
+        fun `both return true with small primes`() {
             val nums = listOf(2, 5, 11, 17, 29, 7919, 514_229, 9_369_319)
             nums.forEach { n ->
                 assertTrue(n.isPrime())
                 assertTrue(n.toLong().isPrimeMRBI())
-                assertTrue(n.toLong().isPrimeMR())
             }
         }
 
         @Test
-        fun `isPrime both return false with small composites`() {
+        fun `both return false with small composites`() {
             val nums = listOf(1, 4, 9, 14, 221, 9523, 22041, 997_653, 999_715_709)
             nums.forEach { n ->
                 assertFalse(n.isPrime())
                 assertFalse(n.toLong().isPrimeMRBI())
-                assertFalse(n.toLong().isPrimeMR())
             }
         }
 
         @Test
-        fun `isPrime both return true with big primes`() {
+        fun `isPrimeMRBI() returns true with big primes`() {
             val nums = listOf(2_147_483_647, 99_987_684_473, 999_973_156_643)
             nums.forEach { n ->
                 assertTrue(n.isPrimeMRBI())
-                assertTrue(n.isPrimeMR())
             }
         }
 
         @Test
-        fun `isPrime both return false with big composites`() {
+        fun `isPrimeMRBI() returns false with big composites`() {
             val nums = listOf(99_987_684_471)
             nums.forEach { n ->
                 assertFalse(n.isPrimeMRBI())
-                assertFalse(n.isPrimeMR())
             }
         }
 
         @Test
-        fun `isPrimeMR returns true with huge primes`() {
+        fun `isPrimeMRBI() returns true with huge primes`() {
             val nums = listOf(888_888_877_777_777, 999_998_727_899_999)
             nums.forEach { n ->
                 assertTrue(n.isPrimeMRBI())
-                assertTrue(n.isPrimeMR())
             }
         }
 
         @Test
-        fun `isPrimeMR returns false with huge composites`() {
+        fun `isPrimeMRBI() returns false with huge composites`() {
             val nums = listOf(3_889_108_085_625, 809_709_509_409_105)
             nums.forEach { n ->
                 assertFalse(n.isPrimeMRBI())
-                assertFalse(n.isPrimeMR())
             }
         }
     }
 
     @Nested
-    @DisplayName("isTriangular test suite")
+    @DisplayName("isTriangular() test suite")
     inner class IsTriangular {
         @Test
-        fun `isTriangular correct with triangular numbers`() {
+        fun `correct with triangular numbers`() {
             val nums = listOf<Long>(1, 3, 6, 10, 190, 325, 496, 595)
             val expected = listOf(1, 2, 3, 4, 19, 25, 31, 34)
             nums.forEachIndexed { i, n ->
@@ -195,7 +189,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `isTriangular returns null with non-triangular numbers`() {
+        fun `returns null with non-triangular numbers`() {
             val nums = listOf<Long>(2, 8, 46, 121, 173, 299, 403)
             nums.forEach { n ->
                 assertNull(n.isTriangularNumber())
@@ -204,7 +198,7 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("lcm test suite")
+    @DisplayName("lcm() test suite")
     inner class LCM {
         @ParameterizedTest(name="lcm({0}, {1}) = {2}")
         @CsvSource(
@@ -215,12 +209,12 @@ internal class ReusableTest {
             // upper constraints
             "101, 63, 6363"
         )
-        fun `least common multiple correct with 2 arguments`(x: Long, y: Long, expected: Long) {
+        fun `correct with 2 arguments`(x: Long, y: Long, expected: Long) {
             assertEquals(expected, lcm(x, y))
         }
 
         @Test
-        fun `least common multiple correct with multiple arguments`() {
+        fun `correct with multiple arguments`() {
             val arguments = listOf(
                 longArrayOf(2, 6, 12), longArrayOf(31, 5, 7, 14), longArrayOf(8, 11, 3, 5, 2, 7, 6),
                 longArrayOf(82, 34, 71, 24, 99, 37, 62, 11, 40)
@@ -232,14 +226,14 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `least common multiple throws exception with invalid input`() {
+        fun `throws exception with invalid input`() {
             assertThrows<IllegalArgumentException> { lcm(0, 2) }
             assertThrows<IllegalArgumentException> { lcm(2, 0) }
             assertThrows<IllegalArgumentException> { lcm(0, 0) }
         }
 
         @Test
-        fun `least common multiple correct for 2 small BigIntegers`() {
+        fun `correct for 2 small BigIntegers`() {
             val n1 = BigInteger.ONE
             val n2 = BigInteger.TEN
             val expected = BigInteger.TEN
@@ -247,7 +241,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `least common multiple correct for 2 large BigIntegers`() {
+        fun `correct for 2 large BigIntegers`() {
             val n1 = "333333333333333333333".toBigInteger()
             val n2 = "666666666666666666666".toBigInteger()
             val expected = "666666666666666666666".toBigInteger()
@@ -256,7 +250,7 @@ internal class ReusableTest {
     }
 
     @Nested
-    @DisplayName("log10 test suite")
+    @DisplayName("log10() test suite")
     inner class BigIntegerLog10 {
         @ParameterizedTest(name = "BI = {0}")
         @CsvSource(
@@ -272,13 +266,13 @@ internal class ReusableTest {
             "10000000000000000000000000000000000000, 37.0",
             "16016016098798700000001872635495879999123456737465, 49.204554496674696"
         )
-        fun `log10 correct for valid BigIntegers`(input: String, expected: Double) {
+        fun `correct for valid BigIntegers`(input: String, expected: Double) {
             val num = input.toBigInteger()
             assertEquals(expected, num.log10(), absoluteTolerance = 1e14)
         }
 
         @Test
-        fun `log10 throws exception with invalid BigIntegers`() {
+        fun `throws exception with invalid BigIntegers`() {
             assertThrows<IllegalArgumentException> { BigInteger.ZERO.log10() }
             assertThrows<IllegalArgumentException> { BigInteger.ONE.negate().log10() }
         }
@@ -290,25 +284,21 @@ internal class ReusableTest {
         "1, 0, 0", "0, 0, 1", "1, 1, 0", "1, 1, 10", "1, 2, 0", "4, 2, 2", "8, 2, 9",
         "47, 2, 31", "7, 4, 5", "43, 7, 10", "1, 10, 100", "7, 20, 10"
     )
-    fun `powerDigitSum correct`(expected: Int, base: Int, exp: Int) {
+    fun `powerDigitSum() correct`(expected: Int, base: Int, exp: Int) {
         assertEquals(expected, powerDigitSum(base, exp))
     }
 
     @Nested
-    @DisplayName("primeFactors test suite")
+    @DisplayName("primeFactors() test suite")
     inner class PrimeFactors {
         @Test
-        fun `primeFactors correct`() {
+        fun `correct for multiple values`() {
             val nums = listOf<Long>(2, 3, 4, 12, 100, 999)
             val expected = listOf<List<Long>>(
                 listOf(2), listOf(3), listOf(2, 2), listOf(2, 2, 3),
                 listOf(2, 2, 5, 5), listOf(3, 3, 3, 37)
             )
             nums.forEachIndexed { i, n ->
-                val primeFactorsOG = primeFactorsOG(n).flatMap { (prime, exp) ->
-                    List(exp) { prime }
-                }
-                assertEquals(expected[i], primeFactorsOG)
                 val primeFactors = primeFactors(n).flatMap { (prime, exp) ->
                     List(exp) { prime }
                 }
@@ -317,51 +307,44 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `primeFactors throws exception with invalid input`() {
-            assertThrows<IllegalArgumentException> { primeFactorsOG(1L) }
+        fun `throws exception with invalid input`() {
             assertThrows<IllegalArgumentException> { primeFactors(1L) }
-            assertThrows<IllegalArgumentException> { primeFactorsOG(-2L) }
             assertThrows<IllegalArgumentException> { primeFactors(-2L) }
         }
     }
 
     @Nested
-    @DisplayName("primeNumbers test suite")
+    @DisplayName("primeNumbers() test suite")
     inner class PrimeNumbers {
         @Test
-        fun `primeNumbers returns emptyList when N == 1`() {
+        fun `returns emptyList when N == 1`() {
             val n = 1
-            assertTrue { primeNumbersOG(n).isEmpty() }
             assertTrue { primeNumbers(n).isEmpty() }
         }
 
         @Test
-        fun `primeNumbers correct with small N`() {
+        fun `correct with small N`() {
             val n = 30
             val expected = listOf(2, 3, 5, 7, 11, 13, 17, 19, 23, 29)
-            assertEquals(expected, primeNumbersOG(n))
             assertEquals(expected, primeNumbers(n))
         }
 
         @Test
-        fun `primeNumbers correct with large N`() {
+        fun `correct with large N`() {
             val n = 10_000
             val expectedSize = 1229
             val expectedTail = listOf(9887, 9901, 9907, 9923, 9929, 9931, 9941, 9949, 9967, 9973)
-            val actualOG = primeNumbersOG(n)
             val actualNew = primeNumbers(n)
-            assertEquals(expectedSize, actualOG.size)
             assertEquals(expectedSize, actualNew.size)
-            assertEquals(expectedTail, actualOG.takeLast(10))
             assertEquals(expectedTail, actualNew.takeLast(10))
         }
     }
 
     @Nested
-    @DisplayName("pythagoreanTriplet test suite")
+    @DisplayName("pythagoreanTriplet() test suite")
     inner class PythagoreanTriplet {
         @Test
-        fun `pythagoreanTriplet correct with valid input`() {
+        fun `correct with valid input`() {
             val d = 1
             val arguments = listOf(2 to 1, 3 to 2, 4 to 1, 4 to 3)
             val expected = listOf(
@@ -374,7 +357,7 @@ internal class ReusableTest {
         }
 
         @Test
-        fun `pythagoreanTriplet throws exception with invalid input`() {
+        fun `throws exception with invalid input`() {
             val d = 1
             val arguments = listOf(1 to 0, 1 to 10, 2 to 2, 5 to 3, 9 to 3)
             arguments.forEach { (m, n) ->
@@ -387,7 +370,7 @@ internal class ReusableTest {
     @CsvSource(
         "0, 0, 0, 0", "1, 0, 0, 1", "1, 1, 1, 3", "1, 2, 3, 6", "10, 100, 99, 209"
     )
-    fun `triple sum correct`(a: Int, b: Int, c:Int, expected: Int) {
+    fun `Triple sum() correct`(a: Int, b: Int, c:Int, expected: Int) {
         val triple = Triple(a, b , c)
         assertEquals(expected, triple.sum())
     }
@@ -403,8 +386,7 @@ internal class ReusableTest {
         // upper constraints
         "5500, 7604", "100_000, 146_078"
     )
-    fun `sumProperDivisors correct`(n: Int, expected: Int) {
-        assertEquals(expected, sumProperDivisorsOG(n))
+    fun `sumProperDivisors() correct`(n: Int, expected: Int) {
         assertEquals(expected, sumProperDivisors(n))
     }
 }

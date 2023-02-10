@@ -21,7 +21,7 @@ import dev.bogwalk.util.maths.gcd
  * Trivial Fraction: Fractions with trailing zeroes in both numerator and denominator that allow
  * cancellation, e.g. 30/50 = 3/5.
  *
- * e.g.: N =  = 2, K = 1
+ * e.g.: N = 2, K = 1
  *       non-trivials = {16/64, 19/95, 26/65, 49/98}
  *       reduced-equivalents = {1/4, 1/5, 2/5, 4/8}
 */

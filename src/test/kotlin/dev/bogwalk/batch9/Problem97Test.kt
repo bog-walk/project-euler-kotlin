@@ -36,7 +36,7 @@ internal class LargeNonMersennePrimeTest {
         val expectedDigits = listOf("000000003257", "431302938382")
         for ((input, expected) in inputs.zip(expectedDigits)) {
             val args = input.map { it.split(" ") }
-            assertEquals(expected, tool.tailSumOfVerlylargeNums(args))
+            assertEquals(expected, tool.tailSumOfVerlyLargeNums(args))
         }
     }
 
@@ -44,11 +44,11 @@ internal class LargeNonMersennePrimeTest {
     fun `speed comparison`() {
         val expected = "8739992577"
         val speeds = mutableListOf<Pair<String, Benchmark>>()
-        getSpeed(tool::tailOfNonMersennePrime, true).run {
+        getSpeed(tool::tailOfNonMersennePrime, repeat=10).run {
             speeds.add("Manual" to second)
             assertEquals(expected, first)
         }
-        getSpeed(tool::tailOfNonMersennePrime, true).run {
+        getSpeed(tool::tailOfNonMersennePrime, true, repeat=10).run {
             speeds.add("BigInteger" to second)
             assertEquals(expected, first)
         }

@@ -1,17 +1,25 @@
 package dev.bogwalk.util.custom
 
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class FractionTest {
-    private val sampleFractions = listOf(
-        Fraction(3, 5) to Fraction(1, 4),
-        Fraction(3, 4) to Fraction(1, 4),
-        Fraction(-16, 3) to Fraction(1, 4),
-        Fraction(11, 13) to Fraction(-7, 8)
-    )
+    private lateinit var sampleFractions: List<Pair<Fraction, Fraction>>
+
+    @BeforeAll
+    fun setUp() {
+        sampleFractions = listOf(
+            Fraction(3, 5) to Fraction(1, 4),
+            Fraction(3, 4) to Fraction(1, 4),
+            Fraction(-16, 3) to Fraction(1, 4),
+            Fraction(11, 13) to Fraction(-7, 8)
+        )
+    }
 
     @Test
     fun `Fraction normalises itself on construction`() {

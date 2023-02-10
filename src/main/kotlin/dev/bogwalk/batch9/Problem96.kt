@@ -27,14 +27,14 @@ class SuDoku {
             if (puzzle.solve()) {
                 val solution = puzzle.getGrid()
                 if (solution.any { '0' in it }) {
-                    println("Puzzle ${i+1} has empty cell in it")
+                    println("Puzzle ${i + 1} has empty cell in it")
                 }
                 if (solution.any { it.toSet().size != 9 }) {
-                    println("Puzzle ${i+1} has invalid repeats")
+                    println("Puzzle ${i + 1} has invalid repeats")
                 }
                 sum += solution.first().take(3).toInt()
             } else {
-                println("Puzzle ${i+1} failed")
+                println("Puzzle ${i + 1} failed")
             }
         }
         return sum

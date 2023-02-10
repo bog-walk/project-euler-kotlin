@@ -1,6 +1,6 @@
 package dev.bogwalk.batch2
 
-import dev.bogwalk.util.maths.primeNumbersOG
+import dev.bogwalk.util.maths.primeNumbers
 import java.math.BigInteger
 
 /**
@@ -49,12 +49,12 @@ class ReciprocalCycles {
      *      - e.g. p = 11 -> (10^1 - 1) % 11 != 0, but (10^2 - 1) / 11 has 99 evenly divided by 11
      *      giving 9. Since k = 2, there must be 2 repeating digits, so repetend = 09.
      *
-     * SPEED (WORST) 4.11s for N = 1e4
+     * SPEED (WORST) 4.18s for N = 1e4
      */
     fun longestRepetendDenomUsingPrimes(n: Int): Int {
         // only primes considered as only the smallest N is required & anything larger would be
         // a multiple of a smaller prime with equivalent K
-        val primes = primeNumbersOG(n - 1) - listOf(2, 3, 5)
+        val primes = primeNumbers(n - 1) - listOf(2, 3, 5)
         var denominator = 3
         var longestK = 1
         val one = BigInteger.ONE
@@ -88,11 +88,11 @@ class ReciprocalCycles {
      *  repeated. So the loop can be started from the largest prime and broken once the first
      *  full repetend prime is found.
      *
-     * SPEED (BETTER) 26.17ms for N = 1e4
+     * SPEED (BETTER) 16.89ms for N = 1e4
      */
     fun longestRepetendDenomUsingPrimesImproved(n: Int): Int {
         if (n < 8) return 3
-        val primes = primeNumbersOG(n - 1).reversed()
+        val primes = primeNumbers(n - 1).reversed()
         var denominator = 3
         val one = BigInteger.ONE
         val ten = BigInteger.TEN
@@ -113,7 +113,7 @@ class ReciprocalCycles {
      * Repeatedly divides & stores decimal parts until a decimal part is repeated & compares
      * length of stored parts.
      *
-     * SPEED (BEST) 1.38ms for N = 1e4
+     * SPEED (BEST) 1.63ms for N = 1e4
      */
     fun longestRepetendDenominator(n: Int): Int {
         var denominator = n

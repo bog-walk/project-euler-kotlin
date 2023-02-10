@@ -10,7 +10,7 @@ package dev.bogwalk.util.search
  * sorted in ascending order. Currently only works with Lists.
  * @return false if collection is empty or element not present; otherwise, true.
  */
-internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<E>): Boolean {
+private fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<E>): Boolean {
     var low = 0
     var high = collection.size - 1
     while (low <= high) {
@@ -41,6 +41,7 @@ internal fun <E : Comparable<E>> binarySearchManual(target: E, collection: List<
  *
  * SPEED (BETTER) 5.2e4ns for edge target in 1e4-sized list
  *
+ * @param [toIndex] final non-inclusive index for search range.
  * @return false if collection is empty or element not present; otherwise, true.
  */
 fun <E : Comparable<E>> binarySearch(

@@ -25,12 +25,12 @@ fun BigInteger.digitCount(): Int {
 /**
  * SPEED (WORST) 5548ns for 19-digit N
  */
-internal fun String.isPalindromeBuiltIn() = this == this.reversed()
+private fun String.isPalindromeBuiltIn() = this == this.reversed()
 
 /**
  * SPEED (BETTER) 1458ns for 19-digit N
  */
-internal fun String.isPalindromeNumber(): Boolean {
+private fun String.isPalindromeNumber(): Boolean {
     if (length == 1) return true
     var num = this.toLong()
     var rev = 0L
@@ -44,7 +44,7 @@ internal fun String.isPalindromeNumber(): Boolean {
 /**
  * SPEED (BETTER) 2931ns for 19-digit N
  */
-internal fun String.isPalindromeRecursive(): Boolean {
+private fun String.isPalindromeRecursive(): Boolean {
     return when {
         length < 2 -> true
         first() != last() -> false

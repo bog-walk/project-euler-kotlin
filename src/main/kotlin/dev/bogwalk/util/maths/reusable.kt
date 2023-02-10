@@ -75,8 +75,6 @@ fun isCoPrime(x: Int, y: Int): Boolean = gcd(x.toLong(), y.toLong()) == 1L
  * so the inverse function, positive solution becomes:
  *
  *      n = (1 + sqrt(1 + 8h_n)) / 4
- *
- * @return  if hN is the nth hexagonal, or null
  */
 fun Long.isHexagonalNumber(): Int? {
     val n = 0.25 * (1 + sqrt(1 + 8.0 * this))
@@ -204,7 +202,7 @@ fun Long.isPrimeMRBI(certainty: Int = 5): Boolean {
  *
  * SPEED (EQUAL for N < 1e3) 6.4e5ns for 3-digit prime
  */
-internal fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
+private fun Long.isPrimeMR(kRounds: List<Long> = listOf(2, 3, 5, 7, 11)): Boolean {
     if (this in 2L..3L) return true
     if (this < 2L || this % 2L == 0L) return false
     val one = BigInteger.ONE
@@ -341,7 +339,7 @@ fun powerDigitSum(base: Int, exp: Int): Int {
  * @return map of prime factors (keys) and their exponents (values).
  * @throws IllegalArgumentException if [n] <= 1.
  */
-fun primeFactorsOG(n: Long): Map<Long, Int> {
+private fun primeFactorsOG(n: Long): Map<Long, Int> {
     require(n > 1) { "Must provide a natural number greater than 1" }
     var num = n
     val primes = mutableMapOf<Long, Int>()
@@ -390,7 +388,7 @@ fun primeFactors(n: Long): Map<Long, Int> {
  *
  * SPEED (WORSE) 19.87ms for N = 1e6
  */
-fun primeNumbersOG(n: Int): List<Int> {
+private fun primeNumbersOG(n: Int): List<Int> {
     // create mask representing [2, max], with all even numbers except 2 (index 0) marked false
     val boolMask = BooleanArray(n - 1) { !(it != 0 && it % 2 == 0) }
     for (p in 3..(sqrt(1.0 * n).toInt()) step 2) {
@@ -473,7 +471,7 @@ fun Triple<Int, Int, Int>.sum(): Int = first + second + third
  *
  * SPEED (WORSE) 6.91ms for N = 1e6 - 1
  */
-fun sumProperDivisorsOG(num: Int): Int {
+private fun sumProperDivisorsOG(num: Int): Int {
     if (num < 2) return 0
     var sum = 1
     var maxDivisor = sqrt(1.0 * num).toInt()

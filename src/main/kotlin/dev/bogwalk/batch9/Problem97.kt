@@ -8,7 +8,7 @@ import java.math.BigInteger
  * https://projecteuler.net/problem=97
  *
  * Goal: Return the last 12 digits of a very large number of the form A * (B^C) + D. If this
- * amount of less than 1e12, return the output padded with leading zeroes.
+ * amount is less than 1e12, return the output padded with leading zeroes.
  *
  * Constraints: 1 <= A, B, C, D <= 1e9
  *
@@ -26,9 +26,9 @@ class LargeNonMersennePrime {
     private val modulo: Long = 1_000_000_000_000
 
     /**
-     * Solution optimised by using BigInteger's built-in modPow().
+     * Solution using BigInteger's built-in modPow().
      *
-     * SPEED (BETTER) 3.56s for PE problem.
+     * SPEED (WORSE) 3.73s for PE problem.
      */
     fun tailOfVeryLargeNumBI(a: Int, b: Int, c: Int, d: Int): String {
         val bigMod = BigInteger.valueOf(modulo)
@@ -43,7 +43,7 @@ class LargeNonMersennePrime {
      * either use RollingQueue or iterate more than 12 times since only the last 12 digits are
      * required.
      *
-     * SPEED (WORSE) 6.43s for PE problem.
+     * SPEED (BETTER) 8.72ms for PE problem.
      */
     fun tailOfVeryLargeNum(a: Int, b: Int, c: Int, d: Int): String {
         val power = b.toBigInteger().pow(c).toString().takeLast(12).padStart(12, '0')
@@ -62,7 +62,7 @@ class LargeNonMersennePrime {
      * HackerRank specific implementation that requires the last 12 digits of the sum of multiple
      * very large numbers resulting from expressions of the form a * b^c + d.
      */
-    fun tailSumOfVerlylargeNums(inputs: List<List<String>>): String {
+    fun tailSumOfVerlyLargeNums(inputs: List<List<String>>): String {
         val bigMod = BigInteger.valueOf(modulo)
         var sum = BigInteger.ZERO
 
