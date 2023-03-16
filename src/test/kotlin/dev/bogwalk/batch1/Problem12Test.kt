@@ -36,7 +36,9 @@ internal class HighlyDivisibleTriangularNumberTest {
         "500, 76_576_500", "900, 842_161_320"
     )
     fun `firstTriangleOverN correct`(n: Int, expected: Int) {
-        assertEquals(expected, tool.firstTriangleOverN(n))
+        assertEquals(expected, tool.firstTriangleBruteA(n))
+        assertEquals(expected, tool.firstTriangleBruteB(n))
+        assertEquals(expected, tool.firstTriangleBruteC(n))
         assertEquals(expected, tool.firstTriangleOverNOptimised(n))
         assertEquals(expected, tool.firstTriangleOverNUsingPrimes(n))
     }
@@ -46,13 +48,15 @@ internal class HighlyDivisibleTriangularNumberTest {
         val n = 1000
         val expected = 842_161_320
         val solutions = mapOf(
-            "Original" to tool::firstTriangleOverN,
+            "Brute A - Cycle" to tool::firstTriangleBruteA,
+            "Brute B - All" to tool::firstTriangleBruteB,
+            "Brute C - Sequence" to tool::firstTriangleBruteC,
             "Prime" to tool::firstTriangleOverNUsingPrimes,
             "Optimised" to tool::firstTriangleOverNOptimised
         )
         val speeds = mutableListOf<Pair<String, Benchmark>>()
         for ((name, solution) in solutions) {
-            getSpeed(solution, n).run {
+            getSpeed(solution, n, repeat = 10).run {
                 speeds.add(name to second)
                 assertEquals(expected, first, "Incorrect $name -> $first")
             }

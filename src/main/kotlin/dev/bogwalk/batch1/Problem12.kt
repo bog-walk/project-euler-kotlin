@@ -2,7 +2,7 @@ package dev.bogwalk.batch1
 
 import dev.bogwalk.util.maths.gaussSum
 import dev.bogwalk.util.maths.primeFactors
-import dev.bogwalk.util.maths.primeNumbersOG
+import dev.bogwalk.util.maths.primeNumbers
 
 /**
  * Problem 12: Highly Divisible Triangular Number
@@ -33,7 +33,7 @@ class HighlyDivisibleTriangularNumber {
      *
      * Since the components of a Gaussian sum (n & n+1) are co-prime (i.e. they can have neither
      * a common prime factor nor a common divisor), the amount of divisors can be assessed based
-     * on the cycling formulae:
+     * on the cycling formulae using these smaller values:
      *
      *      t represents Gaussian sum = n(n + 1)/2
      *
@@ -42,24 +42,60 @@ class HighlyDivisibleTriangularNumber {
      *
      *      (odd n) D(t) = D(n) * D((n+1)/2)
      *
-     * SPEED (WORST) 559.59ms for N = 1e3
+     * SPEED (WORSE) 137.26ms for N = 1e3
      */
-    fun firstTriangleOverN(n: Int): Int {
-        if (n == 1) return 3
-        var t = 2 // D(2) = D(1) * D(3)
+    fun firstTriangleBruteA(limit: Int): Int {
+        if (limit == 1) return 3
+        var n = 2 // D(2) = D(1) * D(3)
+        var isEven = true
         var dn1 = 2 // D(3) = 2
         var count = 2
-        while (count <= n) {
-            t++
-            val dn2 = if (t % 2 == 0) countDivisors(t+1) else countDivisors((t+1)/2)
+        while (count <= limit) {
+            n++
+            isEven = !isEven
+            val dn2 = if (isEven) countDivisors(n+1) else countDivisors((n+1)/2)
             count = dn1 * dn2
             dn1 = dn2
         }
-        return t.gaussSum().toInt()
+        return n.gaussSum().toInt()
     }
 
     /**
-     * Counts unique divisors of [n] using prime decomposition.
+     * Identical to the first brute solution except that each triangle number is calculated
+     * manually and its own divisors counted.
+     *
+     * SPEED (WORST) 396.69ms for N = 1e3
+     */
+    fun firstTriangleBruteB(limit: Int): Int {
+        var t = 3
+        if (limit == 1) return t
+        var n = 2
+        var count = 2
+        while (count <= limit) {
+            n++
+            t = n.gaussSum().toInt()
+            count = countDivisors(t)
+        }
+        return t
+    }
+
+    /**
+     * Identical to the above brute solution except that triangle numbers are generated as a
+     * sequence until the first to exceed [limit] is found.
+     *
+     * SPEED (WORST) 381.42ms for N = 1e3
+     */
+    fun firstTriangleBruteC(limit: Int): Int {
+        return generateSequence(Pair(3, 3)) { Pair(it.first + it.second, it.second + 1) }
+            .first { countDivisors(it.first) > limit }
+            .first
+    }
+
+    /**
+     * Counts unique divisors of [n] using prime decomposition, based on the formulae:
+     *
+     *      n = p_1{e_1} * p_2{e_2} * ... * p_r{e_r}
+     *      d(n) = {r}Pi{x=1}(a_x + 1)
      *
      * e.g. 28 = 2^2 * 7^1, therefore
      *
@@ -72,44 +108,54 @@ class HighlyDivisibleTriangularNumber {
     }
 
     /**
-     * Quick pick solution finds the first triangle over N for every N <= [n] & stores the
-     * results as an IntArray that can be repeatedly accessed afterwards.
+     * Quick pick solution finds the first triangle number to have over N divisors for every
+     * N <= [limit] & stores the results as an IntArray that can be repeatedly accessed afterwards.
      *
-     * SPEED (WORSE) 214.37ms for N = 1e3
+     * SPEED (BETTER) 94.44ms for N = 1e3
      */
-    fun firstTrianglesCache(n: Int): IntArray {
-        val triangles = IntArray(n + 1).apply {
+    fun firstTrianglesCache(limit: Int): IntArray {
+        val triangles = IntArray(limit + 1).apply {
             this[0] = 1
             this[1] = 3
             this[2] = 6
         }
-        var lastT = 3 // D(3) = D(3) * D(2)
+        val eMax = 20_000
+        val divisorCount = IntArray(eMax) { 2 }.apply { this[1] = 1 }
+        for (divisor in 2 until eMax) {
+            for (num in divisor * 2 until eMax step divisor) {
+                divisorCount[num]++
+            }
+        }
+
+        var lastN = 3 // D(3) = D(3) * D(2)
+        var isEven = false
         var lastDn1 = 2
         var lastTriangle = 6
         var lastCount = 4
-        for (i in 3..n) {
+        for (i in 3..limit) {
             if (i < lastCount) {
                 triangles[i] = lastTriangle
                 continue
             }
-            var nextT = lastT + 1
+            var nextN = lastN + 1
+            isEven = !isEven
             do {
-                val triangle = nextT.gaussSum().toInt()
-                val dn2 = if (nextT % 2 == 0) {
-                    countDivisors(nextT + 1)
-                } else {
-                    countDivisors((nextT + 1) / 2)
+                val toCount = if (isEven) nextN + 1 else (nextN + 1) / 2
+                val dn2 = if (toCount < eMax) divisorCount[toCount] else {
+                    countDivisors(toCount)
                 }
                 val count = lastDn1 * dn2
                 lastDn1 = dn2
                 if (i < count) {
+                    val triangle = nextN.gaussSum().toInt()
                     triangles[i] = triangle
                     lastTriangle = triangle
-                    lastT = nextT
+                    lastN = nextN
                     lastCount = count
                     break
                 }
-                nextT++
+                nextN++
+                isEven = !isEven
             } while (true)
         }
         return triangles
@@ -120,12 +166,13 @@ class HighlyDivisibleTriangularNumber {
      * Gaussian sum but stores cumulative divisor counts in an array for quick access instead of
      * calculating the count for every new [n].
      *
-     * Dual cyclic formulae use n - 1 instead of n + 1 to match the index used in the cached list.
+     * Dual cyclic formulae use n - 1 instead of n + 1 to match the cached list that is generated
+     * with every iteration, so looking forward would produce incorrect counts.
      *
      * N.B. n_max was found by exhausting all solutions for n = [1, 1000] & finding the maximum
      * of the ratios of t:n. At n = 1000, the valid triangle number is the 41041st term.
      *
-     * SPEED (BEST) 34.45ms for N = 1e3
+     * SPEED (BEST) 27.62ms for N = 1e3
      */
     fun firstTriangleOverNOptimised(n: Int): Int {
         val nMax = minOf(n * 53, 41100)
@@ -149,11 +196,11 @@ class HighlyDivisibleTriangularNumber {
     /**
      * Generates primes to count number of divisors based on prime factorisation.
      *
-     * SPEED (BETTER): 57.53ms for N = 1e3.
+     * SPEED (BETTER): 43.76ms for N = 1e3.
      */
     fun firstTriangleOverNUsingPrimes(n: Int): Int {
         if (n == 1) return 3
-        val primes = primeNumbersOG(n * 2)
+        val primes = primeNumbers(n * 2)
         var prime = 3
 
         var dn = 2 // min num of divisors for any prime

@@ -24,8 +24,8 @@ class LargeSum {
      * Solution simulates manual addition from RTL, using custom RollingQueue class to abstract
      * away the need to maintain output length with every iteration.
      *
-     * SPEED (WORSE) 19.42ms for 100 50-digit numbers
-     * SPEED (WORSE) 48.61ms for 1000 50-digit numbers
+     * SPEED (BETTER) 6.86ms for 100 50-digit numbers
+     * SPEED (BETTER) 15.96ms for 1000 50-digit numbers
      */
     fun addInReverse(numbers: List<String>): String {
         val n = numbers.size
@@ -34,9 +34,7 @@ class LargeSum {
         val finalIndex = numbers.first().length - 1
         var carryOver = 0
         for (i in finalIndex downTo 0) {
-            val sum = List(n + 1) {
-                if (it == n) carryOver else numbers[it][i].digitToInt()
-            }.sum()
+            val sum = numbers.sumOf { it[i].digitToInt() } + carryOver
             output.add(sum % 10)
             carryOver = sum / 10
         }
@@ -50,8 +48,8 @@ class LargeSum {
     /**
      * Solution using BigInteger to intrinsically sum all numbers.
      *
-     * SPEED (BETTER) 3.2e5ns for 100 50-digit numbers
-     * SPEED (BETTER) 21.28ms for 1000 50-digit numbers
+     * SPEED (WORSE) 7.17ms for 100 50-digit numbers
+     * SPEED (WORSE) 18.30ms for 1000 50-digit numbers
      */
     fun sliceSum(numbers: List<String>): String {
         return numbers.sumOf { BigInteger(it) }.toString().take(10)

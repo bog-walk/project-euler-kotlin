@@ -26,16 +26,16 @@ class LargestProductInGrid {
     /**
      * Solution uses custom class IntMatrix2D to abstract away most of the functions.
      *
-     * SPEED (EQUAL) 3.12ms for N = 20
+     * SPEED (BETTER) 2.07ms for N = 20
      */
     fun largestProductInGridCustom(grid: IntMatrix2D): Int {
         return maxOf(
             getMaxProduct(grid),
-            getMaxProduct(grid.transpose())
+            getMaxProduct(grid.transpose(), allDirections = false)
         )
     }
 
-    private fun getMaxProduct(grid: IntMatrix2D): Int {
+    private fun getMaxProduct(grid: IntMatrix2D, allDirections: Boolean = true): Int {
         var maxProd = 0
         for ((i, row) in grid.withIndex()) {
             var col = 0
@@ -43,7 +43,7 @@ class LargestProductInGrid {
                 val right = row.sliceArray(col until col + series).product()
                 var leadingDiag = 0
                 var counterDiag = 0
-                if (i <= grid.size - series) {
+                if (allDirections && i <= grid.size - series) {
                     leadingDiag = IntArray(series) { grid[i+it][col+it] }.product()
                     counterDiag = IntArray(series) { grid[i+it][col+series-1-it] }.product()
                 }
@@ -55,7 +55,7 @@ class LargestProductInGrid {
     }
 
     /**
-     * SPEED (EQUAL) 3.07ms for N = 20
+     * SPEED (WORSE) 4.16ms for N = 20
      */
     fun largestProductInGrid(grid: Array<IntArray>): Int {
         var largest = 0
