@@ -46,7 +46,7 @@ class ArrangedProbability {
      *  - 4c must be a whole positive integer to be a square number when incremented.
      *  - the square root must be odd to be divisible by 2 when incremented.
      *
-     * Brute force of the solutions also brought to light that [totalDiscs] switched between even
+     * Brute force of the solutions also brought to light that `totalDiscs` switched between even
      * and odd values, with the first arrangement always having an even total, but this is only
      * useful if generating all arrangements. Brute force also shows that some fractions (e.g.
      * 1/2, 3/4, 11/12) can be easily found using the following:
@@ -92,7 +92,7 @@ class ArrangedProbability {
     }
 
     /**
-     * Original PE problem (p = 1/2) results in a known integer sequence of [blueDiscs] based on
+     * Original PE problem (p = 1/2) results in a known integer sequence of `blueDiscs` based on
      * the solution to X(X-1) = 2b(b-1), such that:
      *
      *      when p = 1/2 -> b(n) = 6b(n-1) - b(n-2) - 2, with b(0) = 1, b(1) = 3

@@ -8,7 +8,7 @@ import dev.bogwalk.util.tests.getSpeed
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-internal class IntegerRightTrianglesTest() {
+internal class IntegerRightTrianglesTest {
     private val tool = IntegerRightTriangles()
 
     @ParameterizedTest(name="N = {0}")

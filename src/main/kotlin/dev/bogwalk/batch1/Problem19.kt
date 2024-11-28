@@ -83,7 +83,7 @@ class CountingSundays {
             val monthDays = if (currentMonth == 2 && isLeapYear(currentYear)) {
                 29
             } else {
-                daysInMonth[currentMonth.toInt() - 1]
+                daysInMonth[currentMonth - 1]
             }
             if (day > monthDays) {
                 day -= monthDays
